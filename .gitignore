@@ -1,0 +1,46 @@
+# =======================
+# Java / Spring Boot
+# =======================
+/target/
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.log
+*.tmp
+/out/
+.idea/
+*.DS_Store
+
+# =======================
+# Node / React
+# =======================
+/node_modules/
+build/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =======================
+# Sistema Operacional
+# =======================
+.DS_Store
+Thumbs.db
+
+# =======================
+# Arquivos de Configuração Sensíveis
+# =======================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =======================
+# Logs e Temp
+# =======================
+*.log
+*.tmp
+*.bak
