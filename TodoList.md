@@ -1,22 +1,18 @@
-//TODO:Adicionar validação de formulários.
-// Validar campos obrigatórios (nome, email, senha, confirmação de senha).
-// Validar formato de email.
-// Validar força da senha.
-// Validar se as senhas coincidem no cadastro.
+//TODO:Validação de formulários (login, cadastro e recuperar senha)
+Campos obrigatórios (nome, e-mail, senha, confirmação de senha).
+Formato de e-mail.
 
-//TODO:Implementar feedback visual para erros.
-// Exibir mensagens de erro abaixo dos campos inválidos.
-// Destacar campos com erro (borda vermelha, ícone, etc).
-// Exibir feedback de sucesso após cadastro ou recuperação de senha.
+Definir senha mais segura
+Mínimo 8 caractere,
+Pelo menos 1 letra maiúscula,
+Pelo menos 1 letra minúscula
+Pelo menos 1 número,
+Pelo menos 1 caractere especial.
 
-//TODO:Implementar cores e fontes.
+Validar se as senhas coincidem no cadastro.
+Exibir mensagens de erro abaixo dos campos inválidos.
+Destacar campos com erro (borda vermelha, ícone, etc).
+Exibir feedback de sucesso após cadastro ou recuperação de senha.
 
-//TODO:Adicionar testes unitários para componentes.
-// Criar testes para componentes de formulário.
-// Testar navegação entre rotas.
-// Testar exibição de mensagens de erro.
 
-//TODO:Implementar autenticação
-// Integrar com backend para autenticar login e cadastro.
-// Salvar token de autenticação (localStorage ou context).
-// Proteger rotas que exigem usuário logado.
+//TODO:Página de mudança de senha

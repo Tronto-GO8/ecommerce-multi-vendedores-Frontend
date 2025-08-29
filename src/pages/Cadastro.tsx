@@ -1,34 +1,80 @@
-import InputEmail from "@/components/loginCadastro/InputEmail"
-import InputNome from "@/components/loginCadastro/InputNome"
-import InputSenha from "@/components/loginCadastro/InputSenha"
-import LoginSocial from "@/components/loginCadastro/LoginSocial"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import OuSeparador from "@/components/ui/OuSeparador"
-import TextoLinkAlternativo from "@/components/ui/TextoLinkAlternativo"
+import InputNome from "@/components/loginCadastro/InputNome";
+import InputEmail from "@/components/loginCadastro/InputEmail";
+import InputSenha from "@/components/loginCadastro/InputSenha";
+import { Button } from "@/components/ui/button";
+import OuSeparador from "@/components/ui/OuSeparador";
+import LoginSocial from "@/components/loginCadastro/LoginSocial";
+import TextoLinkAlternativo from "@/components/ui/TextoLinkAlternativo";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import ChecklistSenha from "@/components/loginCadastro/CheckListSenha";
+import { CadastroForm, cadastroSchema } from "@/schemas/cadastroSchema";
+import InputError from "@/components/InputError";
 
 export default function Cadastrar() {
-    return (
-        <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-            <div className="w-full max-w-md">
-                <Card className="shadow-black">
-                    <CardHeader className="space-y-4 text-center">
-                        <CardTitle className="text-2xl font-bold font-sans">Criar conta</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                        <form className="space-y-4 border-dashed border-l-black">
-                            <InputNome />
-                            <InputEmail />
-                            <InputSenha>Senha</InputSenha>
-                            <InputSenha>Confirmar senha</InputSenha>
-                            <Button type="submit" className="w-full">Criar Conta</Button>
-                        </form>
-                        <OuSeparador />
-                        <LoginSocial />
-                        <TextoLinkAlternativo texto="Já tem uma conta?" textoLink="Entrar" to="/login" />
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
-    )
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CadastroForm>({
+    resolver: zodResolver(cadastroSchema),
+  });
+
+  const [senhaDigitada, setSenhaDigitada] = useState("");
+
+  const enviarFormCadastro = (data: CadastroForm) => {
+    const { senha, confirmarSenha, ...dadosSemSenha } = data;
+    console.log("Cadastro: ", dadosSemSenha);
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
+      <div className="w-full max-w-md">
+        <Card className="shadow-black">
+          <CardHeader className="space-y-4 text-center">
+            <CardTitle className="text-2xl font-bold font-sans">
+              Criar conta
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <form
+              className="space-y-4 border-dashed border-l-black"
+              onSubmit={handleSubmit(enviarFormCadastro)}
+            >
+              <InputNome {...register("nome")} />
+              <InputError message={errors.nome?.message} />
+              <InputEmail {...register("email")} />
+              <InputError message={errors.email?.message} />
+              <InputSenha
+                label="Senha"
+                {...register("senha")}
+                onChange={(e) => {
+                  setSenhaDigitada(e.target.value);
+                  register("senha").onChange(e);
+                }}
+              />
+              <ChecklistSenha senha={senhaDigitada} />
+              <InputSenha
+                label="Confirmar Senha"
+                {...register("confirmarSenha")}
+              />
+              <InputError message={errors.confirmarSenha?.message} />
+              <Button type="submit" className="w-full">
+                Criar Conta
+              </Button>
+            </form>
+            <OuSeparador />
+            <LoginSocial />
+            <TextoLinkAlternativo
+              texto="Já tem uma conta?"
+              textoLink="Entrar"
+              to="/login"
+            />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }

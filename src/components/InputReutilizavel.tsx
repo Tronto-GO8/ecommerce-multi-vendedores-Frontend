@@ -1,0 +1,51 @@
+import React from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { iconeComInput } from "@/styles/variaveisTailwind/Reutilizaveis";
+
+export type InputReutilizavelProps =
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    label?: string;
+    icon?: React.ReactNode;
+    /** Elemento que será posicionado à direita, dentro do mesmo container (ex.: botão eye) */
+    rightElement?: React.ReactNode;
+    /** classes extras para o container relativo */
+    containerClassName?: string;
+  };
+
+const InputReutilizavel = React.forwardRef<
+  HTMLInputElement,
+  InputReutilizavelProps
+>(
+  (
+    { label, icon, rightElement, className, containerClassName, ...inputProps },
+    ref
+  ) => {
+    const renderizarIconeSeFornecido = () => {
+      if (!icon) return null;
+      return <span className={iconeComInput}>{icon}</span>;
+    };
+    return (
+      <div className="space-y-2">
+        {label && <Label className="text-sm">{label}</Label>}
+        <div className={`relative ${containerClassName ?? ""}`}>
+          {renderizarIconeSeFornecido()}
+          <Input
+            ref={ref}
+            className={`w-full pl-10 ${className ?? ""}`}
+            {...inputProps}
+          />
+
+          {rightElement && (
+            <div className="absolute right-0 top-0 h-full flex items-center pr-2">
+              {rightElement}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+);
+
+InputReutilizavel.displayName = "InputReutilizavel";
+export default InputReutilizavel;

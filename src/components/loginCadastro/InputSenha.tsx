@@ -1,37 +1,51 @@
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Eye, EyeOff, Lock } from "lucide-react";
+import InputReutilizavel, {
+  InputReutilizavelProps,
+} from "../InputReutilizavel";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { iconeComInput } from "@/styles/variaveisTailwind/Reutilizaveis"
-import { Eye, EyeOff, Lock } from "lucide-react"
-import React, { useState } from "react"
+type SenhaProps = InputReutilizavelProps & {
+  label?: string;
+  placeholder?: string;
+};
 
-interface senhaProps {
-    children: React.ReactNode
-}
+export default function InputSenha({
+  label = "Senha",
+  placeholder = "Digite sua senha",
+  ...props
+}: SenhaProps) {
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
-export default function InputSenha({ children }: senhaProps) {
-    const [mostrarSenha, setMostrarSenha] = useState<boolean>(false)
-    return (
-        <div className="space-y-2">
-            <Label className=" text-sm">{children}</Label>
-            <div className="relative">
-                <Lock className={iconeComInput} />
-                <Input
-                    className="pl-10 pr-10 "
-                    placeholder="••••••••"
-                    type={mostrarSenha ? "text" : "password"}
-                ></Input>
-                <Button
-                    type="button"
-                    variant={"ghost"}
-                    className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                    onClick={() => setMostrarSenha(!mostrarSenha)}>
-                    {mostrarSenha ? (
-                        <Eye className="h-4 w-4 text-muted-foreground"></Eye>) : (
-                        <EyeOff className="h-4 w-4 text-muted-foreground" />)}
-                </Button>
-            </div>
-        </div>
-    )
+  const toggleMostrar = () => setMostrarSenha((s) => !s);
+
+  const rightElement = (
+    <Button
+      type="button"
+      variant="ghost"
+      className="h-8 px-2 hover:bg-transparent"
+      onClick={toggleMostrar}
+      aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+      tabIndex={-1}
+    >
+      {mostrarSenha ? (
+        <Eye className="h-4 w-4 text-muted-foreground" />
+      ) : (
+        <EyeOff className="h-4 w-4 text-muted-foreground" />
+      )}
+    </Button>
+  );
+
+  return (
+    <InputReutilizavel
+      label={label}
+      icon={<Lock className="h-4 w-4 text-muted-foreground" />}
+      type={mostrarSenha ? "text" : "password"}
+      placeholder={placeholder}
+      className="pr-10"
+      containerClassName="w-full"
+      rightElement={rightElement}
+      {...props}
+    />
+  );
 }

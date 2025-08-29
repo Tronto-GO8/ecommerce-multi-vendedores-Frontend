@@ -1,20 +1,16 @@
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { iconeComInput } from "@/styles/variaveisTailwind/Reutilizaveis"
-import { Mail } from "lucide-react"
+import { Mail } from "lucide-react";
+import InputReutilizavel, {
+  InputReutilizavelProps,
+} from "../InputReutilizavel";
 
-
-export default function InputEmail() {
-    return (
-        <div className="space-y-2">
-            <Label className=" text-sm">Entrar</Label>
-            <div className="relative">
-                <Mail className={iconeComInput} />
-                <Input
-                    className="pl-10"
-                    type="email"
-                    placeholder="admin@exemplo.com"></Input>
-            </div>
-        </div>
-    )
+export default function InputEmail(props: InputReutilizavelProps) {
+  return (
+    <InputReutilizavel
+      label="E-mail"
+      type="email"
+      placeholder="seuemail@exemplo.com"
+      icon={<Mail className="h-4 w-4 text-muted-foreground" />}
+      {...props}
+    />
+  );
 }

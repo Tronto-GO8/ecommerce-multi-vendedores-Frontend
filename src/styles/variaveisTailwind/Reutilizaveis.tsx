@@ -1,6 +1,8 @@
-export const iconeComInput = 'absolute left-3 top-3 h-4 w-4 text-muted-foreground'
+export const iconeComInput =
+  "absolute left-3 top-3 h-4 w-4 text-muted-foreground";
 
-{/* <div className="min-h-screen bg-background flex items-center justify-center p-4">
+{
+  /* <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-4">
           <Link
@@ -52,4 +54,5 @@ export const iconeComInput = 'absolute left-3 top-3 h-4 w-4 text-muted-foregroun
           </form>
         </CardContent>
       </Card>
-    </div>*/ }
+    </div>*/
+}
