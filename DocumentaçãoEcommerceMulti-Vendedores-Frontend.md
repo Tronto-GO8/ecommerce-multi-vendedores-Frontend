@@ -34,6 +34,11 @@ Componentes Reutilizáveis
 8. CheckListSenha  
    Checklist visual dos requisitos de senha.  
    Cada item fica verde conforme o usuário atende ao requisito.
+9. InputReutilizavel
+   Base genérica para inputs.
+   Aceita ícone à esquerda e rightElement (ex.: botão de mostrar senha).
+   Responsável pela padronização dos estilos (iconeComInput).
+   Usado internamente em `InputEmail`, `InputSenha`, `InputNome`.
 
 Páginas
 
@@ -49,7 +54,8 @@ Páginas
 2. Cadastro  
    Formulário para criar conta: nome, email, senha, confirmar senha.  
    Validação avançada de senha (tamanho, maiúscula, minúscula, número, especial).  
-   Checklist visual dos requisitos de senha.  
+   Checklist visual dos requisitos de senha.
+   Borda dos inputs ficam vermelha se o usuário colocar um valor inválido  
    Botão para cadastrar.  
    Separador "ou" e botões de login social.  
    Link para login.  
@@ -60,12 +66,22 @@ Páginas
    Botão para enviar link de recuperação.  
    Link para voltar ao login.
 
+4. RedefinirSenha
+   Página para redefinir senha após o link de recuperação.
+   Campos: nova senha e confirmar nova senha.
+   Validação com redefinirSenhaSchema.
+   Checklist de senha exibido abaixo do campo "Nova senha".
+   Botão para confirmar redefinição (com estado de carregando).
+   Link para voltar ao login.
+   Senha nunca é exibida no console.
+
 Validação
 
 - Schemas de validação criados com Zod e organizados na pasta `src/schemas`.
 - Regras de senha centralizadas em `src/schemas/regrasSenha.tsx` e usadas tanto no checklist quanto na validação.
 - Mensagens de erro padronizadas e exibidas via componente `InputError`.
 - E-mails aceitos apenas com final `.com` ou `.com.br`.
+- `redefinirSenhaSchema` garante que novaSenha e confirmarSenha sejam iguais.
 
 Estilização
 

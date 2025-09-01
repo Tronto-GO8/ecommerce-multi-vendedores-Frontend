@@ -43,13 +43,14 @@ export default function Cadastrar() {
               className="space-y-4 border-dashed border-l-black"
               onSubmit={handleSubmit(enviarFormCadastro)}
             >
-              <InputNome {...register("nome")} />
+              <InputNome {...register("nome")} isError={!!errors.nome} />
               <InputError message={errors.nome?.message} />
-              <InputEmail {...register("email")} />
+              <InputEmail {...register("email")} isError={!!errors.email} />
               <InputError message={errors.email?.message} />
               <InputSenha
                 label="Senha"
                 {...register("senha")}
+                isError={!!errors.senha}
                 onChange={(e) => {
                   setSenhaDigitada(e.target.value);
                   register("senha").onChange(e);
@@ -59,6 +60,7 @@ export default function Cadastrar() {
               <InputSenha
                 label="Confirmar Senha"
                 {...register("confirmarSenha")}
+                isError={!!errors.confirmarSenha}
               />
               <InputError message={errors.confirmarSenha?.message} />
               <Button type="submit" className="w-full">

@@ -11,6 +11,7 @@ export type InputReutilizavelProps =
     rightElement?: React.ReactNode;
     /** classes extras para o container relativo */
     containerClassName?: string;
+    isError?: boolean;
   };
 
 const InputReutilizavel = React.forwardRef<
@@ -18,7 +19,15 @@ const InputReutilizavel = React.forwardRef<
   InputReutilizavelProps
 >(
   (
-    { label, icon, rightElement, className, containerClassName, ...inputProps },
+    {
+      label,
+      icon,
+      rightElement,
+      className,
+      containerClassName,
+      isError,
+      ...inputProps
+    },
     ref
   ) => {
     const renderizarIconeSeFornecido = () => {
@@ -32,7 +41,11 @@ const InputReutilizavel = React.forwardRef<
           {renderizarIconeSeFornecido()}
           <Input
             ref={ref}
-            className={`w-full pl-10 ${className ?? ""}`}
+            className={`w-full pl-10 ${className ?? ""} ${
+              isError
+                ? "border-red-500 ring-1 ring-red-500 focus:border-red-500 focus:ring-red-500"
+                : ""
+            }`}
             {...inputProps}
           />
 
