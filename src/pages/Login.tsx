@@ -2,7 +2,7 @@ import InputEmail from "@/components/loginCadastro/InputEmail";
 import InputSenha from "@/components/loginCadastro/InputSenha";
 import LoginSocial from "@/components/loginCadastro/LoginSocial";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import OuSeparador from "@/components/ui/OuSeparador";
 import TextoLinkAlternativo from "@/components/ui/TextoLinkAlternativo";
 import { Link } from "react-router-dom";
@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginForm } from "@/schemas/loginSchema";
 import InputError from "@/components/InputError";
+import FormCardHeader from "@/components/loginCadastro/FormCardHeader";
 
 export default function Login() {
   const {
@@ -28,11 +29,7 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
       <Card className="shadow-black">
-        <CardHeader className="space-y-4 text-center">
-          <CardTitle className="text-2xl font-bold font-sans rounded-x1">
-            Entrar
-          </CardTitle>
-        </CardHeader>
+        <FormCardHeader titulo="Entrar" textoCentralizado />
         <CardContent className="space-y-4">
           <form className="space-y-4" onSubmit={handleSubmit(enviar)}>
             <InputEmail {...register("email")} />

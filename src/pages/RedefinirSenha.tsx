@@ -1,15 +1,7 @@
 import InputSenha from "@/components/loginCadastro/InputSenha";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -18,6 +10,7 @@ import {
 } from "@/schemas/RedefinirSenhaShema";
 import ChecklistSenha from "@/components/loginCadastro/CheckListSenha";
 import InputError from "@/components/InputError";
+import FormCardHeader from "@/components/loginCadastro/FormCardHeader";
 
 export default function RedefinirSenha() {
   const {
@@ -40,25 +33,12 @@ export default function RedefinirSenha() {
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
       <Card className="shadow-black">
-        <CardHeader className="space-y-4">
-          <Link
-            to="/login"
-            className="inline-flex items-center text-sm hover:text-gray-600 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar ao login
-          </Link>
-
-          <div>
-            <CardTitle className="text-2xl font-bold font-sans">
-              Trocar senha
-            </CardTitle>
-            <CardDescription className="text-sm mt-2">
-              Defina uma nova senha para sua conta. Digite e confirme sua nova
-              senha abaixo.
-            </CardDescription>
-          </div>
-        </CardHeader>
+        <FormCardHeader
+          titulo="Trocar senha"
+          descricao="Defina uma nova senha para sua conta. Digite e confirme sua nova
+              senha abaixo."
+          linkDeVoltar={{ to: "/login", label: "Voltar ao login" }}
+        />
         <CardContent className="space-y-6">
           <form
             onSubmit={handleSubmit(enviarFormRedifinido)}

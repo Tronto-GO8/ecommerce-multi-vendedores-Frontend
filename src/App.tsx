@@ -11,11 +11,11 @@ function App() {
     <Router>
       <Header />
       <Routes>
-        <Route path="*" element={<EsqueceuSenha />} />
+        <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Login />} />
         <Route path="*" element={<Login />} />
-        <Route path="*" element={<Cadastrar />} />
+        <Route path="/cadastro" element={<Cadastrar />} />
         {/* <Route path="*" element={<RedefinirSenha />} /> */}
       </Routes>
     </Router>
