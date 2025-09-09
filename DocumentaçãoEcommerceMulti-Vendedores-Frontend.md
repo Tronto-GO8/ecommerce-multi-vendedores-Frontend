@@ -34,46 +34,84 @@ Componentes Reutilizáveis
 8. CheckListSenha  
    Checklist visual dos requisitos de senha.  
    Cada item fica verde conforme o usuário atende ao requisito.
+
 9. InputReutilizavel
    Base genérica para inputs.
    Aceita ícone à esquerda e rightElement (ex.: botão de mostrar senha).
    Responsável pela padronização dos estilos (iconeComInput).
    Usado internamente em `InputEmail`, `InputSenha`, `InputNome`.
+10. FormCardHeader
+    Cabeçalho reutilizável para páginas de autenticação.
+    Recebe título (titulo), descrição opcional (descricao) e link de voltar (linkDeVoltar).
+    Permite centralizar o texto quando não há link (textoCentralizado).
+    Padroniza os headers de páginas como Login, Cadastro, Esqueceu Senha e Redefinir Senha.
+    Páginas
 
-Páginas
+11. ProdutosInfo (tipo + lista)
+    exporta a interface Produtos com objetos de produto (id, nome, preco, imagem[], descricao, categoria, quantidade, empresa, tags).
 
-1. Login  
-   Formulário de login com email e senha.  
-   Validação com Zod e React Hook Form.  
-   Link para recuperação de senha.  
-   Botão de login.  
-   Separador "ou" e botões de login social.  
-   Link para cadastro.  
-   Senha nunca é exibida no console.
+12. ImagemProduto
+    Componente responsável por renderizar a imagem do produto
+    Placeholder quando não há imagem
+    lazy loading
+    overlay sutil.
 
-2. Cadastro  
-   Formulário para criar conta: nome, email, senha, confirmar senha.  
-   Validação avançada de senha (tamanho, maiúscula, minúscula, número, especial).  
-   Checklist visual dos requisitos de senha.
-   Borda dos inputs ficam vermelha se o usuário colocar um valor inválido  
-   Botão para cadastrar.  
-   Separador "ou" e botões de login social.  
-   Link para login.  
-   Senha e confirmação nunca são exibidas no console.
+13. ConteudoProduto
+    Renderiza nome, empresa, preço e tags do produto dentro do card.
+    Limita o número de tags exibidas (constante MAX_VISIVEL)
+    Mostra "+N" quando houver mais tags.
 
-3. EsqueceuSenha  
-   Formulário para recuperação de senha via email.  
-   Botão para enviar link de recuperação.  
-   Link para voltar ao login.
+14. CardProduto
+    Componente que combina ImagemProduto, ConteudoProduto e BtnCarrinho. Faz controle de loading (skeleton) e hover para exibir botão de adicionar ao carrinho.
 
-4. RedefinirSenha
-   Página para redefinir senha após o link de recuperação.
-   Campos: nova senha e confirmar nova senha.
-   Validação com redefinirSenhaSchema.
-   Checklist de senha exibido abaixo do campo "Nova senha".
-   Botão para confirmar redefinição (com estado de carregando).
-   Link para voltar ao login.
-   Senha nunca é exibida no console.
+Comportamento:
+Mostra um skeleton (componente Skeleton) enquanto loading === true.
+Ao passar o mouse exibe BtnCarrinho no canto superior direito.
+Chama adicionarAoCarrinho(produto) quando botão é clicado (função temporária pode ser substituída por dispatch/rota de contexto).
+
+15. BtnCarrinho
+    Botão circular com ícone ShoppingCart (lucide-react). Props:
+    adicionarAoCarrinho?: () => void
+    visivel?: boolean
+    children?: ReactNode
+    className?: string
+
+16 Pagination e Skeleton
+Pagination e utilitários (PaginationContent, PaginationLink, etc.) para paginação reutilizável.
+Skeleton simples para placeholders pulsantes.
+
+Páginas (comportamento)
+
+1. Login
+   Campos: email, senha.
+   Validação: Zod via schemas.
+   Links: esqueceu senha, cadastro.
+   Social login e separador ou.
+   Segurança: senhas NUNCA são logadas no console.
+
+2. Cadastro
+   Campos: nome, email, senha, confirmar senha.
+   Validação: regras de senha centralizadas (regrasSenha.tsx), confirmação deve bater com senha.
+   Checklist visual (CheckListSenha).
+   Inputs invalidos recebem borda vermelha.
+   EsqueceuSenha
+   Formulário: enviar e‑mail para recuperação.
+   Botão para enviar link de recuperação.
+   Link de voltar para login.
+
+3. RedefinirSenha
+   Campos: nova senha, confirmar nova senha.
+   Validação: redefinirSenhaSchema (garante equivalência entre campos).
+   Checklist exibido abaixo de "Nova senha".
+   Botão com estado de carregamento.
+   Senhas NUNCA logadas no console.
+
+4. Inicial (nova página)
+   Página principal do e‑commerce (atualmente usada como wildcard \* no App.tsx para facilitar desenvolvimento).
+   Cabeçalho simples (logo, botões de usuário e suporte).
+   Barra de busca e botão de filtro.
+   Card contendo a listagem de ProdutoInfo.map(...) que renderiza CardProduto.
+   Botão fixo de carrinho (ex.: BtnCarrinho com texto e contagem futuro).
 
 Validação
 
