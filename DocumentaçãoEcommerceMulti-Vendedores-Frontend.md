@@ -40,6 +40,7 @@ Componentes Reutilizáveis
    Aceita ícone à esquerda e rightElement (ex.: botão de mostrar senha).
    Responsável pela padronização dos estilos (iconeComInput).
    Usado internamente em `InputEmail`, `InputSenha`, `InputNome`.
+
 10. FormCardHeader
     Cabeçalho reutilizável para páginas de autenticação.
     Recebe título (titulo), descrição opcional (descricao) e link de voltar (linkDeVoltar).
@@ -112,6 +113,43 @@ Páginas (comportamento)
    Barra de busca e botão de filtro.
    Card contendo a listagem de ProdutoInfo.map(...) que renderiza CardProduto.
    Botão fixo de carrinho (ex.: BtnCarrinho com texto e contagem futuro).
+
+
+Páginas
+
+1. Login  
+   Formulário de login com email e senha.  
+   Validação com Zod e React Hook Form.  
+   Link para recuperação de senha.  
+   Botão de login.  
+   Separador "ou" e botões de login social.  
+   Link para cadastro.  
+   Senha nunca é exibida no console.
+
+2. Cadastro  
+   Formulário para criar conta: nome, email, senha, confirmar senha.  
+   Validação avançada de senha (tamanho, maiúscula, minúscula, número, especial).  
+   Checklist visual dos requisitos de senha.
+   Borda dos inputs ficam vermelha se o usuário colocar um valor inválido  
+   Botão para cadastrar.  
+   Separador "ou" e botões de login social.  
+   Link para login.  
+   Senha e confirmação nunca são exibidas no console.
+
+3. EsqueceuSenha  
+   Formulário para recuperação de senha via email.  
+   Botão para enviar link de recuperação.  
+   Link para voltar ao login.
+
+4. RedefinirSenha
+   Página para redefinir senha após o link de recuperação.
+   Campos: nova senha e confirmar nova senha.
+   Validação com redefinirSenhaSchema.
+   Checklist de senha exibido abaixo do campo "Nova senha".
+   Botão para confirmar redefinição (com estado de carregando).
+   Link para voltar ao login.
+   Senha nunca é exibida no console.
+
 
 Validação
 

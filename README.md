@@ -9,7 +9,7 @@ Usamos o padrão abaixo para manter o histórico organizado.
 - `docs:` atualização de documentação
 - `style:` mudanças visuais/formatação
 - `refactor:` refatoração de código
-- `test:` alterações nos testes
+- `test:` alterações nos textos
 
 
 ## Pré-requisitos
