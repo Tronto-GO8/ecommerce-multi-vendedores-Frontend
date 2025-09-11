@@ -49,26 +49,39 @@ Componentes Reutilizáveis
     Páginas
 
 11. ProdutosInfo (tipo + lista)
-    exporta a interface Produtos com objetos de produto (id, nome, preco, imagem[], descricao, categoria, quantidade, empresa, tags).
+    Exporta a interface Produtos (id, nome, preco, imagem[], descricao, categoria, quantidade, empresa, tags) e a lista ProdutoInfo.
+    Local: src/components/ProdutosInfo.ts.
 
 12. ImagemProduto
-    Componente responsável por renderizar a imagem do produto
-    Placeholder quando não há imagem
-    lazy loading
-    overlay sutil.
+    Componente responsável por renderizar a imagem do produto.
+    Placeholder quando não há imagem.
+    loading="lazy".
+    Overlay sutil (bg-black/5).
+    Implementado com Framer Motion para fade + leve zoom na troca de imagens.
+    Recebe imageUrl: string e nome: string.
+    Notas: usa key={imageUrl} + AnimatePresence para animar entrada/saída.
+    Local: src/components/e-commerce/ImagemProduto.tsx.
 
 13. ConteudoProduto
     Renderiza nome, empresa, preço e tags do produto dentro do card.
-    Limita o número de tags exibidas (constante MAX_VISIVEL)
-    Mostra "+N" quando houver mais tags.
+    Limita o número de tags exibidas pela constante MAX_VISIVEL.
+    Mostra +N quando houver mais tags.
+    Recebe props: nome, empresa, preco, tags.
+    Local: src/components/e-commerce/ConteudoProduto.tsx.
 
 14. CardProduto
-    Componente que combina ImagemProduto, ConteudoProduto e BtnCarrinho. Faz controle de loading (skeleton) e hover para exibir botão de adicionar ao carrinho.
+    Componente que combina ImagemProduto, ConteudoProduto e BtnCarrinho.
+    Faz controle de hover para exibir BtnCarrinho.
+    Usa useTrocaDeImagens para troca automática de imagens ao hover (com preload).
+    Exibe skeleton enquanto loading === true (componente Skeleton).
+    Props: produtos: Produtos.
+    Local: src/components/e-commerce/CardProduto.tsx.
 
-Comportamento:
-Mostra um skeleton (componente Skeleton) enquanto loading === true.
-Ao passar o mouse exibe BtnCarrinho no canto superior direito.
-Chama adicionarAoCarrinho(produto) quando botão é clicado (função temporária pode ser substituída por dispatch/rota de contexto).
+Comportamento principal
+Mostra um Skeleton enquanto loading === true.
+Ao passar o mouse (ou focus por teclado), inicia temporizador (DELAY_INICIO) e, se houver várias imagens, começa a trocar imagens a cada INTERVALO_TROCA.
+Ao sair do card volta para a primeira imagem.
+Chama adicionarAoCarrinho(produto) quando botão é clicado (essa função pode ser substituída por dispatch/rota de contexto).
 
 15. BtnCarrinho
     Botão circular com ícone ShoppingCart (lucide-react). Props:
@@ -77,9 +90,37 @@ Chama adicionarAoCarrinho(produto) quando botão é clicado (função temporári
     children?: ReactNode
     className?: string
 
-16 Pagination e Skeleton
-Pagination e utilitários (PaginationContent, PaginationLink, etc.) para paginação reutilizável.
-Skeleton simples para placeholders pulsantes.
+16. useTrocaDeImagens (hook)
+    Hook responsável pela lógica de troca de imagens no hover.
+    API: useTrocaDeImagens(imagens: string[]) → retorna { indiceAtual, mouseNoCard, aoEntrar, aoSair }.
+    Implementa preload(urls: string[]) que cria new Image() para cada URL (evita piscadas ao trocar).
+    Constantes: DELAY_INICIO e INTERVALO_TROCA.
+    Local: src/hooks/useTrocaDeImagens.ts.
+
+Nota sobre preload: garante que as imagens estejam no cache do navegador antes de serem exibidas, resultando em troca instantânea e sem flicker.
+
+17. useHandleMudarPagina (hook)
+    Hook para controle de mudança de página com scrollTo.
+    Assinatura: useHandleMudarPagina(setPaginaAtual, totalPaginas) → retorna handleMudarPagina(novaPagina).
+    Faz validação de limites e rolagem suave ao topo.
+    Local: src/hooks/useHandleMudarPagina.ts.
+
+18. PaginacaoProdutos
+    Componente de paginação reutilizável.
+    Props: paginaAtual, totalPaginas, onMudarPagina.
+    Usa componentes Pagination, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious (UI primitives).
+    Lógica para exibir elipses quando necessário.
+    Local: src/components/e-commerce/PaginacaoProdutos.tsx.
+
+19. Pagination e Skeleton (utilitários)
+    Pagination* (componentes e estilos) para paginação.
+    Skeleton simples para placeholders pulsantes.
+    Local: src/components/ui/Pagination/* e src/components/ui/Skeleton.tsx.
+
+20. SearchFilterContainer
+    Container com input de busca e botão de filtro.
+    Input com ícone Search e botão com Filter (lucide-react).
+    Local: src/components/e-commerce/SearchFilterContainer.tsx.
 
 Páginas (comportamento)
 
@@ -113,7 +154,6 @@ Páginas (comportamento)
    Barra de busca e botão de filtro.
    Card contendo a listagem de ProdutoInfo.map(...) que renderiza CardProduto.
    Botão fixo de carrinho (ex.: BtnCarrinho com texto e contagem futuro).
-
 
 Páginas
 
@@ -150,6 +190,17 @@ Páginas
    Link para voltar ao login.
    Senha nunca é exibida no console.
 
+5. Inicial (nova página) — página principal do e-commerce (/ ou \* na dev)
+   Cabeçalho simples (HeaderInicial), barra de busca (SearchFilterContainer) e listagem de produtos.
+   Grid que renderiza CardProduto via ProdutoInfo.map(...).
+   Paginação via PaginacaoProdutos.
+   Botão fixo de carrinho (BtnCarrinho) com texto e contagem futura.
+   Local: src/pages/Inicial.tsx.
+
+Exemplo de comportamento (arquivo atual)
+PRODUTOS_POR_PAGINA = 10.
+useHandleMudarPagina controla mudança de página e scroll suave.
+Paginação calculada: totalPaginas = Math.ceil(ProdutoInfo.length / PRODUTOS_POR_PAGINA).
 
 Validação
 

@@ -1,54 +1,46 @@
 import { Produtos } from "../ProdutosInfo";
 import { Card } from "../ui/card";
 import ImagemProduto from "./ImagemProduto";
-import { useEffect, useState } from "react";
 import ConteudoProduto from "./ConteudoProduto";
 import BtnCarrinho from "./BtnCarrinho";
+import { useTrocaDeImagens } from "@/hooks/useTrocaDeImagem";
 
-function formatPriceBRL(value: number) {
+function formatarPrecoBRL(value: number) {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
   }).format(value);
 }
 
-// Função temporaria para adicionar ao carrinho
+// temp function
 const adicionarAoCarrinho = (produto: Produtos) => {
   console.log("Produto adicionado ao carrinho:", produto);
 };
 
 export default function CardProduto({ produtos }: { produtos: Produtos }) {
-  const imageUrl =
-    produtos.imagem && produtos.imagem.length > 0
-      ? produtos.imagem[0].url
-      : "https://via.placeholder.com/600x400?text=No+Image";
-  const [mouseDentro, setMouseDentro] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const imagens = produtos.imagem?.map((i) => i.url) ?? [];
+  const fallback = "https://via.placeholder.com/600x400?text=No+Image";
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 500); // Simula um carregamento de 500ms
+  const { indiceAtual, mouseNoCard, aoEntrar, aoSair } =
+    useTrocaDeImagens(imagens);
 
-    return () => clearTimeout(timer);
-  }, []);
-  if (loading) {
-    return (
-      <div className="w-[260px] h-[350px] bg-gray-300 animate-pulse rounded-lg"></div>
-    );
-  }
+  const imageUrl = imagens.length > 0 ? imagens[indiceAtual] : fallback;
 
   return (
     <Card
-      className="relative w-[260px] md:w-[260px] h-[350px] rounded-lg overflow-hidden border-stone-950 shadow-lg"
-      onMouseEnter={() => setMouseDentro(true)}
-      onMouseLeave={() => setMouseDentro(false)}
+      className="relative w-[260px] md:w-[240px] h-[350px] rounded-lg overflow-hidden border-stone-950 shadow-lg"
+      onMouseEnter={aoEntrar}
+      onMouseLeave={aoSair}
+      onFocus={aoEntrar} // acessibilidade: teclado
+      onBlur={aoSair}
+      tabIndex={0} // permite focus com teclado
     >
       <ImagemProduto imageUrl={imageUrl} nome={produtos.nome} />
-      {mouseDentro && (
+
+      {mouseNoCard && (
         <BtnCarrinho
           adicionarAoCarrinho={() => adicionarAoCarrinho(produtos)}
-          visivel={mouseDentro}
+          visivel={mouseNoCard}
           className="absolute top-2 right-2 p-2"
         />
       )}
@@ -56,7 +48,7 @@ export default function CardProduto({ produtos }: { produtos: Produtos }) {
       <ConteudoProduto
         nome={produtos.nome}
         empresa={produtos.empresa}
-        preco={formatPriceBRL(produtos.preco)}
+        preco={formatarPrecoBRL(produtos.preco)}
         tags={produtos.tags}
       />
     </Card>

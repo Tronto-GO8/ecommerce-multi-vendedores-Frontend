@@ -13,6 +13,7 @@ import ChecklistSenha from "@/components/loginCadastro/CheckListSenha";
 import { CadastroForm, cadastroSchema } from "@/schemas/cadastroSchema";
 import InputError from "@/components/InputError";
 import FormCardHeader from "@/components/loginCadastro/FormCardHeader";
+import Header from "@/components/loginCadastro/Header";
 
 export default function Cadastrar() {
   const {
@@ -35,49 +36,52 @@ export default function Cadastrar() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-      <div className="w-full max-w-md">
-        <Card className="shadow-black">
-          <FormCardHeader titulo="Criar conta" textoCentralizado />
-          <CardContent className="space-y-2">
-            <form
-              className="space-y-4 border-dashed border-l-black"
-              onSubmit={handleSubmit(enviarFormCadastro)}
-            >
-              <InputNome {...register("nome")} isError={!!errors.nome} />
-              <InputError message={errors.nome?.message} />
-              <InputEmail {...register("email")} isError={!!errors.email} />
-              <InputError message={errors.email?.message} />
-              <InputSenha
-                label="Senha"
-                {...register("senha")}
-                isError={!!errors.senha}
-                onChange={(e) => {
-                  setSenhaDigitada(e.target.value);
-                  register("senha").onChange(e);
-                }} //No onChange, além de atualizar o form, salva o valor em senhaDigitada.
+    <div>
+      <Header />
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
+        <div className="w-full max-w-md">
+          <Card className="shadow-black">
+            <FormCardHeader titulo="Criar conta" textoCentralizado />
+            <CardContent className="space-y-2">
+              <form
+                className="space-y-4 border-dashed border-l-black"
+                onSubmit={handleSubmit(enviarFormCadastro)}
+              >
+                <InputNome {...register("nome")} isError={!!errors.nome} />
+                <InputError message={errors.nome?.message} />
+                <InputEmail {...register("email")} isError={!!errors.email} />
+                <InputError message={errors.email?.message} />
+                <InputSenha
+                  label="Senha"
+                  {...register("senha")}
+                  isError={!!errors.senha}
+                  onChange={(e) => {
+                    setSenhaDigitada(e.target.value);
+                    register("senha").onChange(e);
+                  }} //No onChange, além de atualizar o form, salva o valor em senhaDigitada.
+                />
+                {/* validando a senha digitada em tempo real. */}
+                <ChecklistSenha senha={senhaDigitada} />
+                <InputSenha
+                  label="Confirmar Senha"
+                  {...register("confirmarSenha")}
+                  isError={!!errors.confirmarSenha}
+                />
+                <InputError message={errors.confirmarSenha?.message} />
+                <Button type="submit" className="w-full">
+                  Criar Conta
+                </Button>
+              </form>
+              <OuSeparador />
+              <LoginSocial />
+              <TextoLinkAlternativo
+                texto="Já tem uma conta?"
+                textoLink="Entrar"
+                to="/login"
               />
-              {/* validando a senha digitada em tempo real. */}
-              <ChecklistSenha senha={senhaDigitada} />
-              <InputSenha
-                label="Confirmar Senha"
-                {...register("confirmarSenha")}
-                isError={!!errors.confirmarSenha}
-              />
-              <InputError message={errors.confirmarSenha?.message} />
-              <Button type="submit" className="w-full">
-                Criar Conta
-              </Button>
-            </form>
-            <OuSeparador />
-            <LoginSocial />
-            <TextoLinkAlternativo
-              texto="Já tem uma conta?"
-              textoLink="Entrar"
-              to="/login"
-            />
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

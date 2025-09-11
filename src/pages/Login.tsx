@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginForm } from "@/schemas/loginSchema";
 import InputError from "@/components/InputError";
 import FormCardHeader from "@/components/loginCadastro/FormCardHeader";
+import Header from "@/components/loginCadastro/Header";
 
 export default function Login() {
   const {
@@ -27,34 +28,40 @@ export default function Login() {
     console.log("Login: ", dadosSemSenha);
   };
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-      <Card className="shadow-black">
-        <FormCardHeader titulo="Entrar" textoCentralizado />
-        <CardContent className="space-y-4">
-          <form className="space-y-4" onSubmit={handleSubmit(enviar)}>
-            <InputEmail {...register("email")} />
-            <InputError message={errors.email?.message} />
-            <InputSenha label="Senha" {...register("senha")} />
-            <InputError message={errors.senha?.message} />
-            <div className="text-right pt-4">
-              <Link to="/esqueceusenha" className="text-sm hover:text-gray-600">
-                Esqueceu a senha?
-              </Link>
-            </div>
+    <div>
+      <Header />
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
+        <Card className="shadow-black">
+          <FormCardHeader titulo="Entrar" textoCentralizado />
+          <CardContent className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit(enviar)}>
+              <InputEmail {...register("email")} />
+              <InputError message={errors.email?.message} />
+              <InputSenha label="Senha" {...register("senha")} />
+              <InputError message={errors.senha?.message} />
+              <div className="text-right pt-4">
+                <Link
+                  to="/esqueceusenha"
+                  className="text-sm hover:text-gray-600"
+                >
+                  Esqueceu a senha?
+                </Link>
+              </div>
 
-            <Button type="submit" className="w-full">
-              Entrar
-            </Button>
-          </form>
-          <OuSeparador />
-          <LoginSocial />
-          <TextoLinkAlternativo
-            texto="Não tem um conta?"
-            textoLink="Cadastrar"
-            to="/cadastro"
-          />
-        </CardContent>
-      </Card>
+              <Button type="submit" className="w-full">
+                Entrar
+              </Button>
+            </form>
+            <OuSeparador />
+            <LoginSocial />
+            <TextoLinkAlternativo
+              texto="Não tem um conta?"
+              textoLink="Cadastrar"
+              to="/cadastro"
+            />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

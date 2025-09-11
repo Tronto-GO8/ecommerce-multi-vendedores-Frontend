@@ -17,7 +17,13 @@ export const ProdutoInfo: Produtos[] = [
     preco: 899.9,
     imagem: [
       {
-        url: "https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/t/g/tgt-hr-brd0141545100007.jpg",
+        url: "https://media.pichau.com.br/media/catalog/product/cache/ef72d3c27864510e5d4c0ce69bade259/t/g/tgt-hrm-rd024.jpg",
+      },
+      {
+        url: "https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/t/g/tgt-hrm-rd026.jpg",
+      },
+      {
+        url: "https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/t/g/tgt-hrm-rd02.jpg",
       },
     ],
     descricao: "Cadeira Gamer TGT Heron, Preta e Vermelha, TGT-HR-BRD01",
@@ -40,6 +46,12 @@ export const ProdutoInfo: Produtos[] = [
     imagem: [
       {
         url: "https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/m/c/mcr-hz2bn21-bl2101400541003_1.jpg",
+      },
+      {
+        url: "https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/m/c/mcr-hz2bn21-bl2101400541004_1.jpg",
+      },
+      {
+        url: "https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/m/c/mcr-hz2bn21-bl2101400541001.jpg",
       },
     ],
     tags: [
