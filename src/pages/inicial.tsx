@@ -18,7 +18,7 @@ export default function Inicial() {
           <Button>
             <Headset />
           </Button>
-          <Button>
+          <Button>;
             <p>Área admnistrativa</p>
           </Button>
         </div>

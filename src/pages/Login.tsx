@@ -1,4 +1,4 @@
-import InputEmail from "@/components/loginCadastro/InputEmail";
+ import InputEmail from "@/components/loginCadastro/InputEmail";
 import InputSenha from "@/components/loginCadastro/InputSenha";
 import LoginSocial from "@/components/loginCadastro/LoginSocial";
 import { Button } from "@/components/ui/button";

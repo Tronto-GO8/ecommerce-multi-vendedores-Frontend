@@ -1,127 +1,127 @@
-import { useState, useRef, useEffect } from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Send } from "lucide-react"
+import { useState, useRef, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
 
 type Message = {
-    id: number
-    sender: "user" | "bot"
-    text: string
-}
+  id: number;
+  sender: "user" | "bot";
+  text: string;
+};
 
-export default function ChatIa() {
-    const [messages, setMessages] = useState<Message[]>([])
-    const [chatStarted, setChatStarted] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [inputText, setInputText] = useState("")
+type ChatIaProps = {
+  preMessages: string[];
+  setPreMessages: React.Dispatch<React.SetStateAction<string[]>>;
+};
 
-    const messagesEndRef = useRef<HTMLDivElement | null>(null)
+export default function ChatIa({ preMessages, setPreMessages }: ChatIaProps) {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [chatStarted, setChatStarted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [inputText, setInputText] = useState("");
 
-    // Rolagem automática para a última mensagem
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, [messages])
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    const handleSend = () => {
-        if (!inputText.trim()) return
-        setChatStarted(true)
+  // Rolagem automática
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-        // Adiciona a mensagem do usuário
-        const newMessage: Message = {
-            id: Date.now(),
-            sender: "user",
-            text: inputText.trim(),
-        }
-        setMessages((prev) => [...prev, newMessage])
-        setInputText("")
-
-        // Simula resposta do bot temporário
-        setIsLoading(true)
-        setTimeout(() => {
-            const botMessage: Message = {
-                id: Date.now() + 1,
-                sender: "bot",
-                text: "Essa é uma resposta automática da IA",
-            }
-            setMessages((prev) => [...prev, botMessage])
-            setIsLoading(false)
-        }, 1500)
-
-        //fim temp
-
-        /*Requisição real
-        fetch("/api/ai", { method: "POST", body: JSON.stringify({ prompt: inputText }) })
-//   .then(res => res.json())
-//   .then(data => {
-//     // data.text = resposta da IA
-//     const botMessage: Message = {
-//       id: Date.now() + 1,
-//       sender: "bot",
-//       text: data.text,
-//     }
-//     setMessages(prev => [...prev, botMessage])
-//     setIsLoading(false)
-//   })
-//   .catch(err => {
-//     console.error(err)
-//     setIsLoading(false)
-//   })*/
+  // Receber mensagens externas da barra lateral
+  useEffect(() => {
+    if (preMessages.length > 0) {
+      const newMessages: Message[] = preMessages.map((text) => ({
+        id: Date.now() + Math.random(), // ID único
+        sender: "user",
+        text,
+      }));
+      setMessages((prev) => [...prev, ...newMessages]);
+      setPreMessages([]); // limpa as mensagens do pai
+      setChatStarted(true);
+      simulateBotResponse();
     }
+  }, [preMessages, setPreMessages]);
 
-    return (
-        <div className="flex justify-end">
-            <div className="m-4 mr-28 w-[55vw] h-[88vh] flex flex-col border rounded-lg shadow-lg bg-white">
+  // Envio manual
+  const handleSend = () => {
+    if (!inputText.trim()) return;
+    setChatStarted(true);
 
-                {/* Área de mensagens */}
-                <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-2">
-                    {!chatStarted ? (
-                        <div className="flex h-full items-center justify-center text-gray-500">
-                            <p>Digite algo para começarmos...</p>
-                        </div>
-                    ) : (
-                        <>
-                            {messages.map((msg) => (
-                                <div
-                                    key={msg.id}
-                                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-                                >
-                                    <div
-                                        className={`max-w-[70%] p-2 rounded-lg whitespace-normal break-words ${msg.sender === "user"
-                                                ? "bg-blue-500 text-white"
-                                                : "bg-gray-200"
-                                            }`}
-                                    >
-                                        {msg.text}
-                                    </div>
-                                </div>
-                            ))}
+    const newMessage: Message = {
+      id: Date.now(),
+      sender: "user",
+      text: inputText.trim(),
+    };
 
-                            {/*marcador do scroll automático */}
-                            <div ref={messagesEndRef} />
-                        </>
-                    )}
-                </div>
+    setMessages((prev) => [...prev, newMessage]);
+    setInputText("");
+    simulateBotResponse();
+  };
 
-                {/* Input fixo embaixo */}
-                <div className="p-4 border-t flex items-center gap-2">
-                    <Input
-                        value={inputText}
-                        onChange={(e) => setInputText(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                        placeholder="Digite sua mensagem..."
-                        disabled={isLoading}
-                    />
-                    <Button
-                        onClick={handleSend}
-                        size="icon"
-                        variant="default"
-                        aria-label="Enviar mensagem"
-                        disabled={isLoading}
-                    >
-                        <Send className="w-5 h-5" />
-                    </Button>
-                </div>
+  // Resposta automática do bot
+  const simulateBotResponse = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const botMessage: Message = {
+        id: Date.now() + 1,
+        sender: "bot",
+        text: "Essa é uma resposta automática da IA",
+      };
+      setMessages((prev) => [...prev, botMessage]);
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  return (
+    <div className="flex justify-end">
+      <div className="m-4 mr-28 w-full max-w-[95vw] sm:max-w-[85vw] md:max-w-[70vw] lg:max-w-[55vw] h-[85vh] overflow-hidden flex flex-col border rounded-lg shadow-lg bg-white">
+        {/* Área de mensagens */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-2">
+          {!chatStarted ? (
+            <div className="flex h-full items-center justify-center text-gray-500 text-xl">
+              <p>Digite algo para começarmos...</p>
             </div>
+          ) : (
+            <>
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`max-w-[70%] p-2 rounded-lg whitespace-normal break-words ${
+                      msg.sender === "user" ? "bg-blue-500 text-white" : "bg-gray-200"
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </>
+          )}
         </div>
-    )
+
+        {/* Input fixo embaixo */}
+        <div className="p-4 border-t flex items-center gap-2">
+          <Input
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            placeholder="Digite sua mensagem..."
+            disabled={isLoading}
+          />
+          <Button
+            onClick={handleSend}
+            size="icon"
+            variant="default"
+            aria-label="Enviar mensagem"
+            disabled={isLoading}
+          >
+            <Send className="w-5 h-5" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 }
