@@ -13,7 +13,7 @@ export default function Assistencia() {
 
   return (
     // grid pai: header já existe fora daqui, então esta parte ocupa o restante
-    <div className="grid grid-rows-[auto_1fr] min-h-[85%]">
+    <div className="grid grid-rows-[auto_1fr] max-h-[calc(100vh-60px)]">
       {/* Barra preta com seta */}
       <div className="w-full bg-[#303030] flex items-center">
         <Link
