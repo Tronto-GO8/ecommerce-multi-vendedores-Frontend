@@ -1,12 +1,6 @@
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { Pagination, PaginationContent } from "@/components/ui/pagination";
+import MudarPagina from "../MudarPagina";
+import PaginasNumeradas from "./PaginasNumeradas";
 
 interface ProductPaginationProps {
   paginaAtual: number;
@@ -23,64 +17,32 @@ export default function PaginacaoProdutos({
 
   return (
     <div className="space-y-4">
-      {/* Componente de paginação */}
       <div className="flex justify-center">
         <Pagination>
           <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => onMudarPagina(paginaAtual - 1)}
-                className={`cursor-pointer text-white hover:bg-gray-700 ${
-                  paginaAtual === 1 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              />
-            </PaginationItem>
+            <MudarPagina
+              tipoDeBotao="previous"
+              desativarSe={paginaAtual === 1}
+              onMudarPagina={() => onMudarPagina(paginaAtual - 1)}
+            />
 
-            {/* Páginas numeradas */}
             {Array.from({ length: totalPaginas }, (_, i) => i + 1).map(
-              (numeroPagina) => {
-                // Mostrar apenas algumas páginas para não sobrecarregar a UI
-                if (
-                  numeroPagina === 1 ||
-                  numeroPagina === totalPaginas ||
-                  (numeroPagina >= paginaAtual - 1 &&
-                    numeroPagina <= paginaAtual + 1)
-                ) {
-                  return (
-                    <PaginationItem key={numeroPagina}>
-                      <PaginationLink
-                        onClick={() => onMudarPagina(numeroPagina)}
-                        isActive={paginaAtual === numeroPagina}
-                        className="cursor-pointer text-black hover:bg-gray-700"
-                      >
-                        {numeroPagina}
-                      </PaginationLink>
-                    </PaginationItem>
-                  );
-                } else if (
-                  numeroPagina === paginaAtual - 2 ||
-                  numeroPagina === paginaAtual + 2
-                ) {
-                  return (
-                    <PaginationItem key={numeroPagina}>
-                      <PaginationEllipsis className="text-white" />
-                    </PaginationItem>
-                  );
-                }
-                return null;
-              }
+              (numeroPagina) => (
+                <PaginasNumeradas
+                  key={numeroPagina}
+                  numeroPagina={numeroPagina}
+                  paginaAtual={paginaAtual}
+                  totalPaginas={totalPaginas}
+                  onMudarPagina={onMudarPagina}
+                />
+              )
             )}
 
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => onMudarPagina(paginaAtual + 1)}
-                className={`cursor-pointer text-white hover:bg-gray-700 ${
-                  paginaAtual === totalPaginas
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-              />
-            </PaginationItem>
+            <MudarPagina
+              tipoDeBotao="next"
+              desativarSe={paginaAtual === totalPaginas}
+              onMudarPagina={() => onMudarPagina(paginaAtual + 1)}
+            />
           </PaginationContent>
         </Pagination>
       </div>

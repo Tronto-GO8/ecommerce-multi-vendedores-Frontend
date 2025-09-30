@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Card } from "../ui/card";
+import { Card } from "../../ui/card";
 import { useState } from "react";
 
 type ImagemProdutoProps = {
