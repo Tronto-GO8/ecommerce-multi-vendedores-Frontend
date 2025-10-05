@@ -24,7 +24,7 @@ export default function SearchESugestoes({
     totalResultados,
     sugestoes,
     abrirContainerDeSugestoes,
-    handleOpenChange,
+    aoAbrirSugestaoContinuarFocadoNoInput,
     confirmarPesquisa,
     onKeyDown,
     setAbrirContainerDeSugestoes,
@@ -49,7 +49,10 @@ export default function SearchESugestoes({
 
   return (
     <div className="relative flex-1 max-w-sm">
-      <Popover open={abrirContainerDeSugestoes} onOpenChange={handleOpenChange}>
+      <Popover
+        open={abrirContainerDeSugestoes}
+        onOpenChange={aoAbrirSugestaoContinuarFocadoNoInput}
+      >
         <PopoverTrigger asChild>
           <ComponenteSearch
             ref={refDeInputParaFocar}
@@ -69,7 +72,7 @@ export default function SearchESugestoes({
           sugestoes={sugestoes}
           numeroDeSugestoesDePesquisa={numeroDeSugestoesDePesquisa}
           onSelecionarSugestao={onSugestaoSelecionada}
-          onConfirmarPesquisa={confirmarPesquisa}
+          onConfirmarPesquisa={confirmar}
         />
       </Popover>
     </div>

@@ -1160,4 +1160,434 @@ export const ProdutoInfo: Produtos[] = [
       { nome: "Cloud Grey" },
     ],
   },
+  {
+    id: 63,
+    nome: "Impressora Multifuncional HP Deskjet Ink Advantage 2874 Colorida, Wi-Fi, Scanner, USB (6W7G2A)",
+    preco: 399.0,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/61D11enKadL._AC_SX679_.jpg" },
+    ],
+    descricao:
+      "Impressora Multifuncional HP Deskjet Ink Advantage 2874 Colorida, Wi-Fi, Scanner, USB (6W7G2A)",
+    categoria: "Perifericos",
+    subcategoria: "Impressoras",
+    quantidade: 10,
+    empresa: "HP",
+    tags: [
+      { nome: "Impressora" },
+      { nome: "HP" },
+      { nome: "Deskjet Ink Advantage 2874" },
+      { nome: "Wi-Fi" },
+      { nome: "Scanner" },
+      { nome: "USB" },
+      { nome: "Jato de Tinta" },
+      { nome: "Colorida" },
+      { nome: "6W7G2A" },
+    ],
+  },
+
+  {
+    id: 64,
+    nome: "Impressora Multifuncional HP Smart Tank 724 Tanque de Tinta Colorida Wi-Fi Scanner Duplex (2G9Q2A)",
+    preco: 1215.01,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/61f+M0ZPXWL._AC_SX679_.jpg" },
+    ],
+    descricao:
+      "Impressora Multifuncional HP Smart Tank 724 Tanque de Tinta Colorida Wi-Fi Scanner Duplex (2G9Q2A)",
+    categoria: "Perifericos",
+    subcategoria: "Impressoras",
+    quantidade: 10,
+    empresa: "HP",
+    tags: [
+      { nome: "Impressora" },
+      { nome: "HP" },
+      { nome: "Smart Tank 724" },
+      { nome: "Tanque de Tinta" },
+      { nome: "Wi-Fi" },
+      { nome: "Scanner" },
+      { nome: "Duplex" },
+      { nome: "Colorida" },
+      { nome: "2G9Q2A" },
+    ],
+  },
+
+  {
+    id: 65,
+    nome: "Water Cooler Kalkan Delta 360mm - Wireless ARGB - KLK00051",
+    preco: 450.0,
+    imagem: [
+      {
+        url: "https://m.media-amazon.com/images/I/51P7onEWqfL._AC_SY300_SX300_QL70_ML2_.jpg",
+      },
+    ],
+    descricao: "Water Cooler Kalkan Delta 360mm - Wireless ARGB - KLK00051",
+    categoria: "Hardware",
+    subcategoria: "Coolers e Sistemas de Refrigeração",
+    quantidade: 10,
+    empresa: "Kalkan",
+    tags: [
+      { nome: "Water Cooler" },
+      { nome: "Kalkan" },
+      { nome: "Delta 360mm" },
+      { nome: "ARGB" },
+      { nome: "KLK00051" },
+      { nome: "Refrigeração" },
+    ],
+  },
+
+  {
+    id: 66,
+    nome: "Water Cooler Gamer Kalkan Alpha 360 ARGB com display Preto - KLK00048",
+    preco: 399.0,
+    imagem: [
+      {
+        url: "https://m.media-amazon.com/images/I/510T9ho7UwL._AC_SY300_SX300_QL70_ML2_.jpg",
+      },
+    ],
+    descricao:
+      "Water Cooler Gamer Kalkan Alpha 360 ARGB com display Preto - KLK00048",
+    categoria: "Hardware",
+    subcategoria: "Coolers e Sistemas de Refrigeração",
+    quantidade: 10,
+    empresa: "Kalkan",
+    tags: [
+      { nome: "Water Cooler" },
+      { nome: "Kalkan" },
+      { nome: "Alpha 360" },
+      { nome: "ARGB" },
+      { nome: "Display" },
+      { nome: "Gamer" },
+      { nome: "KLK00048" },
+    ],
+  },
+
+  {
+    id: 67,
+    nome: "Webcam Full HD Logitech Brio 100 com Microfone Integrado e Proteção de Privacidade - Grafite",
+    preco: 239.99,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/61nTmIUB0LL._AC_SY355_.jpg" },
+    ],
+    descricao:
+      "Webcam Full HD Logitech Brio 100 com Microfone Integrado e Proteção de Privacidade - Grafite",
+    categoria: "Perifericos",
+    subcategoria: "Webcams",
+    quantidade: 10,
+    empresa: "Logitech",
+    tags: [
+      { nome: "Webcam" },
+      { nome: "Logitech" },
+      { nome: "Brio 100" },
+      { nome: "Full HD" },
+      { nome: "Microfone Integrado" },
+      { nome: "Privacidade" },
+      { nome: "Grafite" },
+    ],
+  },
+
+  {
+    id: 68,
+    nome: "Webcam Full HD Logitech C920s com Microfone Embutido e Proteção de Privacidade - 1080p",
+    preco: 421.99,
+    imagem: [
+      {
+        url: "https://m.media-amazon.com/images/I/61SCZyiMSNL._AC_SY300_SX300_QL70_ML2_.jpg",
+      },
+    ],
+    descricao:
+      "Webcam Full HD Logitech C920s com Microfone Embutido e Proteção de Privacidade - 1080p",
+    categoria: "Perifericos",
+    subcategoria: "Webcams",
+    quantidade: 10,
+    empresa: "Logitech",
+    tags: [
+      { nome: "Webcam" },
+      { nome: "Logitech" },
+      { nome: "C920s" },
+      { nome: "Full HD" },
+      { nome: "1080p" },
+      { nome: "Microfone" },
+      { nome: "Privacidade" },
+    ],
+  },
+
+  {
+    id: 69,
+    nome: "Scanner de Mesa Brother ADS1350W",
+    preco: 1799.9,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/61qPHe0+U7L._AC_SY450_.jpg" },
+    ],
+    descricao: "Scanner de Mesa Brother ADS1350W",
+    categoria: "Perifericos",
+    subcategoria: "Scanners",
+    quantidade: 10,
+    empresa: "Brother",
+    tags: [
+      { nome: "Scanner" },
+      { nome: "Brother" },
+      { nome: "ADS1350W" },
+      { nome: "Mesa" },
+      { nome: "Profissional" },
+    ],
+  },
+
+  {
+    id: 70,
+    nome: "Scanner Canon P-240 - Preto",
+    preco: 1881.0,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/51n-tNX71LL._AC_SY355_.jpg" },
+    ],
+    descricao: "Scanner Canon P-240 - Preto",
+    categoria: "Perifericos",
+    subcategoria: "Scanners",
+    quantidade: 10,
+    empresa: "Canon",
+    tags: [
+      { nome: "Scanner" },
+      { nome: "Canon" },
+      { nome: "P-240" },
+      { nome: "Preto" },
+    ],
+  },
+
+  {
+    id: 71,
+    nome: "Smartphone Samsung Galaxy Z Fold6 512GB 5G, 12GB RAM, Tela 7.60 - Azul",
+    preco: 6799.0,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/51As-V8OzrL._AC_SY450_.jpg" },
+    ],
+    descricao:
+      "Smartphone Samsung Galaxy Z Fold6 512GB 5G, 12GB RAM, Tela 7.60 - Azul",
+    categoria: "Smartphones",
+    subcategoria: "Android",
+    quantidade: 10,
+    empresa: "Samsung",
+    tags: [
+      { nome: "Smartphone" },
+      { nome: "Samsung" },
+      { nome: "Galaxy Z Fold6" },
+      { nome: "512GB" },
+      { nome: "12GB RAM" },
+      { nome: "5G" },
+      { nome: "Tela 7.6" },
+      { nome: "Azul" },
+    ],
+  },
+
+  {
+    id: 72,
+    nome: "Apple iPhone 17 Pro (256 GB) - Azul intenso",
+    preco: 10348.99,
+    imagem: [
+      {
+        url: "https://m.media-amazon.com/images/I/41uMcSPiYAL._AC_SX342_SY445_QL70_ML2_.jpg",
+      },
+    ],
+    descricao: "Apple iPhone 17 Pro (256 GB) - Azul intenso",
+    categoria: "Smartphones",
+    subcategoria: "iOS",
+    quantidade: 10,
+    empresa: "Apple",
+    tags: [
+      { nome: "Smartphone" },
+      { nome: "Apple" },
+      { nome: "iPhone 17 Pro" },
+      { nome: "256 GB" },
+      { nome: "Azul intenso" },
+    ],
+  },
+
+  {
+    id: 73,
+    nome: 'Tablet Lenovo Tab M9 Octa-Core 4GB 64GB Wi-Fi, Câmera 8MP, 9" WVA (1340x800) - Prata',
+    preco: 702.05,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/61dxj9a7NHL._AC_SX679_.jpg" },
+    ],
+    descricao:
+      'Tablet Lenovo Tab M9 Octa-Core 4GB 64GB Wi-Fi, Câmera 8MP, 9" WVA (1340x800) - Prata',
+    categoria: "Tablets",
+    subcategoria: "Android",
+    quantidade: 10,
+    empresa: "Lenovo",
+    tags: [
+      { nome: "Tablet" },
+      { nome: "Lenovo" },
+      { nome: "Tab M9" },
+      { nome: "4GB" },
+      { nome: "64GB" },
+      { nome: "Wi-Fi" },
+      { nome: "8MP" },
+      { nome: '9"' },
+      { nome: "Prata" },
+    ],
+  },
+
+  {
+    id: 74,
+    nome: 'Apple iPad Pro Wi-Fi 11" (512 GB) - Cinzento sideral',
+    preco: 14399.0,
+    imagem: [
+      {
+        url: "https://m.media-amazon.com/images/I/61nshfaBV9L._AC_SX342_SY445_QL70_ML2_.jpg",
+      },
+    ],
+    descricao: 'Apple iPad Pro Wi-Fi 11" (512 GB) - Cinzento sideral',
+    categoria: "Tablets",
+    subcategoria: "iOS",
+    quantidade: 10,
+    empresa: "Apple",
+    tags: [
+      { nome: "Tablet" },
+      { nome: "Apple" },
+      { nome: "iPad Pro" },
+      { nome: '11"' },
+      { nome: "512 GB" },
+      { nome: "Wi-Fi" },
+      { nome: "Cinzento sideral" },
+    ],
+  },
+
+  {
+    id: 75,
+    nome: 'Mini PC Slim Intel Core i7 3ª Geração | 16GB RAM | SSD 512GB NVMe | Windows 11 Pro | Monitor 19" + Teclado e Mouse sem Fio',
+    preco: 1599.9,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/61M2g4WJY6L._AC_SX679_.jpg" },
+    ],
+    descricao:
+      'Mini PC Slim Intel Core i7 3ª Geração | 16GB RAM | SSD 512GB NVMe | Windows 11 Pro | Monitor 19" + Teclado e Mouse sem Fio',
+    categoria: "Desktops",
+    subcategoria: "Workstations",
+    quantidade: 10,
+    empresa: "Generic",
+    tags: [
+      { nome: "Mini PC" },
+      { nome: "Intel Core i7 3ª Geração" },
+      { nome: "16GB RAM" },
+      { nome: "512GB SSD" },
+      { nome: "Windows 11 Pro" },
+      { nome: 'Monitor 19"' },
+    ],
+  },
+
+  {
+    id: 76,
+    nome: 'Computador Completo Intel Core i5 16GB SSD 512GB Monitor 19" Pc Hdmi Teclado e Mouse - Strong Tech',
+    preco: 1281.02,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/61UfMcwoepL._AC_SY450_.jpg" },
+    ],
+    descricao:
+      'Computador Completo Intel Core i5 16GB SSD 512GB Monitor 19" Pc Hdmi Teclado e Mouse - Strong Tech',
+    categoria: "Desktops",
+    subcategoria: "Workstations",
+    quantidade: 10,
+    empresa: "Strong Tech",
+    tags: [
+      { nome: "Computador" },
+      { nome: "Strong Tech" },
+      { nome: "Intel Core i5" },
+      { nome: "16GB RAM" },
+      { nome: "512GB SSD" },
+      { nome: 'Monitor 19"' },
+    ],
+  },
+
+  {
+    id: 77,
+    nome: "Carregador Turbo Compatível com Samsung Galaxy, Motorola, iPhone 15/16 - Fonte 25W Ultra, Tipo C + USB (acompanha cabo) - Black",
+    preco: 59.5,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/51fTkXeAypL._AC_SY450_.jpg" },
+    ],
+    descricao:
+      "Carregador Turbo Compatível com Samsung Galaxy, Motorola, iPhone 15/16 - Fonte 25W Ultra, Tipo C + USB (acompanha cabo) - Black",
+    categoria: "Acessórios",
+    subcategoria: "Carregadores",
+    quantidade: 10,
+    empresa: "Generic",
+    tags: [
+      { nome: "Carregador" },
+      { nome: "Turbo" },
+      { nome: "25W" },
+      { nome: "Tipo C" },
+      { nome: "USB" },
+      { nome: "Compatível" },
+    ],
+  },
+
+  {
+    id: 78,
+    nome: "Carregador Super Turbo 50W Ultra Rápido Tipo C e USB + Cabo Tipo C",
+    preco: 39.89,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/51N6UJWbyLL._AC_SY450_.jpg" },
+    ],
+    descricao:
+      "Carregador Super Turbo 50W Ultra Rápido Tipo C e USB + Cabo Tipo C",
+    categoria: "Acessórios",
+    subcategoria: "Carregadores",
+    quantidade: 10,
+    empresa: "Generic",
+    tags: [
+      { nome: "Carregador" },
+      { nome: "50W" },
+      { nome: "Tipo C" },
+      { nome: "USB" },
+      { nome: "Cabo incluso" },
+      { nome: "Super Turbo" },
+    ],
+  },
+
+  {
+    id: 79,
+    nome: "Fone de Ouvido Bluetooth com Microfone e Cancelamento de Ruído Ativo - 4Leader (à Prova D'água) - Preto",
+    preco: 139.9,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/61qMLLZH1hL._AC_SY606_.jpg" },
+    ],
+    descricao:
+      "Fone de Ouvido Bluetooth com Microfone e Cancelamento de Ruído Ativo - 4Leader (à Prova D'água) - Preto",
+    categoria: "Acessórios",
+    subcategoria: "Fones de Ouvido",
+    quantidade: 10,
+    empresa: "4Leader",
+    tags: [
+      { nome: "Fone de Ouvido" },
+      { nome: "Bluetooth" },
+      { nome: "4Leader" },
+      { nome: "Cancelamento de Ruído" },
+      { nome: "À prova d'água" },
+      { nome: "Microfone" },
+      { nome: "Sem Fio" },
+    ],
+  },
+
+  {
+    id: 80,
+    nome: "PHILIPS Fone de Ouvido com Microfone TAUE101BK/00 - Com fio, Intra-auricular, Preto",
+    preco: 26.0,
+    imagem: [
+      { url: "https://m.media-amazon.com/images/I/51+W7A115SL._AC_SY450_.jpg" },
+    ],
+    descricao:
+      "PHILIPS Fone de Ouvido com Microfone TAUE101BK/00 - Com fio, Intra-auricular, Preto",
+    categoria: "Acessórios",
+    subcategoria: "Fones de Ouvido",
+    quantidade: 10,
+    empresa: "Philips",
+    tags: [
+      { nome: "Fone de Ouvido" },
+      { nome: "Philips" },
+      { nome: "TAUE101BK/00" },
+      { nome: "Com fio" },
+      { nome: "Intra-auricular" },
+      { nome: "Preto" },
+    ],
+  },
 ];

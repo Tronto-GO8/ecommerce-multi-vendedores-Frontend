@@ -48,36 +48,73 @@ Componentes Reutilizáveis
     Padroniza os headers de páginas como Login, Cadastro, Esqueceu Senha e Redefinir Senha.
     Páginas
 
+Header Inicial
+
+1. HeaderInicial
+   Cabeçalho simples da aplicação (logo + botões de usuário e suporte).
+   Usa ícone Headset.
+   Local: src/components/e-commerce/HeaderInicial.tsx.
+
+2. Menu de Perfil (Dropdown)
+   Dropdown com opções da conta (Informações, Pedidos, Chamados, Configurações) usando primitives do DropdownMenu.
+   Usa a variável `iconeComParagrafo` para alinhar ícones e texto.
+   Local: src/components/ui/ProfileDropdown.tsx (ou similar).
+   Observação: considerar internacionalização/rotulagem aria para acessibilidade.
+
 E-commerce: produtos, cards e imagem
 
-11. ProdutosInfo (tipo + lista)
-    Exporta a interface Produtos (id, nome, preco, imagem[], descricao, categoria, quantidade, empresa, tags) e a lista ProdutoInfo.
-    Local: src/components/ProdutosInfo.ts.
+1. ProdutosInfo (tipo + lista)
+   Exporta a interface Produtos (id, nome, preco, imagem[], descricao, categoria, quantidade, empresa, tags) e a lista ProdutoInfo.
+   Local: src/components/ProdutosInfo.ts.
 
-12. ImagemProduto
-    Implementado com framer-motion (AnimatePresence + motion.img) para animação fade + scale.
-    Props: imageUrl: string, nome: string.
-    Comportamento:
-    key={imageUrl} forçando re-mount e animação na troca.
-    onLoad seta estado imagemCarregada (pode ser usado para skeletons/placeholder).
-    Local: src/components/e-commerce/produto/ImagemProduto.tsx.
+2. ImagemProduto
+   Implementado com framer-motion (AnimatePresence + motion.img) para animação fade + scale.
+   Props: imageUrl: string, nome: string.
+   Comportamento:
+   key={imageUrl} forçando re-mount e animação na troca.
+   onLoad seta estado imagemCarregada (pode ser usado para skeletons/placeholder).
+   Local: src/components/e-commerce/produto/ImagemProduto.tsx.
 
-13. ConteudoProduto
-    Renderiza nome, empresa, preço e tags do produto dentro do card.
-    Limita o número de tags exibidas pela constante MAX_VISIVEL.
-    Usa formatarPrecoBRL (import formatarPrecoBRL de src/utils/FormatarPrecoBRL).
-    Usa tagsStyle de src/styles/variaveisTailwind/produto/Reutilizaveis.
-    Mostra +N quando houver mais tags.
-    Recebe props: nome, empresa, preco, tags.
-    Local: src/components/e-commerce/ConteudoProduto.tsx.
+3. ConteudoProduto
+   Renderiza nome, empresa, preço e tags do produto dentro do card.
+   Limita o número de tags exibidas pela constante MAX_VISIVEL.
+   Usa formatarPrecoBRL (import formatarPrecoBRL de src/utils/FormatarPrecoBRL).
+   Usa tagsStyle de src/styles/variaveisTailwind/produto/Reutilizaveis.
+   Mostra +N quando houver mais tags.
+   Recebe props: nome, empresa, preco, tags.
+   Local: src/components/e-commerce/produto/ConteudoProduto.tsx.
 
-14. CardProduto
-    Componente que combina ImagemProduto, ConteudoProduto e BtnCarrinho.
-    Faz controle de hover para exibir BtnCarrinho.
-    Usa useTrocaDeImagens para troca automática de imagens ao hover (com preload).
-    Exibe skeleton enquanto loading === true (componente Skeleton).
-    Props: produtos: Produtos.
-    Local: src/components/e-commerce/produto/CardProduto.tsx.
+4. CardProduto
+   Componente que combina ImagemProduto, ConteudoProduto e BtnCarrinho.
+   Faz controle de hover para exibir BtnCarrinho.
+   Usa useTrocaDeImagens para troca automática de imagens ao hover (com preload).
+   Usa useCarrinho para adicionar ao carrinho via adicionarNoCarrinho(produto, 1)
+   Exibe skeleton enquanto loading === true (componente Skeleton).
+   Props: produtos: Produtos.
+   Local: src/components/e-commerce/produto/CardProduto.tsx.
+
+5. ContainerProduto
+   Componente que recebe produtos: Produtos[] e mapeia para LazyCardProduto.
+   Exibe mensagem de "Nenhum produto encontrado" se não houver itens.
+   Local: src/components/e-commerce/produto/ContainerProduto.tsx.
+
+6. LazyCardProduto
+   Componente que combina:
+   useComponenteVisivel() (IntersectionObserver ref, jaCarregado)
+   useLoading(skeletonDelay, jaCarregado) (flag estaCarregando)
+   Exibe SkeletonProduto até o card ficar visível e após o delay exibe CardProduto.
+   Props:
+   produto: Produtos
+   skeletonTagCount?: number
+   skeletonDelay?: number
+   Local: src/components/e-commerce/produto/LazyCardProduto.tsx.
+   Observação: melhora performance e experiência ao fazer lazy-loading e skeletons.
+
+7. SkeletonProduto
+   Skeleton visual do card (placeholder pulsante) usado enquanto o componente real carrega.
+   Props: tagCount?: number.
+   Local: src/components/e-commerce/produto/SkeletonProduto.tsx.
+   Observação: estilizado com Card e Skeleton primitives; manter contraste e tamanhos compatíveis com o card real.
 
 Comportamento principal
 Mostra um Skeleton enquanto loading === true.
@@ -85,75 +122,78 @@ Ao passar o mouse (ou focus por teclado), inicia temporizador (DELAY_INICIO) e, 
 Ao sair do card volta para a primeira imagem.
 Chama adicionarAoCarrinho(produto) quando botão é clicado (essa função pode ser substituída por dispatch/rota de contexto).
 
-15. BtnCarrinho
-    Botão circular com ícone ShoppingCart (lucide-react). Props:
-    Props:
-    adicionarAoCarrinho?: () => void
-    visivel?: boolean
-    children?: ReactNode
-    className?: string
-    Local: src/components/e-commerce/BtnCarrinho.tsx.
+5. BtnCarrinho
+   Botão circular com ícone ShoppingCart (lucide-react). Props:
+   Props:
+   adicionarAoCarrinho?: () => void
+   visivel?: boolean
+   children?: ReactNode
+   className?: string
+   mostrarTotal?: boolean
+   Usa useCarrinho() (contexto) para ler totalAdicionado.
+   Local: src/components/e-commerce/BtnCarrinho.tsx.
+   Observação: botão é acessível (type="button"), e mostra badge com totalAdicionado quando mostrarTotal é true.
 
-16. PrecoMinMax
-    Componente que encapsula um Slider para selecionar faixa de preço.
-    Props:
-    faixaDePreco: number[], mudarPreco: (newValues: number[]) => void, min?, max?, pulandoPrecoEm?
-    UI:
-    Usa Slider (component UI).
-    Mostra valores Min/Max formatados (atenção a typo).
-    Local: src/components/e-commerce/filtragem/preco/PrecoMinMax.tsx.
+6. PrecoMinMax
+   Componente que encapsula um Slider para selecionar faixa de preço.
+   Props:
+   faixaDePreco: number[], mudarPreco: (newValues: number[]) => void, min?, max?, pulandoPrecoEm?
+   UI:
+   Usa Slider (component UI).
+   Mostra valores Min/Max formatados (atenção a typo).
+   Local: src/components/e-commerce/filtragem/preco/PrecoMinMax.tsx.
 
 Observação crítica: o código usa toLocaleString("pt-Bt") — isso parece um typo. O locale correto é pt-BR. Corrigir para evitar comportamento inesperado de formatação.
 
-17. FiltrarPreco
-    Componente com Popover que exibe PrecoMinMax e botões Aplicar / Limpar.
-    Props:
-    preco: { min?: number; max?: number }
-    aplicarFiltroDePreco?: (faixa: { min: number; max: number }) => void
-    Estado interno para faixaDePreco (array) e controle do dropdown (isPriceDropdownOpen).
-    Comportamento:
-    applyPriceFilter chama aplicarFiltroDePreco com {min, max}.
-    clearPriceFilter reseta para valores iniciais e chama aplicarFiltroDePreco.
-    Local: src/components/e-commerce/filtragem/FiltrarPreco.tsx.
+7. FiltrarPreco
+   Componente com Popover que exibe PrecoMinMax e botões Aplicar / Limpar.
+   Props:
+   preco: { min?: number; max?: number }
+   aplicarFiltroDePreco?: (faixa: { min: number; max: number }) => void
+   Estado interno para faixaDePreco (array) e controle do dropdown (isPriceDropdownOpen).
+   Comportamento:
+   applyPriceFilter chama aplicarFiltroDePreco com {min, max}.
+   clearPriceFilter reseta para valores iniciais e chama aplicarFiltroDePreco.
+   Local: src/components/e-commerce/filtragem/FiltrarPreco.tsx.
 
-Hooks e utilitários
+Hooks
 
-18. useTrocaDeImagens (hook)
-    Hook responsável pela lógica de troca de imagens no hover.
-    API: useTrocaDeImagens(imagens: string[]) → retorna { indiceAtual, mouseNoCard, aoEntrar, aoSair }.
-    Implementa preload(urls: string[]) que cria new Image() para cada URL (evita piscadas ao trocar).
-    Constantes: DELAY_INICIO e INTERVALO_TROCA.
-    Local: src/hooks/useTrocaDeImagem.ts.
+1. useTrocaDeImagens (hook)
+   Hook responsável pela lógica de troca de imagens no hover.
+   API: useTrocaDeImagens(imagens: string[]) → retorna { indiceAtual, mouseNoCard, aoEntrar, aoSair }.
+   Implementa preload(urls: string[]) que cria new Image() para cada URL (evita piscadas ao trocar).
+   Constantes: DELAY_INICIO e INTERVALO_TROCA.
+   Local: src/hooks/useTrocaDeImagem.ts.
 
 Nota sobre preload: garante que as imagens estejam no cache do navegador antes de serem exibidas, resultando em troca instantânea e sem flicker.
 
-19. useHandleMudarPagina (hook)
-    Hook para controle de mudança de página com scrollTo.
-    Assinatura: useHandleMudarPagina(setPaginaAtual, totalPaginas) → retorna handleMudarPagina(novaPagina).
-    Faz validação de limites e rolagem suave ao topo.
-    Local: src/hooks/useHandleMudarPagina.ts.
+2. useHandleMudarPagina (hook)
+   Hook para controle de mudança de página com scrollTo.
+   Assinatura: useHandleMudarPagina(setPaginaAtual, totalPaginas) → retorna handleMudarPagina(novaPagina).
+   Faz validação de limites e rolagem suave ao topo.
+   Local: src/hooks/useHandleMudarPagina.ts.
 
-20. useLogicaSearchESugestoes (hook)
-    Gera valorPesquisado, debouncedLocal (usa useDebouncedValue), sugestoes, abrirContainerDeSugestoes, confirmarPesquisa, onKeyDown (usa useApertarEnterOuEsc).
-    Parâmetros configuráveis: pesquisaInicial, numeroDeSugestoesDePesquisa, minCaracteres.
-    Local: src/hooks/useLogicaSearchESugestoes.ts.
-    Observação: confirmarPesquisa retorna null se menos que minCaracteres.
+3. useLogicaSearchESugestoes (hook)
+   Gera valorPesquisado, debouncedLocal (usa useDebouncedValue), sugestoes, aoAbrirSugestaoContinuarFocadoNoInput, confirmarPesquisa, onKeyDown (usa useApertarEnterOuEsc).
+   Parâmetros configuráveis: pesquisaInicial, numeroDeSugestoesDePesquisa, minCaracteres.
+   Local: src/hooks/useLogicaSearchESugestoes.ts.
+   Observação: confirmarPesquisa retorna null se menos que minCaracteres.
 
-21. useFiltrarProdutos (hook)
-    Filtra produtos por texto, categoria e subcategoria.
-    Normaliza strings (remove acentos, lowercase) e realiza comparações Comparação de categoria usa mesmaCategoria que tenta tratar plurais e includes.
-    Ordem de filtro: categoria → subcategoria → termo.
-    Observação: usa JSON.stringify(subcategoriasAplicada) no array de dependências do useMemo para estabilidade.
+4. useFiltrarProdutos (hook)
+   Filtra produtos por texto, categoria e subcategoria.
+   Normaliza strings (remove acentos, lowercase) e realiza comparações Comparação de categoria usa mesmaCategoria que tenta tratar plurais e includes.
+   Ordem de filtro: categoria → subcategoria → termo.
+   Observação: usa JSON.stringify(subcategoriasAplicada) no array de dependências do useMemo para estabilidade.
 
-22. useDebouncedValue
-    Hook para debouncing de um valor (genérico).
-    Assinatura: useDebouncedValue<T>(value: T, delay = 300) : T.
-    Uso: ideal para inputs de busca antes de disparar filtros/requests.
-    Local: src/hooks/useDebouncedValue.ts.
-    Observação: limpa o timeout no cleanup do useEffect.
+5. useDebouncedValue
+   Hook para debouncing de um valor (genérico).
+   Assinatura: useDebouncedValue<T>(value: T, delay = 300) : T.
+   Uso: ideal para inputs de busca antes de disparar filtros/requests.
+   Local: src/hooks/useDebouncedValue.ts.
+   Observação: limpa o timeout no cleanup do useEffect.
 
-23. useCarousel
-    Hook que mede itens dentro de uma “trilha” e determina quantos itens cabem na viewport, offsets e controles.
+6. useCarousel
+   Hook que mede itens dentro de uma “trilha” e determina quantos itens cabem na viewport, offsets e controles.
 
 "API" retornada:
 refViewport, refTrilha, refPrimeiroItem — refs para elementos DOM.
@@ -169,112 +209,150 @@ Garante que ao menos 1 item seja considerado visível mesmo se maior que viewpor
 Local: src/hooks/useCarousel.ts.
 Observação: ideal para carrosséis que precisam de cálculo preciso de offsets (suporta gaps, margens).
 
-24. useApertarEnterOuEsc (ApertarEnterOuEsc)
-    Utility hook / factory que retorna handler de teclado (teclas Enter / Escape).
-    Assinatura/Props:
-    confirmarPesquisa: () => void
-    fecharDropDown: (abrir: boolean) => void
-    preventDefault?: boolean (default true)
-    Uso: passado como onKeyDown em inputs para capturar Enter/Escape e controlar dropdowns de sugestão.
-    Local: src/hooks/useApertarEnterOuEsc.ts.
+7. useApertarEnterOuEsc (ApertarEnterOuEsc)
+   Utility hook / factory que retorna handler de teclado (teclas Enter / Escape).
+   Assinatura/Props:
+   confirmarPesquisa: () => void
+   fecharDropDown: (abrir: boolean) => void
+   preventDefault?: boolean (default true)
+   Uso: passado como onKeyDown em inputs para capturar Enter/Escape e controlar dropdowns de sugestão.
+   Local: src/hooks/useApertarEnterOuEsc.ts.
 
 Utilitários
 
-25 formatarPrecoBRL
-Função utilitária para formatar valores em BRL.
-Local: src/utils/formatarPreco.ts.
+1. formatarPrecoBRL
+   Função utilitária para formatar valores em BRL.
+   Local: src/utils/formatarPreco.ts.
 
-26. compararArraysIguais
-    Compara se dois arrays contêm os mesmos elementos (ignorando ordem).
-    Local: src/utils/compararArraysIguais.ts.
+2. compararArraysIguais
+   Compara se dois arrays contêm os mesmos elementos (ignorando ordem).
+   Local: src/utils/compararArraysIguais.ts.
 
-27. alternarItemNoArray
-    Toggle de item em array (adiciona se não existe, remove se existe).
-    Local: src/utils/alternarItemNoArray.ts.
+3. alternarItemNoArray
+   Toggle de item em array (adiciona se não existe, remove se existe).
+   Local: src/utils/alternarItemNoArray.ts.
 
-28. Variáveis de classe reutilizáveis
-    iconeComInput:
-    tagsStyle:
-    Local: src/styles/variaveisTailwind/Reutilizaveis.ts
+4. Variáveis de classe reutilizáveis
+   iconeComInput:
+   tagsStyle:
+   Local: src/styles/variaveisTailwind/Reutilizaveis.ts
+
+Context
+
+1. Carrinho (Contexto)
+   Contexto CarrinhoProvider que expõe:
+   carrinho: Record<number, number> (produtoId → quantidade)
+   totalAdicionado: number (soma das quantidades)
+   adicionarNoCarrinho(produto: Produtos, quantidade?: number)
+   Hook useCarrinho() para consumir o contexto.
+   Local: src/contexts/ProdutoCarrinhoContext.tsx.
 
 Componentes auxiliares
 
-29. PaginacaoProdutos
-    Componente de paginação reutilizável.
-    Props: paginaAtual, totalPaginas, onMudarPagina.
-    Usa componentes Pagination, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious (UI primitives).
-    Lógica para exibir elipses quando necessário.
-    Local: src/components/e-commerce/PaginacaoProdutos.tsx.
+1. PaginacaoProdutos
+   Componente de paginação reutilizável.
+   Props: paginaAtual, totalPaginas, onMudarPagina.
+   Usa componentes Pagination, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious (UI primitives).
+   Lógica para exibir elipses quando necessário.
+   Local: src/components/e-commerce/PaginacaoProdutos.tsx.
 
-30. Pagination e Skeleton (utilitários)
-    Pagination* (componentes e estilos) para paginação.
-    Skeleton simples para placeholders pulsantes.
-    Local: src/components/ui/Pagination/* e src/components/ui/Skeleton.tsx.
+2. Pagination e Skeleton (utilitários)
+   Pagination* (componentes e estilos) para paginação.
+   Skeleton simples para placeholders pulsantes.
+   Local: src/components/ui/Pagination/* e src/components/ui/Skeleton.tsx.
 
-31. SearchFilterContainer
-    Componente que agrega:
-    SearchESugestoes (campo de busca + sugestões)
-    BtnCategoria (abre CarouselCategorias)
-    FiltrarPreco (popover de faixa de preço)
-    Botões Aplicar / Cancelar quando há filtros alterados
-    Props:
-    pesquisar: string
-    setPesquisar: (valor: string) => void
-    aoAplicar?: (filtrosAplicados: Filtros) => void
-    faixaDePreco: { min?: number; max?: number }
-    Estado interno:
-    mostrarCarousel, filtros, aplicado (flag para saber se filtro atual foi aplicado)
-    Comportamento:
-    aoAtualizarFiltros compara subcategorias com compararArraysIguais e marca aplicado como false se algo mudou.
-    aplicar() fecha o carousel e chama aoAplicar(filtros).
-    cancelar() reseta filtros e chama aoAplicar com vazio.
-    precoAplicado(range) aplica faixa de preço imediatamente (passado para aoAplicar).
-    Local: src/components/e-commerce/filtragem/SearchFilterContainer.tsx.
+3. SearchFilterContainer
+   Componente que agrega:
+   SearchESugestoes (campo de busca + sugestões)
+   BtnCategoria (abre CarouselCategorias)
+   FiltrarPreco (popover de faixa de preço)
+   Botões Aplicar / Cancelar quando há filtros alterados
+   Props:
+   pesquisar: string
+   setPesquisar: (valor: string) => void
+   aoAplicar?: (filtrosAplicados: Filtros) => void
+   faixaDePreco: { min?: number; max?: number }
+   Estado interno:
+   mostrarCarousel, filtros, aplicado (flag para saber se filtro atual foi aplicado)
+   Comportamento:
+   aoAtualizarFiltros compara subcategorias com compararArraysIguais e marca aplicado como false se algo mudou.
+   aplicar() fecha o carousel e chama aoAplicar(filtros).
+   cancelar() reseta filtros e chama aoAplicar com vazio.
+   precoAplicado(range) aplica faixa de preço imediatamente (passado para aoAplicar).
+   Local: src/components/e-commerce/filtragem/SearchFilterContainer.tsx.
 
-32. SearchESugestoes
-    Componente que integra lógica de busca (hook useLogicaSearchESugestoes) com UI (ComponenteSearch + ContainerDeSugestoes dentro de Popover).
-    Props:
-    pesquisar, setPesquisar, numeroDeSugestoesDePesquisa?, minCaracteres?
-    Fluxo:
-    O hook expõe valorPesquisado, setValorPesquisado, debouncedLocal, sugestoes, abrirContainerDeSugestoes, etc.
-    confirmar() valida via confirmarPesquisa e chama setPesquisar(term) e fecha o dropdown.
-    onSugestaoSelecionada define valorPesquisado, confirma e foca o input.
-    Local: src/components/e-commerce/filtragem/SearchESugestoes.tsx.
+4. SearchESugestoes
+   Componente que integra lógica de busca (hook useLogicaSearchESugestoes) com UI (ComponenteSearch + ContainerDeSugestoes dentro de Popover).
+   Props:
+   pesquisar, setPesquisar, numeroDeSugestoesDePesquisa?, minCaracteres?
+   Fluxo:
+   O hook expõe valorPesquisado, setValorPesquisado, debouncedLocal, sugestoes, abrirContainerDeSugestoes, etc.
+   confirmar() valida via confirmarPesquisa e chama setPesquisar(term) e fecha o dropdown.
+   onSugestaoSelecionada define valorPesquisado, confirma e foca o input.
+   Local: src/components/e-commerce/filtragem/SearchESugestoes.tsx.
 
-33. ContainerDeSugestoes
-    Componente visual que renderiza o dropdown de sugestões (lista de produtos).
-    Props:
-    debouncedLocal: string
-    totalResultados: number
-    sugestoes: Produtos[]
-    numeroDeSugestoesDePesquisa?: number
-    onSelecionarSugestao: (produto) => void
-    onConfirmarPesquisa: (valor?: string) => void
-    Comportamento:
-    Se debouncedLocal.trim().length <= 3 e sugestoes.length === 0 exibe "Nenhum resultado".
-    Caso contrário mostra até numeroDeSugestoesDePesquisa resultados com nome, categoria e preço (R$ formatted).
-    Usa selectedIndex para hover highlight.
-    Local: src/components/e-commerce/filtragem/ContainerDeSugestoes.tsx.
+5. ContainerDeSugestoes
+   Componente visual que renderiza o dropdown de sugestões (lista de produtos).
+   Props:
+   debouncedLocal: string
+   totalResultados: number
+   sugestoes: Produtos[]
+   numeroDeSugestoesDePesquisa?: number
+   onSelecionarSugestao: (produto) => void
+   onConfirmarPesquisa: (valor?: string) => void
+   Comportamento:
+   Mostra PesquisaPorResultado no topo com o termo e contagem (botão que confirma a pesquisa).
+   Se debouncedLocal.trim().length <= 3 e sugestoes.length === 0 exibe "Nenhum resultado".
+   Caso contrário, renderiza `SugestoesDeResultados` com a lista de produtos.
+   Local: src/components/e-commerce/filtragem/pesquisa/ContainerDeSugestoes.tsx.
 
-34. ComponenteSearch
-    Input de busca com ícone Search, forwardRef para foco externo e atributos ARIA.
-    Props:
-    valorPesquisado, onChange, onKeyDown?, abrirContainerDeSugestoes: boolean
-    Local: src/components/e-commerce/filtragem/ComponenteSearch.tsx.
+6. ComponenteSearch
+   Input de busca com ícone Search, forwardRef para foco externo e atributos ARIA.
+   Props:
+   valorPesquisado, onChange, onKeyDown?, abrirContainerDeSugestoes: boolean
+   Local: src/components/e-commerce/filtragem/pesquisa/ComponenteSearch.tsx.
 
-35. CarouselBtn
-    Botão simples para navegação do carrossel (esquerda/direita).
-    Props:
-    direcao: "esquerda" | "direita"
-    onClick: () => void
-    esconder?: boolean
-    Local: src/components/e-commerce/filtragem/categoria/CarouselBtn.tsx.
+7. CarouselBtn
+   Botão simples para navegação do carrossel (esquerda/direita).
+   Props:
+   direcao: "esquerda" | "direita"
+   onClick: () => void
+   esconder?: boolean
+   Local: src/components/e-commerce/filtragem/categoria/CarouselBtn.tsx.
 
-36. AplicarOuCancelar
-    Componente de ações (botões) reutilizável.
-    Props (opcionais):
-    cancelar, aplicar, aplicarLabel?, cancelarLabel?, btnAplicarClassName?, btnCancelarClassName?, tamanho?, cancelarVariante?, className?
-    Local: src/components/e-commerce/filtragem/AplicarOuCancelar.tsx.
+8. AplicarOuCancelar
+   Componente de ações (botões) reutilizável.
+   Props (opcionais):
+   cancelar, aplicar, aplicarLabel?, cancelarLabel?, btnAplicarClassName?, btnCancelarClassName?, tamanho?, cancelarVariante?, className?
+   Local: src/components/e-commerce/filtragem/AplicarOuCancelar.tsx.
+
+9. PesquisaPorResultado
+   Cabeçalho do popover que exibe o termo pesquisado e um botão que confirma a pesquisa (aciona a navegação ou o filtro principal).
+   Props (PesquisaPorResultadoProps):
+   onConfirmarPesquisa: () => void — função disparada ao clicar no header.
+   debouncedLocal: string — termo exibido.
+   totalResultados: number — contagem exibida.
+   Comportamento / UI:
+   Botão ocupando toda a largura com aria-label descritivo (Pesquisar por ${debouncedLocal}).
+   Mostra texto auxiliar “Pesquisar por resultado (resultado: X)” e o termo destacado.
+   Local sugerido: src/components/e-commerce/filtragem/pesquisa/PesquisaPorResultado.tsx.
+
+10. SearchESugestoes
+    Componente que integra UI + lógica (hook useLogicaSearchESugestoes) e orquestra o Popover com ComponenteSearch + ContainerDeSugestoes. Fornece UX padrão para campo de busca com sugestões.
+    Props (SearchESugestoesProps):
+    pesquisar: string — estado externo do termo pesquisado (passado do pai).
+    setPesquisar: (valor: string) => void — setter para atualizar termo no pai.
+    numeroDeSugestoesDePesquisa?: number — quantas sugestões mostrar.
+    minCaracteres?: number — número mínimo de caracteres para abrir sugestões (default 3).
+    Comportamento / Integração:
+    Usa useLogicaSearchESugestoes que expõe:
+    valorPesquisado, setValorPesquisado, debouncedLocal, refDeInputParaFocar,
+    totalResultados, sugestoes, abrirContainerDeSugestoes, aoAbrirSugestaoContinuarFocadoNoInput,
+    confirmarPesquisa, onKeyDown, setAbrirContainerDeSugestoes.
+    PopoverTrigger usa ComponenteSearch (forwardRef), que recebe onKeyDown que combina useApertarEnterOuEsc e confirmação de Enter.
+    ContainerDeSugestoes recebe os dados (debouncedLocal, sugestoes, etc.) e callbacks.
+    Ao selecionar sugestão: onSugestaoSelecionada define o valor e confirma (chama setPesquisar(term)).
+    Local sugerido: src/components/e-commerce/filtragem/pesquisa/SearchESugestoes.tsx.
 
 Filtros, Carrossel de Categorias e Busca por Sugestões
 
@@ -344,11 +422,6 @@ Paginação e navegação (componentes)
     tipoDeBotao: "previous" | "next"
     Local: src/components/e-commerce/paginacao/MudarPagina.tsx.
 
-39. HeaderInicial
-    Cabeçalho simples da aplicação (logo + botões de usuário e suporte).
-    Usa ícones User e Headset.
-    Local: src/components/e-commerce/HeaderInicial.tsx.
-
 Categorias e Subcategorias
 
 40. SUBCATEGORIAS_MAP
@@ -402,7 +475,7 @@ Páginas
    PRODUTOS_POR_PAGINA = 10.
    Usa useFiltrarProdutos para filtrar por termo, categoria e subcategoria.
    Aplica faixa de preço (recebida do SearchFilterContainer) sobre os produtos filtrados.
-   Cálculo de precoMin e precoTotal (min/max do conjunto filtrado).
+   Usa useFiltradosPorPreco para cálculo de precoMin e precoTotal (min/max do conjunto filtrado).
    useHandleMudarPagina controla navegação e scroll.
    Renderiza CardProduto para produtosPaginaAtual (array slice).
    Local: src/pages/Inicial.tsx.

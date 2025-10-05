@@ -8,10 +8,6 @@ interface FilterProps {
   subcategoriasAplicada?: string[];
 }
 
-/**
- * Mantém seu normalize: remove acentos, coloca em lowercase e trim.
- * Não mexi nesta implementação — só a reutilizei.
- */
 const formatarStr = (s?: string) =>
   (s ?? "")
     .normalize("NFD")
@@ -19,11 +15,6 @@ const formatarStr = (s?: string) =>
     .toLowerCase()
     .trim();
 
-/**
- * Comparação flexível entre categorias (usa normalize)
- * - retorna true se filtro não informado
- * - trata plurais simples (remove 's' final) e includes para maior tolerância
- */
 const mesmaCategoria = (prodCategoria?: string, filtro?: string | null) => {
   if (!filtro) return true;
   if (!prodCategoria) return false;
@@ -54,16 +45,13 @@ export default function useFiltrarProdutos({
         p.categoria ?? "",
         p.subcategoria ?? "",
         ...(p.tags?.map((t) => t.nome) ?? []),
-        p.descricao ?? "",
       ];
       return campos.some((c) => formatarStr(c).includes(termo));
     };
 
     const correspondeCategoria = (p: Produtos) => {
       if (!catFilter) return true;
-      // usa mesmaCategoria para maior tolerância com plurais/variações
       if (mesmaCategoria(p.categoria, catFilter)) return true;
-      // também checa tags por segurança
       const tags = (p.tags ?? []).map((t) => formatarStr(t.nome));
       return tags.some((t) => t.includes(catFilter));
     };
@@ -77,7 +65,6 @@ export default function useFiltrarProdutos({
       );
     };
 
-    // Ordem: categoria -> subcategoria -> termo (melhora performance)
     return produtos.filter((p) => {
       if (!correspondeCategoria(p)) return false;
       if (!correspondeSubcategorias(p)) return false;

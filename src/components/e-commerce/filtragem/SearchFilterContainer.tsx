@@ -3,7 +3,7 @@ import { useState } from "react";
 import FiltrarPreco from "./preco/FiltrarPreco";
 import AplicarOuCancelar from "./AplicarOuCancelar";
 import BtnCategoria from "./categoria/BtnCategoria";
-import SearchESugestoes from "./SearchESugestoes";
+import SearchESugestoes from "./pesquisa/SearchESugestoes";
 import compararArraysIguais from "@/utils/compararArraysIguais";
 
 interface SearchFilterContainerProps {

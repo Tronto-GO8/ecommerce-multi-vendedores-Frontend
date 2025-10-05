@@ -33,13 +33,12 @@ export default function useLogicaSearchESugestoes({
   const [abrir, setAbrir] = useState(false);
 
   useEffect(() => {
-    const deveAbrir =
-      debouncedLocal.trim().length >= minCaracteres && totalResultados > 0;
+    const deveAbrir = debouncedLocal.trim().length >= minCaracteres;
     if (deveAbrir) setAbrir(true);
     else setAbrir(false);
   }, [debouncedLocal, totalResultados, minCaracteres]);
 
-  const handleOpenChange = useCallback((open: boolean) => {
+  const aoAbrirSugestaoContinuarFocadoNoInput = useCallback((open: boolean) => {
     setAbrir(open);
     if (open) {
       setTimeout(() => refDeInputParaFocar.current?.focus(), 0);
@@ -71,7 +70,7 @@ export default function useLogicaSearchESugestoes({
     sugestoes,
     abrirContainerDeSugestoes: abrir,
     setAbrirContainerDeSugestoes: setAbrir,
-    handleOpenChange,
+    aoAbrirSugestaoContinuarFocadoNoInput,
     confirmarPesquisa,
     onKeyDown,
   };

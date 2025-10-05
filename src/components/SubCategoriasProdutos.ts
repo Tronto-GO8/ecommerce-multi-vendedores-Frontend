@@ -23,16 +23,8 @@ export const SUBCATEGORIAS_MAP: Record<string, string[]> = {
   Smartphones: ["Android", "iOS"],
   Tablets: ["Android", "iOS"],
   Notebooks: ["Ultrabooks", "Gaming", "2 em 1"],
-  Desktops: ["All-in-One", "Gaming", "Workstations"],
-  Acessórios: [
-    "Carregadores",
-    "Capas e Cases",
-    "Películas de Proteção",
-    "Fones de Ouvido",
-    "Cabos e Adaptadores",
-    "Suportes e Docking Stations",
-    "Outros Acessórios",
-  ],
+  Desktops: ["Gaming", "Workstations"],
+  Acessórios: ["Carregadores", "Fones de Ouvido", "Cabos e Adaptadores"],
   Smartwatches: [
     "Android",
     "iOS",
@@ -41,14 +33,6 @@ export const SUBCATEGORIAS_MAP: Record<string, string[]> = {
     "Smartwatches Básicos",
     "Smartwatches Intermediários",
     "Smartwatches Avançados",
-  ],
-  Fones: [
-    "Intra-auriculares",
-    "Supra-auriculares",
-    "Circum-auriculares",
-    "Sem Fio",
-    "Com Fio",
-    "Acessórios",
   ],
   Câmeras: [
     "DSLR",

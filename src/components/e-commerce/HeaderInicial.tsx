@@ -1,5 +1,6 @@
 import { Headset, User } from "lucide-react";
 import { Button } from "../ui/button";
+import DropDownPerfil from "./DropDownPerfil";
 
 export default function HeaderInicial() {
   return (
@@ -7,7 +8,7 @@ export default function HeaderInicial() {
       <h1 className="text-xl font-semibold font-sans text-white">LOGO</h1>
       <div className="flex flex-row items-center gap-2">
         <Button>
-          <User />
+          <DropDownPerfil />
         </Button>
         <Button>
           <Headset />
