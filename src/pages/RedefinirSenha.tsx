@@ -11,6 +11,7 @@ import {
 import ChecklistSenha from "@/components/loginCadastro/CheckListSenha";
 import InputError from "@/components/InputError";
 import FormCardHeader from "@/components/loginCadastro/FormCardHeader";
+import Header from "@/components/loginCadastro/Header";
 
 export default function RedefinirSenha() {
   const {
@@ -31,45 +32,48 @@ export default function RedefinirSenha() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-      <Card className="shadow-black">
-        <FormCardHeader
-          titulo="Trocar senha"
-          descricao="Defina uma nova senha para sua conta. Digite e confirme sua nova
+    <div>
+      <Header />
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
+        <Card className="shadow-black">
+          <FormCardHeader
+            titulo="Trocar senha"
+            descricao="Defina uma nova senha para sua conta. Digite e confirme sua nova
               senha abaixo."
-          linkDeVoltar={{ to: "/login", label: "Voltar ao login" }}
-        />
-        <CardContent className="space-y-6">
-          <form
-            onSubmit={handleSubmit(enviarFormRedifinido)}
-            className="space-y-4"
-          >
-            <InputSenha
-              label="Nova senha"
-              {...register("novaSenha")}
-              isError={!!errors.novaSenha}
-              onChange={(e) => {
-                setSenhaDigitada(e.target.value);
-                register("novaSenha").onChange(e);
-              }}
-            />
-            <ChecklistSenha senha={senhaDigitada} />
-            <InputSenha
-              label="Confirmar nova senha"
-              {...register("confirmarSenha")}
-              isError={!!errors.confirmarSenha}
-            />
-            <InputError message={errors.confirmarSenha?.message} />
-            <Button
-              type="submit"
-              className="w-full  border border-white bg-[#303030] text-white hover:bg-gray-900"
-              disabled={estaCarregando}
+            linkDeVoltar={{ to: "/login", label: "Voltar ao login" }}
+          />
+          <CardContent className="space-y-6">
+            <form
+              onSubmit={handleSubmit(enviarFormRedifinido)}
+              className="space-y-4"
             >
-              {estaCarregando ? "Redefinindo..." : "Confirmar"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+              <InputSenha
+                label="Nova senha"
+                {...register("novaSenha")}
+                isError={!!errors.novaSenha}
+                onChange={(e) => {
+                  setSenhaDigitada(e.target.value);
+                  register("novaSenha").onChange(e);
+                }}
+              />
+              <ChecklistSenha senha={senhaDigitada} />
+              <InputSenha
+                label="Confirmar nova senha"
+                {...register("confirmarSenha")}
+                isError={!!errors.confirmarSenha}
+              />
+              <InputError message={errors.confirmarSenha?.message} />
+              <Button
+                type="submit"
+                className="w-full  border border-white bg-[#303030] text-white hover:bg-gray-900"
+                disabled={estaCarregando}
+              >
+                {estaCarregando ? "Redefinindo..." : "Confirmar"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
