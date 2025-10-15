@@ -72,7 +72,7 @@ export default function Cadastrar() {
                   Criar Conta
                 </Button>
               </form>
-              <OuSeparador />
+              <OuSeparador strVisivel={true} />
               <LoginSocial />
               <TextoLinkAlternativo
                 texto="Já tem uma conta?"

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import HeaderInicial from "@/components/e-commerce/HeaderInicial";
 import SearchFilterContainer from "@/components/e-commerce/filtragem/SearchFilterContainer";
 import BtnCarrinho from "@/components/e-commerce/BtnCarrinho";
 import { ProdutoInfo } from "@/components/ProdutosInfo";
@@ -8,8 +7,8 @@ import PaginacaoProdutos from "@/components/e-commerce/PaginacaoProdutos";
 import useHandleMudarPagina from "@/hooks/useHandleMudarPagina";
 import useFiltrarProdutos from "@/hooks/useFiltrarProdutos";
 import ContainerProduto from "@/components/e-commerce/produto/ContainerProduto";
-import { CarrinhoProvider } from "@/contexts/ProdutoCarrinhoContext";
 import useFiltradosPorPreco from "@/hooks/useFiltradosPorPreco";
+import { Link } from "react-router-dom";
 
 const PRODUTOS_POR_PAGINA = 10;
 
@@ -60,46 +59,44 @@ export default function Inicial() {
   const handleMudarPagina = useHandleMudarPagina(setPaginaAtual, totalPaginas);
 
   return (
-    <CarrinhoProvider>
-      <div className="w-full min-h-screen bg-[#303030]">
-        <HeaderInicial />
-        <div className="w-full grid">
-          <SearchFilterContainer
-            pesquisar={pesquisar}
-            setPesquisar={setPesquisar}
-            aoAplicar={(tipoDeFiltro) => {
-              setCategoriaAplicada(tipoDeFiltro.categoria ?? null);
-              setSubcategoriaAplicada(tipoDeFiltro.subcategorias ?? []);
-              setFaixaPrecoAplicada(tipoDeFiltro.faixaDePreco);
-            }}
-            faixaDePreco={{ min: precoMin, max: precoMax }}
+    <div className="w-full min-h-screen bg-[#303030]">
+      <div className="w-full grid">
+        <SearchFilterContainer
+          pesquisar={pesquisar}
+          setPesquisar={setPesquisar}
+          aoAplicar={(tipoDeFiltro) => {
+            setCategoriaAplicada(tipoDeFiltro.categoria ?? null);
+            setSubcategoriaAplicada(tipoDeFiltro.subcategorias ?? []);
+            setFaixaPrecoAplicada(tipoDeFiltro.faixaDePreco);
+          }}
+          faixaDePreco={{ min: precoMin, max: precoMax }}
+        />
+        <Card className="p-6 bg-[#202020] border-none space-y-6 rounded-none">
+          <div className="space-y-2">
+            <CardTitle className="text-white">
+              Populares ({filtradosComPreco.length} produtos)
+            </CardTitle>
+            <div className="border-t border-gray-400"></div>
+          </div>
+
+          <div className="flex flex-wrap gap-4 justify-center">
+            <ContainerProduto produtos={produtosPaginaAtual} />
+          </div>
+          <PaginacaoProdutos
+            paginaAtual={paginaAtual}
+            totalPaginas={totalPaginas}
+            onMudarPagina={handleMudarPagina}
           />
-          <Card className="p-6 bg-[#202020] border-none space-y-6 rounded-none">
-            <div className="space-y-2">
-              <CardTitle className="text-white">
-                Populares ({filtradosComPreco.length} produtos)
-              </CardTitle>
-              <div className="border-t border-gray-400"></div>
-            </div>
-
-            <div className="flex flex-wrap gap-4 justify-center">
-              <ContainerProduto produtos={produtosPaginaAtual} />
-            </div>
-            <PaginacaoProdutos
-              paginaAtual={paginaAtual}
-              totalPaginas={totalPaginas}
-              onMudarPagina={handleMudarPagina}
-            />
-          </Card>
-
+        </Card>
+        <Link to="/app/carrinho">
           <BtnCarrinho
             className="fixed z-50 bottom-4 right-4 flex items-center gap-2 px-4 py-2 shadow-lg"
             mostrarTotal={true}
           >
             <span className="text-lg text-white">Carrinho</span>
           </BtnCarrinho>
-        </div>
+        </Link>
       </div>
-    </CarrinhoProvider>
+    </div>
   );
 }

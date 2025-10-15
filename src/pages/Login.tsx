@@ -47,12 +47,13 @@ export default function Login() {
                   Esqueceu a senha?
                 </Link>
               </div>
-
-              <Button type="submit" className="w-full">
-                Entrar
-              </Button>
+              <Link to={"/app/inicial"}>
+                <Button type="submit" className="w-full">
+                  Entrar
+                </Button>
+              </Link>
             </form>
-            <OuSeparador />
+            <OuSeparador strVisivel={true} />
             <LoginSocial />
             <TextoLinkAlternativo
               texto="Não tem um conta?"

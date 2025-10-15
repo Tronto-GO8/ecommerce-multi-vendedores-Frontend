@@ -4,15 +4,21 @@ import React, {
   useMemo,
   useState,
   ReactNode,
+  useEffect,
+  useCallback,
 } from "react";
 import { Produtos } from "@/components/ProdutosInfo";
 
 type CarrinhoMap = Record<number, number>; // produtoId -> quantidade
+const STORAGE_KEY = "carrinho_v1";
 
 interface CartContextValue {
   carrinho: CarrinhoMap;
   totalAdicionado: number;
   adicionarNoCarrinho: (produto: Produtos, quantidade?: number) => void;
+  definirQuantidade: (produtoId: number, quantidade: number) => void;
+  removerDoCarrinho: (produtoId: number) => void;
+  limparCarrinho: () => void;
 }
 
 const QuaisEQuantosItensEstaoNoCarrinho = createContext<
@@ -20,7 +26,23 @@ const QuaisEQuantosItensEstaoNoCarrinho = createContext<
 >(undefined);
 
 export function CarrinhoProvider({ children }: { children: ReactNode }) {
-  const [carrinho, setCarrinho] = useState<CarrinhoMap>({});
+  const [carrinho, setCarrinho] = useState<CarrinhoMap>(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? (JSON.parse(raw) as CarrinhoMap) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  // Persistir sempre que mudar
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(carrinho));
+    } catch {
+      // ignore
+    }
+  }, [carrinho]);
 
   const adicionarNoCarrinho = (produto: Produtos, novaQuantidade = 1) => {
     setCarrinho((estaNoCarrinho) => {
@@ -30,6 +52,30 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const definirQuantidade = useCallback(
+    (produtoId: number, quantidade: number) => {
+      setCarrinho((prev) => {
+        if (quantidade <= 0) {
+          const copy = { ...prev };
+          delete copy[produtoId];
+          return copy;
+        }
+        return { ...prev, [produtoId]: quantidade };
+      });
+    },
+    []
+  );
+
+  const removerDoCarrinho = useCallback((produtoId: number) => {
+    setCarrinho((prev) => {
+      const copy = { ...prev };
+      delete copy[produtoId];
+      return copy;
+    });
+  }, []);
+
+  const limparCarrinho = useCallback(() => setCarrinho({}), []);
+
   const totalAdicionado = useMemo(
     () => Object.values(carrinho).reduce((s, q) => s + q, 0),
     [carrinho]
@@ -37,7 +83,14 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
 
   return (
     <QuaisEQuantosItensEstaoNoCarrinho.Provider
-      value={{ carrinho, totalAdicionado, adicionarNoCarrinho }}
+      value={{
+        carrinho,
+        totalAdicionado,
+        adicionarNoCarrinho,
+        definirQuantidade,
+        removerDoCarrinho,
+        limparCarrinho,
+      }}
     >
       {children}
     </QuaisEQuantosItensEstaoNoCarrinho.Provider>

@@ -24,7 +24,7 @@ Componentes Reutilizáveis
    Ícones SVG personalizados.
 
 6. OuSeparador  
-   Componente para separar seções com uma linha e o texto "ou".  
+   Componente para separar seções com uma linha ou juntamente com o texto "ou".  
    Usado tanto no Login quanto no Cadastro.
 
 7. TextoLinkAlternativo  
@@ -218,6 +218,11 @@ Observação: ideal para carrosséis que precisam de cálculo preciso de offsets
    Uso: passado como onKeyDown em inputs para capturar Enter/Escape e controlar dropdowns de sugestão.
    Local: src/hooks/useApertarEnterOuEsc.ts.
 
+8. useModoMobile
+   Detecta tela <= breakpoint.
+   Implementação segura para SSR.
+   Local: src/hooks/useModoMobile.ts.
+
 Utilitários
 
 1. formatarPrecoBRL
@@ -244,6 +249,10 @@ Context
    carrinho: Record<number, number> (produtoId → quantidade)
    totalAdicionado: number (soma das quantidades)
    adicionarNoCarrinho(produto: Produtos, quantidade?: number)
+   definirQuantidade(produtoId: number, quantidade: number)
+   removerDoCarrinho(produtoId: number)
+   limparCarrinho()
+   Persistência: grava / lê localStorage (STORAGE_KEY = 'carrinho_v1').
    Hook useCarrinho() para consumir o contexto.
    Local: src/contexts/ProdutoCarrinhoContext.tsx.
 
@@ -434,9 +443,59 @@ Categorias e Subcategorias
     Lista principal de categorias, começando por "Todos" seguida das categorias eletrônicas.
     Local: src/components/CategoriasProdutos.ts.
 
-Páginas
+Carrinho
 
-1. Login  
+1. SumarioCard aceita prop mobile?: boolean e items?: Produtos[].
+   Mobile behavior:
+   Quando mobile === true, começa compacto (componente CompactoMobileHeader), mostra total + botão continuar e botão expandir.
+   Ao expandir, exibe subtotal/frete/total e botões (Continuar / Limpar — onClear chama limparCarrinho()).
+
+2. CompactoMobileHeader:
+   Local: src/components/carrinho/CompactoMobileHeader.tsx.
+   Props: total: number, onCheckout?: () => void, expandido?: () => void.
+
+3. ProdutosCarrinho
+   Exibe imagem, nome, empresa, controle de quantidade (±) e ação de remover. Exibe também o preço total do item (preço × quantidade).
+   Arquivo: src/components/carrinho/ProdutosCarrinho.tsx
+   Props
+   produtoTeste: Produtos & { quantidade?: number } — objeto do catálogo com campo quantidade (opcional, default 1).
+   onIncrease?: () => void — handler chamado ao clicar em +.
+   onDecrease?: () => void — handler chamado ao clicar em -.
+   onRemove?: () => void — handler chamado ao clicar em remover (lixeira).
+   Comportamento / UI
+   Imagem principal: pega produtoTeste.imagem[0].url quando disponível; fallback para https://via.placeholder.com/600x400?text=No+Image.
+   onError do <img> troca para o fallback se a URL falhar.
+   A área principal mostra:
+   Título (truncado se longo)
+   Empresa (se existir)
+   Preço unitário formatado via formatarPrecoBRL
+   Na barra inferior:
+   Botões - e + (component Button do design system) que chamam onDecrease / onIncrease.
+   Exibição da quantidade (valor padrão 1).
+   Preço total do item = preco \* quantidade (formatado).
+   Botão remover (ícone Trash2) chama onRemove.
+   Acessibilidade / Observações
+   Botões devem ter aria-label quando necessário (opcional, pode ser adicionado).
+   Use handlers do contexto (adicionarNoCarrinho, definirQuantidade, removerDoCarrinho) ao usar o componente na página de carrinho.
+   Local de import sugerido: import ProdutosCarrinho from "@/components/carrinho/ProdutosCarrinho";
+
+4. CarrinhoVazio
+   Propósito: tela / placeholder mostrado quando o carrinho não possui itens.
+   Arquivo: src/components/carrinho/CarrinhoVazio.tsx
+   Comportamento / UI
+   Ícone grande ShoppingBag (lucide-react).
+   Mensagens:
+   Título: “Seu carrinho está vazio”
+   Texto auxiliar: “Adicione produtos para começar suas compras”
+   Botão Continuar comprando que leva o usuário para a listagem de produtos (/app/inicial) via Link do react-router-dom.
+   Estilização: centralizado verticalmente, fundo escuro, texto claro — mantém consistência com o layout do carrinho.
+   Acessibilidade / Observações
+   Botão usa Button do design system; ícone decorativo com contraste reduzido.
+   Ideal para ser retornado quando items.length === 0 em pages/Carrinho.tsx.
+   Local de import sugerido: import CarrinhoVazio from "@/components/carrinho/CarrinhoVazio";
+   Páginas
+
+5. Login  
    Formulário de login com email e senha.  
    Validação com Zod e React Hook Form.  
    Link para recuperação de senha.  
@@ -445,7 +504,7 @@ Páginas
    Link para cadastro.  
    Senha nunca é exibida no console.
 
-2. Cadastro  
+6. Cadastro  
    Formulário para criar conta: nome, email, senha, confirmar senha.  
    Validação avançada de senha (tamanho, maiúscula, minúscula, número, especial).  
    Checklist visual dos requisitos de senha.
@@ -455,12 +514,12 @@ Páginas
    Link para login.  
    Senha e confirmação nunca são exibidas no console.
 
-3. EsqueceuSenha  
+7. EsqueceuSenha  
    Formulário para recuperação de senha via email.  
    Botão para enviar link de recuperação.  
    Link para voltar ao login.
 
-4. RedefinirSenha
+8. RedefinirSenha
    Página para redefinir senha após o link de recuperação.
    Campos: nova senha e confirmar nova senha.
    Validação com redefinirSenhaSchema.
@@ -469,7 +528,7 @@ Páginas
    Link para voltar ao login.
    Senha nunca é exibida no console.
 
-5. Inicial (nova página) — página principal do e-commerce (/ ou \* na dev)
+9. Inicial (nova página) — página principal do e-commerce (/ ou \* na dev)
    Cabeçalho(HeaderInicial), barra de busca (SearchFilterContainer) e listagem de produtos.
    Lógica atual:
    PRODUTOS_POR_PAGINA = 10.
@@ -479,6 +538,15 @@ Páginas
    useHandleMudarPagina controla navegação e scroll.
    Renderiza CardProduto para produtosPaginaAtual (array slice).
    Local: src/pages/Inicial.tsx.
+
+10. Carrinho
+    /app/carrinho
+    Usa useCarrinho() para montar items (mapeia carrinho id→produto via ProdutoInfo).
+    Layout:
+    Lista de produtos com scrollbar (overflow-y-auto + custom-scrollbar + max-h-[70vh]).
+    SumarioCard sticky lateral no desktop.
+    SumarioCard fixo bottom (compact/expandível) no mobile; CompactoMobileHeader em src/components/carrinho/CompactoMobileHeader.tsx.
+    Local: src/pages/Carrinho.tsx.
 
 Validação
 
