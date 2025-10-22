@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Filter, Headset, Search, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Inicial() {
   return (
@@ -16,10 +17,10 @@ export default function Inicial() {
             <User />
           </Button>
           <Button>
-            <Headset />
+            <Link to="/assistencia"><Headset /></Link>
           </Button>
-          <Button>;
-            <p>Área admnistrativa</p>
+          <Button>
+            <Link to="/PainelDeControle">Área admnistrativa</Link>
           </Button>
         </div>
       </header>
