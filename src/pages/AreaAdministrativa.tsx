@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import DadosGerais from "@/components/areaAdministrativa/dadosGerais";
+import PainelDeControle from "@/components/areaAdministrativa/paneilDecontrole";
 
 export default function Adiministracao() {
     return (
@@ -17,10 +18,11 @@ export default function Adiministracao() {
                 </div>
 
                 {/* Grid principal */}
-                <div className="grid grid-rows-[3fr_2fr_50px] border flex-1 gap-2">
-                    <DadosGerais/>
-                    <div className="border bg-green-200">2</div>
-                    <div className="border bg-blue-200">3</div>
+                <div className="grid grid-rows-[60%_40%_0]   /* mobile */
+                sm:grid-rows-[1fr_50px_1fr]  /* desktop */ border flex-1">
+                    <DadosGerais />
+                    <PainelDeControle/>
+                    <div className="border bg-blue-200 hidden sm:block">3</div>
                 </div>
             </div>
         </>
