@@ -1,9 +1,28 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { useEffect, useState } from "react";
 import DadosGerais from "@/components/areaAdministrativa/dadosGerais";
 import PainelDeControle from "@/components/areaAdministrativa/paneilDecontrole";
+import CentralTabelas from "@/components/areaAdministrativa/centralTabelas";
+import { Modulos } from "@/components/ui/modulos";
 
 export default function Adiministracao() {
+    const [moduloSelecionado, setModuloSelecionado] = useState<Modulos>(window.innerWidth < 640 ? "vazio" : "usuarios");
+
+    //Exibição dos módulos
+    useEffect(() => {
+  const handleResize = () => {
+    if (window.innerWidth < 640) {
+      setModuloSelecionado("vazio");
+    } else if (moduloSelecionado === "vazio") {
+      setModuloSelecionado("usuarios");
+    }
+  };
+
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, [moduloSelecionado]);
+
     return (
         <>
             <div className="flex flex-col w-full h-screen max-h-[calc(100vh-60px)]">
@@ -18,13 +37,12 @@ export default function Adiministracao() {
                 </div>
 
                 {/* Grid principal */}
-                <div className="grid grid-rows-[60%_40%_0]   /* mobile */
-                sm:grid-rows-[1fr_50px_1fr]  /* desktop */ border flex-1">
+                <div className="grid grid-rows-[60%_40%_0] sm:grid-rows-[1fr_50px_1fr] border flex-1 relative">
                     <DadosGerais />
-                    <PainelDeControle/>
-                    <div className="border bg-blue-200 hidden sm:block">3</div>
+                    <PainelDeControle selecionarModulo={setModuloSelecionado} moduloAtivo={moduloSelecionado}/>
+                    <CentralTabelas selecionarModulo={setModuloSelecionado} moduloAtivo={moduloSelecionado}/>
                 </div>
-            </div>
+            </div> 
         </>
     );
 }

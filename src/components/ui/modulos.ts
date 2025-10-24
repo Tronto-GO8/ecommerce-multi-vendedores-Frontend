@@ -1,0 +1,1 @@
+export type Modulos = "usuarios" | "estoque" | "assistencia" | "funcionarios" | "vazio";
