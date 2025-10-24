@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+
+<body>
+    <div class="page">
+        <form id="formularioLogin" class="formularioLogin">
+            <label>Nome: <input id="nome" name="nome" type="text" required placeholder="Digite seu nome" /> </label>
+            <label>Curso: <select id="curso" name="curso" type="text" required>
+                    <option value="Eletrônica">Eletrônica</option>
+                    <option value="Informática">Informática</option>
+                    <option value="Lazer">Lazer</option>
+                </select></label>
+            <label>Ano: <input id="ano" name="ano" type="number" min="1" max="4" required
+                    placeholder="ano" /></label>
+            <button>Enviar</button>
+        </form>
+        <br/>
+        <label> Pesquisar <input type="text" placeholder="nome.." id="campoPequisa"> 
+            <span onclick="pesquisarAluno()" class="material-symbols-outlined" aria-label="pesquisar"  >search</span>
+        </label>
+
+        <table id="tabelaAlunos" class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Curso</th>
+                    <th>Ano</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="teste" class="dados">
+            </tbody>
+        </table>
+        <dialog id="exemplo1">
+            <form id="formularioEdicao">
+                <label>ID: <input readonly type="text" id="formEdicaoId"></label>
+                <br/>
+                <label>Nome: <input type="text" id="formEdicaoNome"></label>
+                <br/>
+                <label>Curso: <select id="formEdicaocurso" name="formEdicaocurso" type="text" required>
+                    <option value="Eletrônica">Eletrônica</option>
+                    <option value="Informática">Informática</option>
+                    <option value="Lazer">Lazer</option>
+                </select></label>
+                <br/>
+                <label>Ano: <input id="formEdicaoAno" name="formEdicaoAno" type="number" min="1" max="4" required
+                    placeholder="ano" /></label>
+                <button><span class="material-symbols-outlined">arrow_circle_down</span></button>
+                <button onclick="esconderEdicao()" type="button"><span class="material-symbols-outlined" aria-label="Close" >Close</span></button> 
+            </form>
+           
+
+        </dialog>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>
