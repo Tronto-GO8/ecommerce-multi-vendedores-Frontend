@@ -70,15 +70,23 @@ export default function DadosGerais() {
   ];
 
   return (
-    <div className="grid gap-2 sm:gap-3 p-2">
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 justify-items-center">
+    <div className="p-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 items-center">
         {cards.map((card, idx) => (
-          <Card key={idx} className="border border-black p-2 flex flex-col mx-auto w-[90%] sm:w-full md:w-full max-w-full box-border">
-            <div className="flex justify-between items-center w-full break-words">
-              <CardTitle className="text-xs sm:text-xs md:text-base break-words">{card.title}</CardTitle>
-              {card.icon}
+          <Card
+            key={idx}
+            className="border border-black p-2 flex flex-col justify-between w-full h-full min-h-[60px] sm:min-h-[70px] md:min-h-[80px] box-border max-w-[90%]"
+          >
+            {/* Cabeçalho do Card */}
+            <div className="flex justify-between items-start mb-1">
+              <CardTitle className="text-xs sm:text-sm md:text-base break-words">
+                {card.title}
+              </CardTitle>
+              <div className="flex-shrink-0">{card.icon}</div>
             </div>
-            <div className="mt-auto text-sm sm:text-base md:text-lg break-words overflow-hidden">
+
+            {/* Corpo do Card */}
+            <div className="mt-auto text-xs sm:text-sm md:text-base break-words">
               {card.loading ? (
                 <p>Carregando...</p>
               ) : card.error ? (
@@ -86,11 +94,12 @@ export default function DadosGerais() {
               ) : (
                 <p>{card.value}</p>
               )}
-              <p>{card.label}</p>
+              <p className="text-gray-500">{card.label}</p>
             </div>
           </Card>
         ))}
       </div>
     </div>
+
   );
 }

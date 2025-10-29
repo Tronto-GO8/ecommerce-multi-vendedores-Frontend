@@ -7,21 +7,23 @@ import CentralTabelas from "@/components/areaAdministrativa/centralTabelas";
 import { Modulos } from "@/components/ui/modulos";
 
 export default function Adiministracao() {
-    const [moduloSelecionado, setModuloSelecionado] = useState<Modulos>(window.innerWidth < 640 ? "vazio" : "usuarios");
+    const [algumModuloCelecionado, setAlgumModuloCelecionado] = useState(false);
+    const [moduloSelecionado, setModuloSelecionado] = useState<Modulos>("usuarios");
 
-    //Exibição dos módulos
     useEffect(() => {
-  const handleResize = () => {
-    if (window.innerWidth < 640) {
-      setModuloSelecionado("vazio");
-    } else if (moduloSelecionado === "vazio") {
-      setModuloSelecionado("usuarios");
-    }
-  };
+        const handleResize = () => {
+            if (window.innerWidth < 640 && !algumModuloCelecionado) {
+                setModuloSelecionado("vazio");
+            } else if (moduloSelecionado === "vazio") {
+                setModuloSelecionado("usuarios");
+            }
+        };
 
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, [moduloSelecionado]);
+        window.addEventListener("resize", handleResize);
+        setAlgumModuloCelecionado(true);
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, [moduloSelecionado, algumModuloCelecionado]);
 
     return (
         <>
@@ -37,12 +39,24 @@ export default function Adiministracao() {
                 </div>
 
                 {/* Grid principal */}
-                <div className="grid grid-rows-[60%_40%_0] sm:grid-rows-[1fr_50px_1fr] border flex-1 relative">
-                    <DadosGerais />
-                    <PainelDeControle selecionarModulo={setModuloSelecionado} moduloAtivo={moduloSelecionado}/>
-                    <CentralTabelas selecionarModulo={setModuloSelecionado} moduloAtivo={moduloSelecionado}/>
+                <div className="flex flex-col flex-1 border overflow-hidden">
+                    <div className=" flex flex-col sm:flex-[0_0_40%] p-2">
+                        <DadosGerais />
+                    </div>
+                    <div className="flex-[0_0_50px] sm:h-[50px]">
+                        <PainelDeControle
+                            selecionarModulo={setModuloSelecionado}
+                            moduloAtivo={moduloSelecionado}
+                        />
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                        <CentralTabelas
+                            selecionarModulo={setModuloSelecionado}
+                            moduloAtivo={moduloSelecionado}
+                        />
+                    </div>
                 </div>
-            </div> 
+            </div>
         </>
     );
 }
