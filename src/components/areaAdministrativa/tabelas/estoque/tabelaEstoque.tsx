@@ -300,6 +300,7 @@ export default function TabelaEstoque({
                     <ModalDadosEstoque
                         idItem={itemSelecionadoId ?? undefined}
                         setMostrarDados={setMostrarDadosItens}
+                        atualizarLista={getProdutos}
                     />
                 ) : null}
 

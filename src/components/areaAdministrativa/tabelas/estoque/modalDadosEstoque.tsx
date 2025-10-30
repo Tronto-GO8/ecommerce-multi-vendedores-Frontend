@@ -3,20 +3,12 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import FiltroItens from "@/components/ui/filtroItens";
+import InputError from "@/components/InputError";
 
 interface ModalProps {
   idItem?: number;
   setMostrarDados: React.Dispatch<React.SetStateAction<boolean>>;
   atualizarLista: () => void;
-}
-
-interface DadosProduto {
-  id: number;
-  Produto: String;
-  Quantidade: number;
-  valor: number;
-  Canal: String;
-  Data: String;
 }
 
 export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLista }: ModalProps) {
@@ -26,6 +18,14 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [categorias, setCategorias] = useState<string[]>([]);
   const [imagens, setImagens] = useState<File[]>([]);
+  const [errosCard, setErrosCard] = useState({
+    nome: "",
+    preco: "",
+    quantidade: "",
+    quantidadeMinima: "",
+    categorias: "",
+  });
+
   const [produto, setproduto] = useState<any>({
     nome: "",
     quantidade: 0,
@@ -59,6 +59,25 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
     setCategorias(categorias.filter((c) => c !== cat));
   };
 
+  useEffect(() => {
+    const data = produto;
+    setImagens(Array.isArray(data.imagens) ? data.imagens : []);
+  }, [produto]);
+
+  // Erro dos campos obrigatórios
+  const validarCampos = () => {
+    const novosErros = {
+      nome: produto.nome ? "" : "O nome é obrigatório.",
+      preco: produto.preco ? "" : "O preço é obrigatório.",
+      quantidade: produto.quantidade ? "" : "A quantidade é obrigatória.",
+      quantidadeMinima: produto.quantidadeMinima ? "" : "A quantidade mínima é obrigatória.",
+      categorias: categorias.length > 0 ? "" : "Selecione pelo menos uma categoria.",
+    };
+
+    setErrosCard(novosErros);
+    return Object.values(novosErros).every((e) => e === "");
+  };
+
   // Buscar dados se necessário
   useEffect(() => {
     if (!idItem) {
@@ -87,7 +106,7 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
 
         const data = await response.json();
         setproduto(data);
-        setCategorias(data.categorias || []);
+        setCategorias(Array.isArray(data.categorias) ? data.categorias : []);
         setImagens(data.imagens || []);
       } catch (err: unknown) {
         setErro(err instanceof Error ? err.message : "Erro desconhecido");
@@ -102,11 +121,10 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-30">
       <div
-        className={`bg-white rounded shadow-lg ${
-          abaAtiva == "informacoes"
-            ? "w-[90vw] sm:w-[80vw] md:w-[60vw] h-[90vh]"
-            : "w-[90vw] sm:w-[70vw] md:w-[50vw] h-[70vh]"
-        }`}
+        className={`bg-white rounded shadow-lg ${abaAtiva == "informacoes"
+          ? "w-[90vw] sm:w-[80vw] md:w-[60vw] h-[90vh]"
+          : "w-[90vw] sm:w-[70vw] md:w-[50vw] h-[70vh]"
+          }`}
       >
         <div className="flex h-full flex-col gap-2 border border-black">
           <div className="flex flex-col flex-grow gap-2 overflow-hidden m-4 h-full">
@@ -133,31 +151,42 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                               <p>Nome do produto</p>
                               <Input
                                 className="w-[80%]"
-                                value={produto?.nome || ""}
-                                onChange={(e) => setproduto({ ...produto, nome: e.target.value })}
+                                value={produto.nome}
+                                onChange={(e) => {
+                                  setproduto({ ...produto, nome: e.target.value });
+                                  if (errosCard.nome)
+                                    setErrosCard({ ...errosCard, nome: "" });
+                                }}
                               />
+                              <InputError message={errosCard.nome} />
                             </div>
                             <div>
                               <p>Quantidade em estoque</p>
                               <Input
                                 className="w-[80%]"
                                 type="number"
-                                value={produto?.quantidade || ""}
-                                onChange={(e) =>
-                                  setproduto({ ...produto, quantidade: Number(e.target.value) })
-                                }
+                                value={produto.quantidade}
+                                onChange={(e) => {
+                                  setproduto({ ...produto, valor: Number(e.target.value) });
+                                  if (errosCard.preco)
+                                    setErrosCard({ ...errosCard, preco: "" });
+                                }}
                               />
+                              <InputError message={errosCard.quantidade} />
                             </div>
                             <div>
                               <p>Quantidade mínima</p>
                               <Input
                                 className="w-[80%]"
                                 type="number"
-                                value={produto?.quantidadeMinima || ""}
-                                onChange={(e) =>
-                                  setproduto({ ...produto, quantidadeMinima: Number(e.target.value) })
-                                }
+                                value={produto.quantidadeMinima}
+                                onChange={(e) => {
+                                  setproduto({ ...produto, quantidade: Number(e.target.value) });
+                                  if (errosCard.quantidade)
+                                    setErrosCard({ ...errosCard, quantidade: "" });
+                                }}
                               />
+                              <InputError message={errosCard.quantidadeMinima} />
                             </div>
                           </div>
 
@@ -168,29 +197,37 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                               <Input
                                 className="w-[80%]"
                                 type="number"
-                                value={produto?.preco || ""}
-                                onChange={(e) =>
-                                  setproduto({ ...produto, preco: Number(e.target.value) })
-                                }
+                                value={produto.preco}
+                                onChange={(e) => {
+                                  setproduto({
+                                    ...produto,
+                                    quantidadeMinima: Number(e.target.value),
+                                  });
+                                  if (errosCard.quantidadeMinima)
+                                    setErrosCard({ ...errosCard, quantidadeMinima: "" });
+                                }}
                               />
+                              <InputError message={errosCard.preco} />
                             </div>
 
                             <div>
                               <p>Categoria</p>
                               <div className="flex items-center gap-2 text-sm sm:text-md md:text-md">
-                                <FiltroItens
-                                  value={categoriaSelecionada}
-                                  onChange={setCategoriaSelecionada}
-                                />
+                                <div>
+                                  <FiltroItens
+                                    value={categoriaSelecionada}
+                                    onChange={setCategoriaSelecionada}
+                                  />
+                                  <InputError message={errosCard.categorias} />
+                                </div>
                                 <Button onClick={adicionarCategoria}>Add</Button>
                               </div>
                             </div>
 
                             <div className="flex-1 border border-black rounded-md overflow-y-auto max-h-[120px]">
                               <div
-                                className={`flex flex-wrap gap-1 p-2 ${
-                                  categorias.length <= 0 ? "justify-center items-center" : ""
-                                }`}
+                                className={`flex flex-wrap gap-1 p-2 ${categorias.length <= 0 ? "justify-center items-center" : ""
+                                  }`}
                               >
                                 {categorias.length > 0 ? (
                                   categorias.map((cat) => (
@@ -243,15 +280,20 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                               <div className="flex flex-col gap-2 w-full">
                                 <div className="flex flex-wrap gap-2 justify-center items-center p-2 rounded-md min-h-[150px] w-full border">
                                   {imagens.map((img, index) => (
-                                    <div
-                                      key={index}
-                                      className="relative w-24 h-24 border rounded-md overflow-hidden"
-                                    >
-                                      <img
-                                        src={URL.createObjectURL(img)}
-                                        alt={`Imagem ${index + 1}`}
-                                        className="w-full h-full object-cover"
-                                      />
+                                    <div key={index} className="relative w-24 h-24 border rounded-md overflow-hidden">
+                                      {typeof img === "string" ? (
+                                        <img
+                                          src={img}
+                                          alt={`Imagem ${index + 1}`}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      ) : (
+                                        <img
+                                          src={URL.createObjectURL(img)}
+                                          alt={`Imagem ${index + 1}`}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      )}
                                       <button
                                         onClick={() => removerImagem(index)}
                                         className="absolute top-1 right-1 bg-black/60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
@@ -260,7 +302,6 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                                       </button>
                                     </div>
                                   ))}
-
                                   {imagens.length < 5 && (
                                     <label className="w-24 h-24 border-2 border-dashed border-gray-400 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50">
                                       <span className="text-2xl text-gray-500">+</span>
@@ -305,10 +346,7 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                 onClick={async () => {
                   if (abaAtiva === "imagens") {
                     // Validação simples
-                    if (!produto.nome || !produto.preco) {
-                      alert("Preencha todos os campos obrigatórios!");
-                      return;
-                    }
+                    if (!validarCampos()) return;
 
                     const metodo = idItem ? "PUT" : "POST";
                     const url = idItem ? `/api/produtos/${idItem}` : "/api/produtos";
@@ -340,16 +378,20 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                       console.error(err);
                       alert("Falha ao salvar os dados.");
                     }
-                  } else {
+                  } else if (abaAtiva === "informacoes") {
+                    if (!validarCampos()) {
+                      return;
+                    }
                     setAbaAtiva("imagens");
+                    return;
                   }
                 }}
               >
                 {abaAtiva == "informacoes"
                   ? "Continuar"
                   : idItem
-                  ? "Salvar alterações"
-                  : "Adicionar produto"}
+                    ? "Salvar alterações"
+                    : "Adicionar produto"}
               </Button>
             </div>
           </div>
