@@ -10,6 +10,15 @@ interface ModalProps {
   setMostrarDados: React.Dispatch<React.SetStateAction<boolean>>;
   atualizarLista: () => void;
 }
+interface Produto {
+  nome: string;
+  preco: number;
+  quantidade: number;
+  quantidadeMinima: number;
+  descricao: string;
+  imagens: (File | string)[];
+  categorias: string[];
+}
 
 export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLista }: ModalProps) {
   const [abaAtiva, setAbaAtiva] = useState<"informacoes" | "imagens">("informacoes");
@@ -17,21 +26,24 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
   const [erro, setErro] = useState<string | null>(null);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [categorias, setCategorias] = useState<string[]>([]);
-  const [imagens, setImagens] = useState<File[]>([]);
+  const [imagens, setImagens] = useState<(File | string)[]>([]);
   const [errosCard, setErrosCard] = useState({
     nome: "",
     preco: "",
     quantidade: "",
     quantidadeMinima: "",
     categorias: "",
+    descricao: "",
   });
 
-  const [produto, setproduto] = useState<any>({
+  const [produto, setproduto] = useState<Produto>({
     nome: "",
+    preco: 0,
     quantidade: 0,
     quantidadeMinima: 0,
-    preco: 0,
     descricao: "",
+    imagens: [],
+    categorias: [],
   });
 
   // Adicionar imagem
@@ -67,26 +79,57 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
   // Erro dos campos obrigatórios
   const validarCampos = () => {
     const novosErros = {
-      nome: produto.nome ? "" : "O nome é obrigatório.",
-      preco: produto.preco ? "" : "O preço é obrigatório.",
-      quantidade: produto.quantidade ? "" : "A quantidade é obrigatória.",
-      quantidadeMinima: produto.quantidadeMinima ? "" : "A quantidade mínima é obrigatória.",
-      categorias: categorias.length > 0 ? "" : "Selecione pelo menos uma categoria.",
+      nome: produto.nome.trim() === "" ? "O nome é obrigatório." : "",
+
+      preco:
+        produto.preco === undefined || produto.preco === null
+          ? "O preço é obrigatório."
+          : produto.preco <= 0
+            ? "O preço deve ser maior que zero."
+            : "",
+
+      quantidade:
+        produto.quantidade === undefined || produto.quantidade === null
+          ? "A quantidade é obrigatória."
+          : produto.quantidade <= 0
+            ? "A quantidade deve ser maior que zero."
+            : produto.quantidade > 99999
+              ? "A quantidade não pode ultrapassar 99.999 unidades."
+              : "",
+
+      quantidadeMinima:
+        produto.quantidadeMinima === undefined || produto.quantidadeMinima === null
+          ? "A quantidade mínima é obrigatória."
+          : produto.quantidadeMinima <= 0
+            ? "A quantidade mínima deve ser maior que zero."
+            : produto.quantidadeMinima > produto.quantidade
+              ? "A quantidade mínima não pode ser maior que o estoque."
+              : "",
+
+      categorias:
+        categorias.length === 0 ? "Selecione pelo menos uma categoria." : "",
+
+      descricao:
+        produto.descricao.trim() === "" ? "A descrição deve ser preenchida." : "",
     };
 
     setErrosCard(novosErros);
-    return Object.values(novosErros).every((e) => e === "");
+
+    // Retorna true se todos os erros estiverem vazios
+    return Object.values(novosErros).every((erro) => erro === "");
   };
+
 
   // Buscar dados se necessário
   useEffect(() => {
     if (!idItem) {
       setproduto({
         nome: "",
+        preco: 0,
         quantidade: 0,
         quantidadeMinima: 0,
-        preco: 0,
         descricao: "",
+        imagens: [],
         categorias: [],
       });
       setCategorias([]);
@@ -167,9 +210,9 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                                 type="number"
                                 value={produto.quantidade}
                                 onChange={(e) => {
-                                  setproduto({ ...produto, valor: Number(e.target.value) });
-                                  if (errosCard.preco)
-                                    setErrosCard({ ...errosCard, preco: "" });
+                                  setproduto({ ...produto, quantidade: Number(e.target.value) });
+                                  if (errosCard.quantidade)
+                                    setErrosCard({ ...errosCard, quantidade: "" });
                                 }}
                               />
                               <InputError message={errosCard.quantidade} />
@@ -181,9 +224,9 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                                 type="number"
                                 value={produto.quantidadeMinima}
                                 onChange={(e) => {
-                                  setproduto({ ...produto, quantidade: Number(e.target.value) });
-                                  if (errosCard.quantidade)
-                                    setErrosCard({ ...errosCard, quantidade: "" });
+                                  setproduto({ ...produto, quantidadeMinima: Number(e.target.value) });
+                                  if (errosCard.quantidadeMinima)
+                                    setErrosCard({ ...errosCard, quantidadeMinima: "" });
                                 }}
                               />
                               <InputError message={errosCard.quantidadeMinima} />
@@ -201,10 +244,10 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                                 onChange={(e) => {
                                   setproduto({
                                     ...produto,
-                                    quantidadeMinima: Number(e.target.value),
+                                    preco: Number(e.target.value),
                                   });
-                                  if (errosCard.quantidadeMinima)
-                                    setErrosCard({ ...errosCard, quantidadeMinima: "" });
+                                  if (errosCard.preco)
+                                    setErrosCard({ ...errosCard, preco: "" });
                                 }}
                               />
                               <InputError message={errosCard.preco} />
@@ -220,7 +263,12 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                                   />
                                   <InputError message={errosCard.categorias} />
                                 </div>
-                                <Button onClick={adicionarCategoria}>Add</Button>
+                                <Button onClick={() => {
+                                  adicionarCategoria();
+                                  if (errosCard.categorias)
+                                    setErrosCard({ ...errosCard, categorias: "" });
+                                }}
+                                >Add</Button>
                               </div>
                             </div>
 
@@ -265,6 +313,7 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                               setproduto({ ...produto, descricao: e.target.value })
                             }
                           />
+                          <InputError message={errosCard.descricao} />
                         </div>
                       </div>
                     ) : (
@@ -358,7 +407,11 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                     formData.append("preco", produto.preco.toString());
                     formData.append("descricao", produto.descricao);
                     categorias.forEach((c) => formData.append("categorias", c));
-                    imagens.forEach((img) => formData.append("imagens", img));
+                    imagens.forEach((img) => {
+                      if (img instanceof File) {
+                        formData.append("imagens", img);
+                      }
+                    });
 
                     try {
                       const response = await fetch(url, {
