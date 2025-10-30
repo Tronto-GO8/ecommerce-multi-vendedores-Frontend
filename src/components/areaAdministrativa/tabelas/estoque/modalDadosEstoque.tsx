@@ -7,6 +7,7 @@ import FiltroItens from "@/components/ui/filtroItens";
 interface ModalProps {
   idItem?: number;
   setMostrarDados: React.Dispatch<React.SetStateAction<boolean>>;
+  atualizarLista: () => void;
 }
 
 interface DadosProduto {
@@ -18,7 +19,7 @@ interface DadosProduto {
   Data: String;
 }
 
-export default function ModalDadosEstoque({ setMostrarDados, idItem }: ModalProps) {
+export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLista }: ModalProps) {
   const [abaAtiva, setAbaAtiva] = useState<"informacoes" | "imagens">("informacoes");
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -334,6 +335,7 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem }: ModalProp
 
                       alert(idItem ? "Produto atualizado!" : "Produto criado!");
                       setMostrarDados(false);
+                      atualizarLista();
                     } catch (err) {
                       console.error(err);
                       alert("Falha ao salvar os dados.");

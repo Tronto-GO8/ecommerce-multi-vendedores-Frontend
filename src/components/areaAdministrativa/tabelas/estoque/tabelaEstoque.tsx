@@ -20,9 +20,10 @@ interface TabelaUsuariosProps {
 interface Itens {
     id: number;
     produto: string;
-    categoriaPrincipal: string;
+    categorias: string[];
     preco: number;
     estoque: number;
+    estoqueMinimo: number;
 }
 
 export default function TabelaEstoque({
@@ -30,49 +31,34 @@ export default function TabelaEstoque({
     selecionarModulo,
 }: TabelaUsuariosProps) {
     const [mostrarDadosItens, setMostrarDadosItens] = useState(false);
-    const [itemSelecionadoId, setitemSelecionadoId] = useState<number | null>();
+    const [itemSelecionadoId, setitemSelecionadoId] = useState<number | null>(null);
     const [pesquisa, setPesquisa] = useState("");
+    const [erroPesquisa, setErroPesquisa] = useState<string | null>(null);
     const [loadingTabela, setLoadingTabela] = useState(false);
     const [errorTabela, setErrorTabela] = useState<string | null>(null);
+    const [filtroCategoria, setFiltroCategoria] = useState<string>("");
+    const [filtroEstoque, setFiltroEstoque] = useState<string>("");
     const [produtos, setprodutos] = useState<Itens[]>([
         {
             id: 1,
             produto: "Notebook Gamer X-15",
-            categoriaPrincipal: "Informática",
+            categorias: ["Informática", "Gamer"],
             preco: 6499.9,
             estoque: 12,
+            estoqueMinimo: 5,
         },
         {
             id: 2,
-            produto: "Smartphone Galaxy Z Flip 6",
-            categoriaPrincipal: "Celulares",
-            preco: 4999.0,
-            estoque: 8,
-        },
-        {
-            id: 3,
-            produto: "Monitor UltraWide 34'' LG",
-            categoriaPrincipal: "Periféricos",
-            preco: 2899.99,
-            estoque: 15,
-        },
-        {
-            id: 4,
-            produto: "Teclado Mecânico RGB HyperX Alloy",
-            categoriaPrincipal: "Acessórios",
-            preco: 599.9,
-            estoque: 32,
-        },
-        {
-            id: 5,
-            produto: "Cadeira Gamer ThunderX3 TGC12",
-            categoriaPrincipal: "Móveis",
-            preco: 1399.0,
-            estoque: 5,
+            produto: "Camiseta Preta",
+            categorias: ["Moda", "Roupas"],
+            preco: 49.9,
+            estoque: 3,
+            estoqueMinimo: 5,
         },
     ]);
+    const [produtosFiltrados, setProdutosFiltrados] = useState<Itens[]>(produtos);
 
-    // 🔹 Buscar produtos (inicial)
+    // 🔹 Buscar produtos (inicial, quando a tela é carregada)
     async function getProdutos() {
         setLoadingTabela(true);
         try {
@@ -89,6 +75,7 @@ export default function TabelaEstoque({
                 return;
             }
             setprodutos(data);
+            setProdutosFiltrados(data);
             setErrorTabela(null);
         } catch (err: unknown) {
             if (err instanceof TypeError) {
@@ -105,10 +92,11 @@ export default function TabelaEstoque({
         getProdutos();
     }, []);
 
-    // 🔹 Filtrar produtos
-    async function filtrarDados() {
+    // 🔹 Buscar produto por nome
+    async function getDadosNome() {
         if (!pesquisa.trim()) {
-            setErrorTabela("Digite algo para pesquisar.");
+            setErroPesquisa(null);
+            setProdutosFiltrados(produtos);
             return;
         }
 
@@ -130,6 +118,7 @@ export default function TabelaEstoque({
                 return;
             }
             setprodutos(data);
+            setProdutosFiltrados(data);
             setErrorTabela(null);
         } catch (err: unknown) {
             if (err instanceof TypeError) {
@@ -142,19 +131,29 @@ export default function TabelaEstoque({
         }
     }
 
-    // 🔹 Buscar produto por ID (para o modal)
-    async function buscarProduto(id: number) {
-        try {
-            const response = await fetch(`/api/produtos/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
+    // 🔹 Filtrar itens
+
+    useEffect(() => {
+        const filtrados = produtos
+            .filter((p) => {
+                if (!filtroCategoria) return true;
+                return p.categorias.some((cat) =>
+                    cat.toLowerCase().includes(filtroCategoria.toLowerCase())
+                );
+            })
+            .filter((p) => {
+                if (filtroEstoque === "baixo") return p.estoque < p.estoqueMinimo;
+                if (filtroEstoque === "alto") return p.estoque >= p.estoqueMinimo;
+                return true;
+            })
+            .sort((a, b) => {
+                if (filtroEstoque === "ordenarMenor") return a.estoque - b.estoque;
+                if (filtroEstoque === "ordenarMaior") return b.estoque - a.estoque;
+                return 0;
             });
-            if (!response.ok) throw new Error("Falha ao buscar produto");
-            const data = await response.json();
-            return data;
-        } catch (err) {
-            console.error(err);
-        }
-    }
+
+        setProdutosFiltrados(filtrados);
+    }, [filtroCategoria, filtroEstoque, produtos]);
 
     // 🔹 Excluir produto
     async function deletarProduto(id: number) {
@@ -187,7 +186,7 @@ export default function TabelaEstoque({
 
                         {/* Botão adicionar */}
                         <Button
-                            onClick={() => { setMostrarDadosItens(true), setitemSelecionadoId(undefined) }}
+                            onClick={() => { setMostrarDadosItens(true), setitemSelecionadoId(null) }}
                             className="w-auto"
                         >
                             + Adicionar
@@ -195,17 +194,21 @@ export default function TabelaEstoque({
 
                         {/* Filtro */}
                         <div className="max-w-[140px]">
-                            <FiltroItens />
+                            <FiltroItens value={filtroCategoria} onChange={setFiltroCategoria} />
                         </div>
 
                         {/* Select */}
                         <div>
-                            <select className="min-w-[150px] border rounded-md px-1 py-2">
-                                <option value="" disabled>
-                                    Estoque
-                                </option>
+                            <select className="min-w-[150px] border rounded-md px-1 py-2"
+                                value={filtroEstoque}
+                                onChange={(e) => setFiltroEstoque(e.target.value)}
+
+                            >
+                                <option value="">Estoque</option>
                                 <option value="ordenarMenor">▼ Menor estoque</option>
                                 <option value="ordenarMaior">▲ Maior estoque</option>
+                                <option value="baixo">baixo do minimo</option>
+                                <option value="alto">acima do minimo</option>
                             </select>
                         </div>
                     </div>
@@ -217,7 +220,7 @@ export default function TabelaEstoque({
                             placeholder="Pesquisar produto"
                             className="w-full sm:w-[60%] md:w-[50%] dark:bg-[#202020] dark:text-gray-200 dark:border-[#303030] min-w-[180px]"
                         />
-                        <Button onClick={filtrarDados} className="w-auto">
+                        <Button onClick={getDadosNome} className="w-auto">
                             <Search />
                         </Button>
                     </div>
@@ -225,8 +228,8 @@ export default function TabelaEstoque({
 
                 <Card
                     className={`w-full p-2 gap-2 border border-black flex-1 overflow-hidden ${loadingTabela || errorTabela
-                            ? "flex justify-center items-center"
-                            : ""
+                        ? "flex justify-center items-center"
+                        : ""
                         }`}
                 >
                     {loadingTabela ? (
@@ -248,13 +251,17 @@ export default function TabelaEstoque({
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {produtos.map((user) => (
+                                    {produtosFiltrados.map((user) => (
                                         <tr key={user.id}>
                                             <td className="p-2 text-center text-sm sm:text-base md:text-lg">
                                                 {user.produto}
                                             </td>
                                             <td className="p-2 text-center text-sm sm:text-base md:text-lg">
-                                                {user.categoriaPrincipal}
+                                                {user.categorias[0]}
+                                                {user.categorias.length > 1 && (
+                                                    <span className="text-gray-500"> (+{user.categorias.length - 1})</span>
+                                                )}
+
                                             </td>
                                             <td className="p-2 text-center text-sm sm:text-base md:text-lg">
                                                 R$ {user.preco.toFixed(2)}
@@ -295,7 +302,6 @@ export default function TabelaEstoque({
                         setMostrarDados={setMostrarDadosItens}
                     />
                 ) : null}
-
 
             </div>
         </>
