@@ -235,12 +235,6 @@ export default function ModalDadosUsuario({ setMostrarDados, idCliente }: ModalP
 
                         )}
                     </div>
-
-
-
-
-
-
                 </div>
             </div>
         </div>

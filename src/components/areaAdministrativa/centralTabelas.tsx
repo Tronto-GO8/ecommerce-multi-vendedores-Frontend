@@ -2,6 +2,8 @@ import TabelaUsiarios from "./tabelas/usuarios/tabelaUsuarios";
 import { Modulos } from "../ui/modulos";
 import { Card } from "../ui/card";
 import TabelaEstoque from "./tabelas/estoque/tabelaEstoque";
+import TabelaPedidosdeAssistencia from "./tabelas/assistenciaAoProduto/tabaleAssistenciaProduto";
+import TabelaFuncionarios from "./tabelas/funcionarios/tabelaFuncionarios";
 
 interface CentralTabelasProps {
     moduloAtivo: Modulos;
@@ -12,8 +14,8 @@ export default function CentralTabelas({ moduloAtivo, selecionarModulo }: Centra
     const tabelas = {
         usuarios: <TabelaUsiarios moduloAtivo={moduloAtivo} selecionarModulo={selecionarModulo} />,
         estoque: <TabelaEstoque moduloAtivo={moduloAtivo} selecionarModulo={selecionarModulo}/>,
-        assistencia: null,
-        funcionarios: null,
+        assistencia: <TabelaPedidosdeAssistencia moduloAtivo={moduloAtivo} selecionarModulo={selecionarModulo}/>,
+        funcionarios: <TabelaFuncionarios  moduloAtivo={moduloAtivo} selecionarModulo={selecionarModulo} />,
         vazio: null,
     };
 
