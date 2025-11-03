@@ -13,9 +13,8 @@ import PainelDeControle from "./pages/AreaAdministrativa";
 function App() {
   return (
     <Router>
-      <Header />
       <Routes>
-        <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
+        {/* <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
         <Route path="/login" element={<Login />} />
         <Route path="/assistencia" element={<Assistencia/>} />
         <Route path="/" element={<Inicial />} />
@@ -24,6 +23,7 @@ function App() {
         <Route path="/cadastro" element={<Cadastrar />} />
         <Route path="/PainelDeControle" element={<PainelDeControle />} />
         {/* <Route path="*" element={<RedefinirSenha />} /> */}
+        <Route path="*" element={<Inicial />} />
       </Routes>
     </Router>
   );
