@@ -12,16 +12,16 @@ import Assistencia from "./pages/AssistenciaAoProduto";
 function App() {
   return (
     <Router>
-      <Header />
       <Routes>
-        <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
+        {/* <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
         <Route path="/login" element={<Login />} />
         <Route path="/assistencia" element={<Assistencia/>} />
         <Route path="/" element={<Inicial />} />
         <Route path="*" element={<Inicial />} />
         <Route path="/cadastro" element={<Cadastrar />} />
-        <Route path="/auth/callback" element={<Cadastrar />} />
+        <Route path="/auth/callback" element={<Cadastrar />} /> */}
         {/* <Route path="*" element={<RedefinirSenha />} /> */}
+        <Route path="*" element={<Inicial />} />
       </Routes>
     </Router>
   );
