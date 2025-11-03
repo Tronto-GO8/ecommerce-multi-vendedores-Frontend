@@ -20,7 +20,7 @@ export default function Assistencia() {
           to="/meus-chamados"
           className="p-2 rounded-full text-white hover:bg-gray-700"
         >
-          <ArrowLeft className="w-6 h-6" />
+          <ArrowLeft className="w-4 h-4" />
         </Link>
       </div>
 

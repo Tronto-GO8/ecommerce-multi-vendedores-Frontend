@@ -8,6 +8,7 @@ import RedefinirSenha from "./pages/RedefinirSenha";
 import AuthCallback from "./pages/AuthCallback";
 import Inicial from "./pages/inicial"
 import Assistencia from "./pages/AssistenciaAoProduto";
+import PainelDeControle from "./pages/AreaAdministrativa";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
         <Route path="/" element={<Inicial />} />
         <Route path="*" element={<Inicial />} />
         <Route path="/cadastro" element={<Cadastrar />} />
-        <Route path="/auth/callback" element={<Cadastrar />} /> */}
+        <Route path="/cadastro" element={<Cadastrar />} />
+        <Route path="/PainelDeControle" element={<PainelDeControle />} />
         {/* <Route path="*" element={<RedefinirSenha />} /> */}
         <Route path="*" element={<Inicial />} />
       </Routes>
