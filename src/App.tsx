@@ -6,7 +6,8 @@ import EsqueceuSenha from "./pages/EsqueceuSenha";
 import Login from "./pages/Login";
 import RedefinirSenha from "./pages/RedefinirSenha";
 import AuthCallback from "./pages/AuthCallback";
-import Inicial from "./pages/inicial";
+import Inicial from "./pages/inicial"
+import Assistencia from "./pages/AssistenciaAoProduto";
 
 function App() {
   return (
@@ -14,8 +15,9 @@ function App() {
       <Routes>
         {/* <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Login />} />
-        <Route path="*" element={<Login />} />
+        <Route path="/assistencia" element={<Assistencia/>} />
+        <Route path="/" element={<Inicial />} />
+        <Route path="*" element={<Inicial />} />
         <Route path="/cadastro" element={<Cadastrar />} />
         <Route path="/auth/callback" element={<Cadastrar />} /> */}
         {/* <Route path="*" element={<RedefinirSenha />} /> */}
