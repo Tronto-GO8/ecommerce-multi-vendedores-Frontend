@@ -14,7 +14,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
+        <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
         <Route path="/login" element={<Login />} />
         <Route path="/assistencia" element={<Assistencia/>} />
         <Route path="/" element={<Inicial />} />

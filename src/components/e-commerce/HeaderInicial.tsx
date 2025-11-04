@@ -1,6 +1,7 @@
 import { Headset, User } from "lucide-react";
 import { Button } from "../ui/button";
 import DropDownPerfil from "./DropDownPerfil";
+import { Link } from "react-router-dom";
 
 export default function HeaderInicial() {
   return (
@@ -10,11 +11,11 @@ export default function HeaderInicial() {
         <Button>
           <DropDownPerfil />
         </Button>
-        <Button>
-          <Headset />
+        <Button asChild>
+          <Link to="/assistencia"><Headset /></Link>
         </Button>
-        <Button>
-          <p>Área admnistrativa</p>
+        <Button asChild>
+         <Link to="/PainelDeControle">Área admnistrativa</Link>
         </Button>
       </div>
     </header>

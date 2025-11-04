@@ -27,7 +27,7 @@ export default function Adiministracao() {
 
     return (
         <>
-            <div className="flex flex-col w-full h-screen max-h-[calc(100vh-60px)]">
+            <div className="flex flex-col w-full h-screen max-h-100vh">
                 {/* Cabeçalho */}
                 <div className="w-full bg-[#303030] flex items-center">
                     <Link
