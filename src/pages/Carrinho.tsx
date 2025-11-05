@@ -5,6 +5,11 @@ import ProdutosCarrinho from "@/components/carrinho/ProdutosCarrinho";
 import { useModoMobile } from "@/hooks/useModoMobile";
 import { useCarrinho } from "@/contexts/ProdutoCarrinhoContext";
 import { ProdutoInfo } from "@/components/ProdutosInfo";
+import { CheckoutCarrinho } from "@/components/carrinho/checkout/CheckoutCarrinho";
+import type {
+  Address,
+  PaymentMethod as PaymentMethodType,
+} from "@/type/ProdutosType";
 
 export default function Carrinho() {
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
@@ -17,7 +22,14 @@ export default function Carrinho() {
     limparCarrinho,
   } = useCarrinho();
 
-  // Monta array de produtos com quantidade do carrinho
+  const [address, setAddress] = useState<Address | null>(null);
+  const [shippingMethod, setShippingMethod] = useState<"pickup" | "shipping">(
+    "pickup"
+  );
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType | null>(
+    null
+  );
+
   const items = useMemo(() => {
     return Object.entries(carrinho)
       .map(([idStr, qtd]) => {
@@ -26,8 +38,37 @@ export default function Carrinho() {
         if (!produto) return null;
         return { ...produto, quantidade: qtd };
       })
-      .filter(Boolean) as any[]; // tipo inferido como array de Produtos com `quantidade`
+      .filter(Boolean) as any[];
   }, [carrinho]);
+
+  // subtotal
+  const subtotal = useMemo(() => {
+    return items.reduce(
+      (acc, it) => acc + (it.preco ?? 0) * ((it.quantidade ?? 1) as number),
+      0
+    );
+  }, [items]);
+
+  const shippingPrice = useMemo(() => {
+    return shippingMethod === "pickup" ? 0 : 19.9;
+  }, [shippingMethod]);
+
+  const totalPrice = subtotal + shippingPrice;
+
+  const handleConfirmPurchase = () => {
+    if (shippingMethod === "shipping" && !address) {
+      alert("Por favor, adicione um endereço para entrega.");
+      return;
+    }
+    if (!paymentMethod) {
+      alert("Por favor, selecione uma forma de pagamento.");
+      return;
+    }
+
+    alert("Compra confirmada! Obrigado.");
+    limparCarrinho();
+    setIsCheckoutModalOpen(false);
+  };
 
   if (items.length === 0) {
     return <CarrinhoVazio />;
@@ -40,20 +81,8 @@ export default function Carrinho() {
           Carrinho de Compras
         </h1>
 
-        {/* Desktop Layout */}
-        <div className="min-h-screen lg:grid lg:grid-cols-3 gap-8 ">
-          {/* Items List */}
-          <div
-            className={`
-              lg:col-span-2 
-              border-none
-              space-y-2 
-              overflow-y-auto 
-              custom-scrollbar
-              max-h-[70vh] 
-            `}
-          >
-            {/* Products */}
+        <div className="min-h-screen lg:grid lg:grid-cols-3 gap-8">
+          <div className={"lg:col-span-2 border-none space-y-2"}>
             {items.map((p) => (
               <ProdutosCarrinho
                 key={p.id}
@@ -70,16 +99,16 @@ export default function Carrinho() {
             ))}
           </div>
 
-          {/* Summary Sidebar */}
           {!modoMobile && (
             <div className="hidden lg:block lg:col-span-1">
               <div className="sticky top-8">
                 <SumarioCard
                   items={items}
+                  subtotal={subtotal}
+                  totalPrice={totalPrice}
+                  shippingPrice={shippingPrice}
                   onCheckout={() => setIsCheckoutModalOpen(true)}
-                  onClear={() => {
-                    limparCarrinho();
-                  }}
+                  onClear={() => limparCarrinho()}
                   mobile={false}
                 />
               </div>
@@ -87,21 +116,22 @@ export default function Carrinho() {
           )}
         </div>
 
-        {/* Mobile Layout */}
         <div className="lg:hidden fixed inset-x-0 bottom-0 z-50 p-4 pointer-events-none">
           <div className="max-w-7xl mx-auto pointer-events-auto">
             <SumarioCard
               items={items}
+              subtotal={subtotal}
+              totalPrice={totalPrice}
+              shippingPrice={shippingPrice}
               mobile={true}
               className="max-w-3xl mx-auto"
               onCheckout={() => setIsCheckoutModalOpen(true)}
-              onClear={() => {
-                limparCarrinho();
-              }}
+              onClear={() => limparCarrinho()}
             />
           </div>
         </div>
-        {/* <CheckoutModal
+
+        <CheckoutCarrinho
           open={isCheckoutModalOpen}
           onOpenChange={setIsCheckoutModalOpen}
           items={items}
@@ -109,10 +139,12 @@ export default function Carrinho() {
           onAddressUpdate={setAddress}
           selectedPayment={paymentMethod}
           onPaymentSelect={setPaymentMethod}
+          shippingMethod={shippingMethod}
+          onShippingMethodChange={setShippingMethod}
           shippingPrice={shippingPrice}
           totalPrice={totalPrice}
           onConfirmPurchase={handleConfirmPurchase}
-        /> */}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,3 @@
-import InputNome from "@/components/loginCadastro/InputNome";
-import InputEmail from "@/components/loginCadastro/InputEmail";
-import InputSenha from "@/components/loginCadastro/InputSenha";
 import { Button } from "@/components/ui/button";
 import OuSeparador from "@/components/ui/OuSeparador";
 import LoginSocial from "@/components/loginCadastro/LoginSocial";
@@ -14,25 +11,58 @@ import { CadastroForm, cadastroSchema } from "@/schemas/cadastroSchema";
 import InputError from "@/components/InputError";
 import FormCardHeader from "@/components/loginCadastro/FormCardHeader";
 import Header from "@/components/loginCadastro/Header";
+import { useNavigate } from "react-router-dom";
+import {
+  InputNome,
+  InputEmail,
+  InputSenha,
+} from "@/components/loginCadastro/InputsLoginCadastro";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSubmitStatus } from "@/hooks/useSubmitStatus";
 
 export default function Cadastrar() {
   const {
-    register, //conecta os inputs ao form.
-    handleSubmit, //função que processa antes de enviar.
+    register,
+    handleSubmit,
     formState: { errors },
   } = useForm<CadastroForm>({
     resolver: zodResolver(cadastroSchema),
-  }); // contém os erros de validação gerados pelo zodResolver(cadastroSchema).
+  });
 
-  //   Estado local para armazenar a senha conforme o usuário digita.
-  // Necessário para atualizar o ChecklistSenha
   const [senhaDigitada, setSenhaDigitada] = useState("");
+  const { register: registerUser } = useAuth();
+  const navigate = useNavigate();
 
-  const enviarFormCadastro = (data: CadastroForm) => {
-    // Separa senha e confirmarSenha do resto dos dados (por segurança, pode ser que você não queira logar/exibir senhas).
-    const { senha, confirmarSenha, ...dadosSemSenha } = data;
-    // Mostra os dados no console como teste.
-    console.log("Cadastro: ", dadosSemSenha);
+  const {
+    status,
+    serverError,
+    startLoading,
+    handleSuccess,
+    handleError,
+    getButtonContent,
+    getButtonStyles,
+  } = useSubmitStatus({
+    onSuccess: () => navigate("/login"),
+  });
+  const enviarFormCadastro = async (data: CadastroForm) => {
+    startLoading();
+
+    try {
+      const res = await registerUser({
+        nome: data.nome,
+        email: data.email,
+        senha: data.senha,
+      });
+
+      if (!res.ok) {
+        handleError(res.message ?? "Erro ao criar conta");
+        return;
+      }
+
+      handleSuccess();
+    } catch (error) {
+      handleError("Erro ao criar conta");
+    }
   };
 
   return (
@@ -57,10 +87,9 @@ export default function Cadastrar() {
                   isError={!!errors.senha}
                   onChange={(e) => {
                     setSenhaDigitada(e.target.value);
-                    register("senha").onChange(e);
-                  }} //No onChange, além de atualizar o form, salva o valor em senhaDigitada.
+                    register("senha").onChange(e as any);
+                  }}
                 />
-                {/* validando a senha digitada em tempo real. */}
                 <ChecklistSenha senha={senhaDigitada} />
                 <InputSenha
                   label="Confirmar Senha"
@@ -68,8 +97,17 @@ export default function Cadastrar() {
                   isError={!!errors.confirmarSenha}
                 />
                 <InputError message={errors.confirmarSenha?.message} />
-                <Button type="submit" className="w-full">
-                  Criar Conta
+
+                {serverError && (
+                  <p className="text-sm text-red-400">{serverError}</p>
+                )}
+
+                <Button
+                  type="submit"
+                  className={getButtonStyles()}
+                  disabled={status !== "idle"}
+                >
+                  {getButtonContent() || "Criar Conta"}
                 </Button>
               </form>
               <OuSeparador strVisivel={true} />

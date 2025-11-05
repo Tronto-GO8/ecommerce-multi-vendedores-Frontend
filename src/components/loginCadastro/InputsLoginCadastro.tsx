@@ -1,20 +1,35 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Lock } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import InputReutilizavel, {
   InputReutilizavelProps,
 } from "../InputReutilizavel";
+import { Button } from "../ui/button";
+import { useState } from "react";
 
-type SenhaProps = InputReutilizavelProps & {
-  label?: string;
-  placeholder?: string;
-};
+export function InputNome(props: InputReutilizavelProps) {
+  return (
+    <InputReutilizavel
+      label="Nome"
+      type="text"
+      placeholder="Seu nome completo"
+      icon={<User className="h-4 w-4 text-muted-foreground" />}
+      {...props}
+    />
+  );
+}
 
-export default function InputSenha({
-  label = "Senha",
-  placeholder = "Digite sua senha",
-  ...props
-}: SenhaProps) {
+export function InputEmail(props: InputReutilizavelProps) {
+  return (
+    <InputReutilizavel
+      label="E-mail"
+      type="email"
+      placeholder="seuemail@exemplo.com"
+      icon={<Mail className="h-4 w-4 text-muted-foreground" />}
+      {...props}
+    />
+  );
+}
+
+export function InputSenha(props: InputReutilizavelProps) {
   const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const toggleMostrar = () => setMostrarSenha((s) => !s);
@@ -38,10 +53,10 @@ export default function InputSenha({
 
   return (
     <InputReutilizavel
-      label={label}
+      label="Senha"
       icon={<Lock className="h-4 w-4 text-muted-foreground" />}
       type={mostrarSenha ? "text" : "password"}
-      placeholder={placeholder}
+      placeholder="Digite sua senha"
       className="pr-10"
       containerClassName="w-full"
       rightElement={rightElement}
@@ -49,3 +64,4 @@ export default function InputSenha({
     />
   );
 }
+export default InputReutilizavel;

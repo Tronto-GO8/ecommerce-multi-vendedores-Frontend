@@ -6,13 +6,15 @@ import HeaderInicial from "./components/e-commerce/HeaderInicial";
 
 function Layout() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <HeaderInicial />
-      <Routes>
-        <Route path="inicial" element={<Inicial />} />
-        <Route path="carrinho" element={<Carrinho />} />
-      </Routes>
-    </>
+      <main className="flex-1">
+        <Routes>
+          <Route path="inicial" element={<Inicial />} />
+          <Route path="carrinho" element={<Carrinho />} />
+        </Routes>
+      </main>
+    </div>
   );
 }
 

@@ -8,9 +8,10 @@ import React, {
   useCallback,
 } from "react";
 import { Produtos } from "@/components/ProdutosInfo";
+import { useAuth } from "./AuthContext";
 
-type CarrinhoMap = Record<number, number>; // produtoId -> quantidade
-const STORAGE_KEY = "carrinho_v1";
+type CarrinhoMap = Record<number, number>;
+const BASE_STORAGE_KEY = "carrinho_v1";
 
 interface CartContextValue {
   carrinho: CarrinhoMap;
@@ -26,28 +27,47 @@ const QuaisEQuantosItensEstaoNoCarrinho = createContext<
 >(undefined);
 
 export function CarrinhoProvider({ children }: { children: ReactNode }) {
+  const { usuarioAtual } = useAuth();
+  const storageKey = useMemo(
+    () =>
+      usuarioAtual
+        ? `${BASE_STORAGE_KEY}_${usuarioAtual.email}`
+        : BASE_STORAGE_KEY,
+    [usuarioAtual]
+  );
+
   const [carrinho, setCarrinho] = useState<CarrinhoMap>(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(storageKey);
       return raw ? (JSON.parse(raw) as CarrinhoMap) : {};
     } catch {
       return {};
     }
   });
 
+  // Atualiza o carrinho quando o usuário muda
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      setCarrinho(raw ? (JSON.parse(raw) as CarrinhoMap) : {});
+    } catch {
+      setCarrinho({});
+    }
+  }, [storageKey]);
+
   // Persistir sempre que mudar
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(carrinho));
+      localStorage.setItem(storageKey, JSON.stringify(carrinho));
     } catch {
       // ignore
     }
-  }, [carrinho]);
+  }, [carrinho, storageKey]);
 
   const adicionarNoCarrinho = (produto: Produtos, novaQuantidade = 1) => {
     setCarrinho((estaNoCarrinho) => {
       const id = produto.id;
-      const quantidadeAtual = estaNoCarrinho[id] ?? 0; //verifica se a quantidade está no carrinho, se existir, pega a quantidade atual, se não assume que é 0
+      const quantidadeAtual = estaNoCarrinho[id] ?? 0;
       return { ...estaNoCarrinho, [id]: quantidadeAtual + novaQuantidade };
     });
   };

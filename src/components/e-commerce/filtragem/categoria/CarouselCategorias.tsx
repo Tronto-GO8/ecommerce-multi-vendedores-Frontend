@@ -39,25 +39,10 @@ export default function CarouselCategorias({
     mostrarControles,
   } = useCarousel(itens.length);
 
-  // selecionar categoria principal: **apenas 1**
   const aoSelecionarCategoria = (categoria: string) => {
-    // if (categoria === "Todos") {
-    //   // "Todos" zera a seleção de categoria
-    //   atualizarFiltros({ categoria: null, subcategorias: [] });
-    //   return;
-    // }
-
-    // se já está selecionada, desmarca (volta para nenhuma categoria)
-    // if (filters.categoria === categoria) {
-    //   atualizarFiltros({ categoria: null, subcategorias: [] });
-    //   return;
-    // }
-
-    // seleciona nova categoria e limpa subcategorias
     atualizarFiltros({ categoria: categoria, subcategorias: [] });
   };
 
-  // alterna subcategoria (várias permitidas)
   const aoAlterarSubcategoria = (sub: string) => {
     const novaLista = alternarItemNoArray(filters.subcategorias, sub);
     atualizarFiltros({ ...filters, subcategorias: novaLista });
@@ -65,12 +50,12 @@ export default function CarouselCategorias({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
         {modoSubcategorias ? (
           <div className="flex items-center gap-3">
             <Button
               onClick={voltarCategoria}
-              className="text-sm text-slate-300 hover:underline"
+              className="text-sm text-slate-300 hover:bg-slate-800 h-8 px-2"
             >
               <ArrowLeft />
               Voltar às categorias principais

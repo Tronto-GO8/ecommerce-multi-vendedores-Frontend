@@ -8,7 +8,7 @@ import useHandleMudarPagina from "@/hooks/useHandleMudarPagina";
 import useFiltrarProdutos from "@/hooks/useFiltrarProdutos";
 import ContainerProduto from "@/components/e-commerce/produto/ContainerProduto";
 import useFiltradosPorPreco from "@/hooks/useFiltradosPorPreco";
-import { Link } from "react-router-dom";
+import OuSeparador from "@/components/ui/OuSeparador";
 
 const PRODUTOS_POR_PAGINA = 10;
 
@@ -47,7 +47,6 @@ export default function Inicial() {
     setPaginaAtual(1);
   }, [pesquisar, categoriaAplicada, subcategoriaAplicada, faixaPrecoAplicada]);
 
-  // Calcular produtos para a página atual
   const totalPaginas = Math.max(
     1,
     Math.ceil(filtradosComPreco.length / PRODUTOS_POR_PAGINA)
@@ -59,7 +58,7 @@ export default function Inicial() {
   const handleMudarPagina = useHandleMudarPagina(setPaginaAtual, totalPaginas);
 
   return (
-    <div className="w-full min-h-screen bg-[#303030]">
+    <div className="w-full bg-[#303030]">
       <div className="w-full grid">
         <SearchFilterContainer
           pesquisar={pesquisar}
@@ -76,7 +75,7 @@ export default function Inicial() {
             <CardTitle className="text-white">
               Populares ({filtradosComPreco.length} produtos)
             </CardTitle>
-            <div className="border-t border-gray-400"></div>
+            <OuSeparador />
           </div>
 
           <div className="flex flex-wrap gap-4 justify-center">
@@ -88,14 +87,13 @@ export default function Inicial() {
             onMudarPagina={handleMudarPagina}
           />
         </Card>
-        <Link to="/app/carrinho">
-          <BtnCarrinho
-            className="fixed z-50 bottom-4 right-4 flex items-center gap-2 px-4 py-2 shadow-lg"
-            mostrarTotal={true}
-          >
-            <span className="text-lg text-white">Carrinho</span>
-          </BtnCarrinho>
-        </Link>
+        <BtnCarrinho
+          className="fixed z-50 bottom-4 right-4 flex items-center gap-2 px-4 py-2 shadow-lg"
+          mostrarTotal={true}
+          redirecionarPara="/app/carrinho"
+        >
+          <span className="text-lg text-white">Carrinho</span>
+        </BtnCarrinho>
       </div>
     </div>
   );

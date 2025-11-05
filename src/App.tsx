@@ -7,28 +7,31 @@ import RedefinirSenha from "./pages/RedefinirSenha";
 import AuthCallback from "./pages/AuthCallback";
 import Layout from "./Layout";
 import { CarrinhoProvider } from "./contexts/ProdutoCarrinhoContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />*/}
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Login />} />
-        <Route path="*" element={<Login />} />
-        <Route path="/cadastro" element={<Cadastrar />} />
-        <Route path="/auth/callback" element={<Cadastrar />} />
-        {/* <Route path="*" element={<RedefinirSenha />} /> */}
-        <Route
-          path="/app/*"
-          element={
-            <CarrinhoProvider>
-              <Layout />
-            </CarrinhoProvider>
-          }
-        />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="*" element={<Login />} />
+          <Route path="/cadastro" element={<Cadastrar />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          {/* <Route path="*" element={<RedefinirSenha />} /> */}
+          <Route
+            path="/app/*"
+            element={
+              <CarrinhoProvider>
+                <Layout />
+              </CarrinhoProvider>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

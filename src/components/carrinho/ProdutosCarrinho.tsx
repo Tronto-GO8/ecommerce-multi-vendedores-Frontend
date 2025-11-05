@@ -23,7 +23,6 @@ export default function ProdutosCarrinho({
   return (
     <div className={"space-y-4"}>
       <Card className="bg-zinc-900 border-zinc-800 p-4">
-        {/* info produto */}
         <div className="flex flex-col sm:flex-row gap-4 mb-4 items-start">
           <div className="relative sm:w-24 sm:h-24 md:w-32 md:h-32 bg-zinc-800 rounded-lg overflow-hidden flex-shrink-0">
             <img

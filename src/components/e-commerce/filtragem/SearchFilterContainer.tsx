@@ -75,7 +75,6 @@ export default function SearchFilterContainer({
   const quantidadeSelecionada =
     (filtros.categoria ? 1 : 0) + filtros.subcategorias.length;
 
-  // Função que será passada para FiltrarPreco: aplica preço imediatamente
   const precoAplicado = (range: { min: number; max: number }) => {
     const novo = { ...filtros, faixaDePreco: range };
     setFiltros(novo);
@@ -83,40 +82,53 @@ export default function SearchFilterContainer({
     if (aoAplicar) aoAplicar(novo);
   };
   return (
-    <div className="bg-[#202020] flex gap-2 p-2 w-full overflow-hidden">
-      <div className="flex flex-col w-full space-y-4 overflow-hidden">
-        <div className="flex justify-between gap-2">
-          <SearchESugestoes pesquisar={pesquisar} setPesquisar={setPesquisar} />
-          <BtnCategoria
-            mostrarCarousel={() => setMostrarCarousel(!mostrarCarousel)}
-            quantidadeSelecionada={quantidadeSelecionada}
-          />
+    <div className="bg-[#202020] p-3 md:p-4 w-full overflow-hidden">
+      <div className="flex flex-col space-y-3 w-full">
+        <div className="flex flex-col sm:flex-row gap-2 w-full">
+          <div className="flex-1 min-w-0">
+            <SearchESugestoes
+              pesquisar={pesquisar}
+              setPesquisar={setPesquisar}
+            />
+          </div>
+          <div className="flex gap-2">
+            <div className="flex-1 sm:flex-initial">
+              <BtnCategoria
+                mostrarCarousel={() => setMostrarCarousel(!mostrarCarousel)}
+                quantidadeSelecionada={quantidadeSelecionada}
+              />
+            </div>
+            <div className="flex-1 sm:flex-initial">
+              <FiltrarPreco
+                preco={faixaDePreco ?? { min: 0, max: 0 }}
+                aplicarFiltroDePreco={precoAplicado}
+              />
+            </div>
+          </div>
         </div>
+
         {mostrarCarousel && (
-          <CarouselCategorias
-            filters={filtros}
-            voltarCategoria={cancelar}
-            atualizarFiltros={aoAtualizarFiltros}
-          />
+          <div>
+            <CarouselCategorias
+              filters={filtros}
+              voltarCategoria={cancelar}
+              atualizarFiltros={aoAtualizarFiltros}
+            />
+          </div>
         )}
-      </div>
-      <div className="flex flex-col space-y-16 pt-1">
-        <FiltrarPreco
-          preco={faixaDePreco ?? { min: 0, max: 0 }}
-          aplicarFiltroDePreco={precoAplicado}
-        />
-        {temSelecionado && !aplicado ? (
-          <AplicarOuCancelar
-            cancelar={cancelar}
-            aplicar={aplicar}
-            aplicarLabel="Aplicar"
-            cancelarLabel="Cancelar"
-            btnCancelarClassName="text-white hover:bg-slate-800"
-            btnAplicarClassName="bg-emerald-600 hover:bg-emerald-700 text-white"
-            className="flex gap-3"
-          />
-        ) : (
-          <></>
+
+        {temSelecionado && !aplicado && (
+          <div className="w-full pt-2">
+            <AplicarOuCancelar
+              cancelar={cancelar}
+              aplicar={aplicar}
+              aplicarLabel="Aplicar"
+              cancelarLabel="Cancelar"
+              btnCancelarClassName="text-white hover:bg-slate-800 flex-1"
+              btnAplicarClassName="bg-emerald-600 hover:bg-emerald-700 text-white flex-1"
+              className="flex gap-3 w-full"
+            />
+          </div>
         )}
       </div>
     </div>
