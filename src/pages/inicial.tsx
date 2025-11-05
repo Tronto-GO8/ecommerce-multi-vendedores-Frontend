@@ -19,9 +19,6 @@ export default function Inicial() {
   const [categoriaAplicada, setCategoriaAplicada] = useState<string | null>(
     null
   );
-  const [subcategoriaAplicada, setSubcategoriaAplicada] = useState<string[]>(
-    []
-  );
 
   const [faixaPrecoAplicada, setFaixaPrecoAplicada] = useState<
     | {
@@ -35,7 +32,6 @@ export default function Inicial() {
     produtos: ProdutoInfo,
     pesquisar,
     categoriaAplicada,
-    subcategoriasAplicada: subcategoriaAplicada,
   });
 
   const { filtradosComPreco, precoMin, precoMax } = useFiltradosPorPreco({
@@ -45,7 +41,7 @@ export default function Inicial() {
 
   useEffect(() => {
     setPaginaAtual(1);
-  }, [pesquisar, categoriaAplicada, subcategoriaAplicada, faixaPrecoAplicada]);
+  }, [pesquisar, categoriaAplicada, faixaPrecoAplicada]);
 
   const totalPaginas = Math.max(
     1,
@@ -65,7 +61,6 @@ export default function Inicial() {
           setPesquisar={setPesquisar}
           aoAplicar={(tipoDeFiltro) => {
             setCategoriaAplicada(tipoDeFiltro.categoria ?? null);
-            setSubcategoriaAplicada(tipoDeFiltro.subcategorias ?? []);
             setFaixaPrecoAplicada(tipoDeFiltro.faixaDePreco);
           }}
           faixaDePreco={{ min: precoMin, max: precoMax }}

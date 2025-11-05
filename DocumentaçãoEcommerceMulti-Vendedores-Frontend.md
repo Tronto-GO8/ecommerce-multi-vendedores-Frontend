@@ -190,10 +190,8 @@ Nota sobre preload: garante que as imagens estejam no cache do navegador antes d
    Observação: confirmarPesquisa retorna null se menos que minCaracteres.
 
 4. useFiltrarProdutos (hook)
-   Filtra produtos por texto, categoria e subcategoria.
+   Filtra produtos por texto, categoria.
    Normaliza strings (remove acentos, lowercase) e realiza comparações Comparação de categoria usa mesmaCategoria que tenta tratar plurais e includes.
-   Ordem de filtro: categoria → subcategoria → termo.
-   Observação: usa JSON.stringify(subcategoriasAplicada) no array de dependências do useMemo para estabilidade.
 
 5. useDebouncedValue
    Hook para debouncing de um valor (genérico).
@@ -306,7 +304,7 @@ Filtros, Carrossel de Categorias e Busca por Sugestões
    - `faixaDePreco` — estado externo de faixa.
      Composição: SearchESugestoes, BtnCategoria, FiltrarPreco, CarouselCategorias, AplicarOuCancelar.  
      Comportamento:
-   - Mantém estado local de `filtros` (categoria, subcategorias, faixaDePreco) e `aplicado`.
+   - Mantém estado local de `filtros` (categoria, faixaDePreco) e `aplicado`.
    - Ao alterar filtros desmarca `aplicado` quando apropriado.
    - Exibe botão Aplicar/Cancelar quando há seleção não aplicada.
    - Fornece `precoAplicado` para aplicar faixa imediatamente.
@@ -384,28 +382,15 @@ Filtros, Carrossel de Categorias e Busca por Sugestões
    Ao selecionar sugestão: onSugestaoSelecionada define o valor e confirma (chama setPesquisar(term)).
    Local sugerido: src/components/e-commerce/filtragem/pesquisa/SearchESugestoes.tsx.
 
-9. SubCategoriaCarousel
-   Componente visual simples que renderiza botões para subcategorias.
-   Props:
-   subcategorias: string[]
-   selecionadas: string[]
-   toggle: (sub: string) => void
-   Comportamento:
-   Cada subcategoria vira um Button; se selecionadas.includes(sub) o botão recebe variante default (ativo).
-   Chama toggle(sub) ao clicar.
-   Local sugerido: src/components/e-commerce/filtragem/categoria/SubCategoriaCarousel.tsx.
+9. CarouselCategorias (src/components/e-commerce/filtragem/categoria/CarouselCategorias.tsx)  
+   Carrossel horizontal para seleção de categorias.  
+   Integra `useCarousel` para cálculo de visibilidade e navegação (irAnterior / irProximo).  
+   UI:
 
-10. CarouselCategorias (src/components/e-commerce/filtragem/categoria/CarouselCategorias.tsx)  
-    Carrossel horizontal para seleção de categorias ou subcategorias.  
-    Integra `useCarousel` para cálculo de visibilidade e navegação (irAnterior / irProximo).  
-    Usa `categoriasProdutos` e `SUBCATEGORIAS_MAP`.  
-    UI:
-
-- Botões para selecionar categoria (toggle para subcategorias).
+- Botões para selecionar categoria.
 - Controles esquerdo/direito (CarouselBtn) quando necessário.
-- Suporta modo subcategorias (botão Voltar).
 
-12. BtnCategoria
+10. BtnCategoria
     Botão que abre o carousel de categorias e exibe um badge com a quantidade selecionada.
     Props:
     mostrarCarousel: () => void
@@ -446,15 +431,9 @@ Paginação e navegação (componentes)
    tipoDeBotao: "previous" | "next"
    Local: src/components/e-commerce/paginacao/MudarPagina.tsx.
 
-Categorias e Subcategorias
+Categorias
 
-1. SUBCATEGORIAS_MAP
-   Mapeamento de categoria principal → lista de subcategorias.
-   Estrutura: Record<string, string[]>.
-   Exemplos de categorias: Hardware, Periféricos, Smartphones, Notebooks, etc.
-   Local: src/components/SubCategoriasProdutos.ts (ou similar).
-
-2. categoriasProdutos
+1. categoriasProdutos
    Lista principal de categorias, começando por "Todos" seguida das categorias eletrônicas.
    Local: src/components/CategoriasProdutos.ts.
 
@@ -637,7 +616,7 @@ Páginas
    Cabeçalho(HeaderInicial), barra de busca (SearchFilterContainer) e listagem de produtos.
    Lógica atual:
    PRODUTOS_POR_PAGINA = 10.
-   Usa useFiltrarProdutos para filtrar por termo, categoria e subcategoria.
+   Usa useFiltrarProdutos para filtrar por termo, categoria.
    Aplica faixa de preço (recebida do SearchFilterContainer) sobre os produtos filtrados.
    Usa useFiltradosPorPreco para cálculo de precoMin e precoTotal (min/max do conjunto filtrado).
    useHandleMudarPagina controla navegação e scroll.

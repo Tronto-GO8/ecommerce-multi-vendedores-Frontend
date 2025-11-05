@@ -4,7 +4,6 @@ import FiltrarPreco from "./preco/FiltrarPreco";
 import AplicarOuCancelar from "./AplicarOuCancelar";
 import BtnCategoria from "./categoria/BtnCategoria";
 import SearchESugestoes from "./pesquisa/SearchESugestoes";
-import compararArraysIguais from "@/utils/compararArraysIguais";
 
 interface SearchFilterContainerProps {
   pesquisar: string;
@@ -18,7 +17,6 @@ interface SearchFilterContainerProps {
 
 type Filtros = {
   categoria: string | null;
-  subcategorias: string[];
   faixaDePreco?: {
     min?: number;
     max?: number;
@@ -34,26 +32,21 @@ export default function SearchFilterContainer({
   const [mostrarCarousel, setMostrarCarousel] = useState(false);
   const [filtros, setFiltros] = useState<Filtros>({
     categoria: null,
-    subcategorias: [],
     faixaDePreco: undefined,
   });
   const [aplicado, setAplicado] = useState(false);
-
+  const normalizeCategoria = (cat: string | null | undefined) =>
+    cat === "Todos" ? null : cat ?? null;
   const aoAtualizarFiltros = (novoFiltro: Filtros) => {
-    const mudouSubCategoria = !compararArraysIguais(
-      filtros.subcategorias ?? [],
-      novoFiltro.subcategorias ?? []
-    );
-
     const antigaCategoria = filtros.categoria ?? null;
     const novaCategoria = novoFiltro.categoria ?? null;
     const mudouCategoria = antigaCategoria !== novaCategoria;
 
-    if ((mudouSubCategoria || mudouCategoria) && aplicado) {
+    if (mudouCategoria && aplicado) {
       setAplicado(false);
     }
 
-    setFiltros(novoFiltro);
+    setFiltros({ ...novoFiltro, categoria: novaCategoria });
   };
 
   const aplicar = () => {
@@ -61,19 +54,25 @@ export default function SearchFilterContainer({
     setAplicado(true);
 
     if (aoAplicar) aoAplicar(filtros);
+    const categoriaParaAplicar = normalizeCategoria(filtros.categoria);
+    const filtrosParaAplicar = { ...filtros, categoria: categoriaParaAplicar };
+
+    setMostrarCarousel(false);
+    setAplicado(true);
+    setFiltros(filtrosParaAplicar);
+
+    if (aoAplicar) aoAplicar(filtrosParaAplicar);
   };
 
   const cancelar = () => {
-    setFiltros({ categoria: null, subcategorias: [] });
+    setFiltros({ categoria: null });
     setMostrarCarousel(false);
     setAplicado(false);
-    if (aoAplicar) aoAplicar({ categoria: null, subcategorias: [] });
+    if (aoAplicar) aoAplicar({ categoria: null });
   };
-  const temSelecionado =
-    !!filtros.categoria || filtros.subcategorias.length > 0;
+  const temSelecionado = !!filtros.categoria;
 
-  const quantidadeSelecionada =
-    (filtros.categoria ? 1 : 0) + filtros.subcategorias.length;
+  const quantidadeSelecionada = filtros.categoria ? 1 : 0;
 
   const precoAplicado = (range: { min: number; max: number }) => {
     const novo = { ...filtros, faixaDePreco: range };
@@ -82,7 +81,7 @@ export default function SearchFilterContainer({
     if (aoAplicar) aoAplicar(novo);
   };
   return (
-    <div className="bg-[#202020] p-3 md:p-4 w-full overflow-hidden">
+    <div className="bg-[#202020] p-3 md:p-4 w-full overflow-x-auto">
       <div className="flex flex-col space-y-3 w-full">
         <div className="flex flex-col sm:flex-row gap-2 w-full">
           <div className="flex-1 min-w-0">
@@ -108,10 +107,9 @@ export default function SearchFilterContainer({
         </div>
 
         {mostrarCarousel && (
-          <div>
+          <div className="w-full">
             <CarouselCategorias
               filters={filtros}
-              voltarCategoria={cancelar}
               atualizarFiltros={aoAtualizarFiltros}
             />
           </div>
