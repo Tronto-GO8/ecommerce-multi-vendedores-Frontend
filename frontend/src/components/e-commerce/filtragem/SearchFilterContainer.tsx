@@ -4,7 +4,6 @@ import FiltrarPreco from "./preco/FiltrarPreco";
 import AplicarOuCancelar from "./AplicarOuCancelar";
 import BtnCategoria from "./categoria/BtnCategoria";
 import SearchESugestoes from "./pesquisa/SearchESugestoes";
-import compararArraysIguais from "@/utils/compararArraysIguais";
 
 interface SearchFilterContainerProps {
   pesquisar: string;
@@ -18,7 +17,6 @@ interface SearchFilterContainerProps {
 
 type Filtros = {
   categoria: string | null;
-  subcategorias: string[];
   faixaDePreco?: {
     min?: number;
     max?: number;
@@ -34,26 +32,21 @@ export default function SearchFilterContainer({
   const [mostrarCarousel, setMostrarCarousel] = useState(false);
   const [filtros, setFiltros] = useState<Filtros>({
     categoria: null,
-    subcategorias: [],
     faixaDePreco: undefined,
   });
   const [aplicado, setAplicado] = useState(false);
-
+  const normalizeCategoria = (cat: string | null | undefined) =>
+    cat === "Todos" ? null : cat ?? null;
   const aoAtualizarFiltros = (novoFiltro: Filtros) => {
-    const mudouSubCategoria = !compararArraysIguais(
-      filtros.subcategorias ?? [],
-      novoFiltro.subcategorias ?? []
-    );
-
     const antigaCategoria = filtros.categoria ?? null;
     const novaCategoria = novoFiltro.categoria ?? null;
     const mudouCategoria = antigaCategoria !== novaCategoria;
 
-    if ((mudouSubCategoria || mudouCategoria) && aplicado) {
+    if (mudouCategoria && aplicado) {
       setAplicado(false);
     }
 
-    setFiltros(novoFiltro);
+    setFiltros({ ...novoFiltro, categoria: novaCategoria });
   };
 
   const aplicar = () => {
@@ -61,21 +54,26 @@ export default function SearchFilterContainer({
     setAplicado(true);
 
     if (aoAplicar) aoAplicar(filtros);
+    const categoriaParaAplicar = normalizeCategoria(filtros.categoria);
+    const filtrosParaAplicar = { ...filtros, categoria: categoriaParaAplicar };
+
+    setMostrarCarousel(false);
+    setAplicado(true);
+    setFiltros(filtrosParaAplicar);
+
+    if (aoAplicar) aoAplicar(filtrosParaAplicar);
   };
 
   const cancelar = () => {
-    setFiltros({ categoria: null, subcategorias: [] });
+    setFiltros({ categoria: null });
     setMostrarCarousel(false);
     setAplicado(false);
-    if (aoAplicar) aoAplicar({ categoria: null, subcategorias: [] });
+    if (aoAplicar) aoAplicar({ categoria: null });
   };
-  const temSelecionado =
-    !!filtros.categoria || filtros.subcategorias.length > 0;
+  const temSelecionado = !!filtros.categoria;
 
-  const quantidadeSelecionada =
-    (filtros.categoria ? 1 : 0) + filtros.subcategorias.length;
+  const quantidadeSelecionada = filtros.categoria ? 1 : 0;
 
-  // Função que será passada para FiltrarPreco: aplica preço imediatamente
   const precoAplicado = (range: { min: number; max: number }) => {
     const novo = { ...filtros, faixaDePreco: range };
     setFiltros(novo);
@@ -83,40 +81,52 @@ export default function SearchFilterContainer({
     if (aoAplicar) aoAplicar(novo);
   };
   return (
-    <div className="bg-[#202020] flex gap-2 p-2 w-full overflow-hidden">
-      <div className="flex flex-col w-full space-y-4 overflow-hidden">
-        <div className="flex justify-between gap-2">
-          <SearchESugestoes pesquisar={pesquisar} setPesquisar={setPesquisar} />
-          <BtnCategoria
-            mostrarCarousel={() => setMostrarCarousel(!mostrarCarousel)}
-            quantidadeSelecionada={quantidadeSelecionada}
-          />
+    <div className="bg-[#202020] p-3 md:p-4 w-full overflow-x-auto">
+      <div className="flex flex-col space-y-3 w-full">
+        <div className="flex flex-col sm:flex-row gap-2 w-full">
+          <div className="flex-1 min-w-0">
+            <SearchESugestoes
+              pesquisar={pesquisar}
+              setPesquisar={setPesquisar}
+            />
+          </div>
+          <div className="flex gap-2">
+            <div className="flex-1 sm:flex-initial">
+              <BtnCategoria
+                mostrarCarousel={() => setMostrarCarousel(!mostrarCarousel)}
+                quantidadeSelecionada={quantidadeSelecionada}
+              />
+            </div>
+            <div className="flex-1 sm:flex-initial">
+              <FiltrarPreco
+                preco={faixaDePreco ?? { min: 0, max: 0 }}
+                aplicarFiltroDePreco={precoAplicado}
+              />
+            </div>
+          </div>
         </div>
+
         {mostrarCarousel && (
-          <CarouselCategorias
-            filters={filtros}
-            voltarCategoria={cancelar}
-            atualizarFiltros={aoAtualizarFiltros}
-          />
+          <div className="w-full">
+            <CarouselCategorias
+              filters={filtros}
+              atualizarFiltros={aoAtualizarFiltros}
+            />
+          </div>
         )}
-      </div>
-      <div className="flex flex-col space-y-16 pt-1">
-        <FiltrarPreco
-          preco={faixaDePreco ?? { min: 0, max: 0 }}
-          aplicarFiltroDePreco={precoAplicado}
-        />
-        {temSelecionado && !aplicado ? (
-          <AplicarOuCancelar
-            cancelar={cancelar}
-            aplicar={aplicar}
-            aplicarLabel="Aplicar"
-            cancelarLabel="Cancelar"
-            btnCancelarClassName="text-white hover:bg-slate-800"
-            btnAplicarClassName="bg-emerald-600 hover:bg-emerald-700 text-white"
-            className="flex gap-3"
-          />
-        ) : (
-          <></>
+
+        {temSelecionado && !aplicado && (
+          <div className="w-full pt-2">
+            <AplicarOuCancelar
+              cancelar={cancelar}
+              aplicar={aplicar}
+              aplicarLabel="Aplicar"
+              cancelarLabel="Cancelar"
+              btnCancelarClassName="text-white hover:bg-slate-800 flex-1"
+              btnAplicarClassName="bg-emerald-600 hover:bg-emerald-700 text-white flex-1"
+              className="flex gap-3 w-full"
+            />
+          </div>
         )}
       </div>
     </div>

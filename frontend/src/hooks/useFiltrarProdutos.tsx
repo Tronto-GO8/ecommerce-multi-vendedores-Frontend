@@ -5,7 +5,6 @@ interface FilterProps {
   produtos: Produtos[];
   pesquisar?: string;
   categoriaAplicada?: string | null;
-  subcategoriasAplicada?: string[];
 }
 
 const formatarStr = (s?: string) =>
@@ -30,20 +29,17 @@ export default function useFiltrarProdutos({
   produtos,
   pesquisar = "",
   categoriaAplicada = null,
-  subcategoriasAplicada = [],
 }: FilterProps) {
   return useMemo(() => {
     const termo = formatarStr(pesquisar);
     const temTermo = termo.length > 0;
     const catFilter = formatarStr(categoriaAplicada ?? undefined);
-    const subsFilter = (subcategoriasAplicada ?? []).map((s) => formatarStr(s));
 
     const produtoContemTermo = (p: Produtos) => {
       if (!temTermo) return true;
       const campos = [
         p.nome ?? "",
         p.categoria ?? "",
-        p.subcategoria ?? "",
         ...(p.tags?.map((t) => t.nome) ?? []),
       ];
       return campos.some((c) => formatarStr(c).includes(termo));
@@ -56,25 +52,10 @@ export default function useFiltrarProdutos({
       return tags.some((t) => t.includes(catFilter));
     };
 
-    const correspondeSubcategorias = (p: Produtos) => {
-      if (!subsFilter || subsFilter.length === 0) return true;
-      const prodSub = formatarStr(p.subcategoria);
-      const tags = (p.tags ?? []).map((t) => formatarStr(t.nome));
-      return subsFilter.some(
-        (sub) => prodSub.includes(sub) || tags.some((t) => t.includes(sub))
-      );
-    };
-
     return produtos.filter((p) => {
       if (!correspondeCategoria(p)) return false;
-      if (!correspondeSubcategorias(p)) return false;
       if (!produtoContemTermo(p)) return false;
       return true;
     });
-  }, [
-    produtos,
-    pesquisar,
-    categoriaAplicada,
-    JSON.stringify(subcategoriasAplicada),
-  ]);
+  }, [produtos, pesquisar, categoriaAplicada]);
 }

@@ -5,7 +5,6 @@ export interface Produtos {
   imagem?: { url: string }[];
   descricao?: string;
   categoria?: string;
-  subcategoria?: string;
   quantidade?: number;
   empresa?: string;
   tags?: { nome: string }[];
@@ -43,7 +42,6 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Monitor Gamer Mancer Horizon Z2B, 21.5 Pol, VA, FHD, 1ms, 100Hz, HDMI/VGA, MCR-HZ2BN21-BL2",
     categoria: "Perifericos",
-    subcategoria: "Monitores",
     quantidade: 15,
     empresa: "Mancer",
   },
@@ -71,7 +69,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Processador Intel Core i5-12400F, 6-Core, 12-Threads, 2.5GHz (4.4GHz Turbo), Cache 18MB, LGA1700, BX8071512400F",
     categoria: "Hardware",
-    subcategoria: "Processador",
+
     quantidade: 25,
     empresa: "Intel",
   },
@@ -99,7 +97,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Processador AMD Ryzen 5 5500, 6-Core, 12-Threads, 3.6GHz (4.2GHz Turbo), Cache 19MB, AM4, 100-100000457BOX",
     categoria: "Hardware",
-    subcategoria: "Processador",
+
     quantidade: 20,
     empresa: "AMD",
   },
@@ -122,7 +120,7 @@ export const ProdutoInfo: Produtos[] = [
     ],
     descricao: "PC Gamer Mancer Afrodite, Ryzen 5 5600GT, 16GB DDR4, SSD 480GB",
     categoria: "Desktops",
-    subcategoria: "Gaming",
+
     quantidade: 5,
     empresa: "Mancer",
   },
@@ -148,7 +146,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Teclado Mecanico Mancer Tharix, Rainbow, ABNT2, Switch Vermelho, Preto, MCR-THX-RBW01R",
     categoria: "Perifericos",
-    subcategoria: "Teclados",
+
     quantidade: 30,
     empresa: "Mancer",
   },
@@ -175,7 +173,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Mouse Gamer Mancer Draxor, RGB, 7200DPI, 6 Botoes, Preto, MCR-DXR-RGB01",
     categoria: "Perifericos",
-    subcategoria: "Mouses",
+
     quantidade: 50,
     empresa: "Mancer",
   },
@@ -199,7 +197,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "FFonte Corsair CX650, 650W, 80 Plus Bronze, Preto, CP-9020278-BR",
     categoria: "Hardware",
-    subcategoria: "Fontes de Alimentação",
+
     quantidade: 40,
     empresa: "Corsair",
   },
@@ -224,7 +222,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Placa de Vídeo ASUS GeForce GTX 1650 Phoenix, 4GB GDDR6, DLSS, Ray Tracing, DUAL-GTX1650-O4G",
     categoria: "Hardware",
-    subcategoria: "Placas de Vídeo",
+
     quantidade: 8,
     empresa: "ASUS",
   },
@@ -250,7 +248,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Placa Mae Asus Prime B760M-A D4, DDR4, Socket LGA1700, M-ATX, Chipset Intel B760, PRIME-B760M-A-D4",
     categoria: "Hardware",
-    subcategoria: "Placas-Mãe",
+
     quantidade: 12,
     empresa: "ASUS",
   },
@@ -275,7 +273,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Memoria Corsair Vengeance DDR5, 32GB (2x16GB), 5200MHz, C40, Branca, CMK32GX5M2B5200C40W",
     categoria: "Hardware",
-    subcategoria: "Memórias RAM",
+
     quantidade: 18,
     empresa: "Corsair",
   },
@@ -300,7 +298,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "SSD Kingston A400, 240GB, 2.5, Sata III 6GB/s, Leitura 500MB/s, Gravacao 350MB/s, SA400S37-240G",
     categoria: "Hardware",
-    subcategoria: "SSDs",
+
     quantidade: 22,
     empresa: "Kingston",
   },
@@ -326,7 +324,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Gabinete Gamer Mancer Hexer, Mid Tower, Vidro Temperado, ARGB, Preto, SGPU-001",
     categoria: "Perifericos",
-    subcategoria: "Gabinetes",
+
     quantidade: 14,
     empresa: "Mancer",
   },
@@ -352,7 +350,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Headset Gamer Redragon Ares, 7.1, RGB, Microfone, Preto/Vermelho, H120",
     categoria: "Perifericos",
-    subcategoria: "Headsets",
+
     quantidade: 16,
     empresa: "Redragon",
   },
@@ -388,7 +386,6 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Monitor Gamer Mancer Horizon Z2B, 24 Pol, VA, FHD, 1ms, 100Hz, HDMI/VGA, MCR-HZ2BN24-BL2",
     categoria: "Perifericos",
-    subcategoria: "Monitores",
     quantidade: 10,
     empresa: "Mancer",
   },
@@ -416,7 +413,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Processador Intel Core i5-12400F, 6-Core, 12-Threads, 2.5GHz (4.4GHz Turbo), Cache 18MB, LGA1700, BX8071512400F",
     categoria: "Hardware",
-    subcategoria: "Processadores",
+
     quantidade: 25,
     empresa: "Intel",
   },
@@ -444,7 +441,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Processador AMD Ryzen 5 5500, 6-Core, 12-Threads, 3.6GHz (4.2GHz Turbo), Cache 19MB, AM4, 100-100000457BOX",
     categoria: "Hardware",
-    subcategoria: "Processadores",
+
     quantidade: 20,
     empresa: "AMD",
   },
@@ -467,7 +464,7 @@ export const ProdutoInfo: Produtos[] = [
     ],
     descricao: "PC Gamer Mancer Afrodite, Ryzen 5 5600GT, 16GB DDR4, SSD 480GB",
     categoria: "Desktops",
-    subcategoria: "Gaming",
+
     quantidade: 5,
     empresa: "Mancer",
   },
@@ -493,7 +490,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Teclado Mecanico Mancer Tharix, Rainbow, ABNT2, Switch Vermelho, Preto, MCR-THX-RBW01R",
     categoria: "Perifericos",
-    subcategoria: "Teclados",
+
     quantidade: 30,
     empresa: "Mancer",
   },
@@ -520,7 +517,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Mouse Gamer Mancer Draxor, RGB, 7200DPI, 6 Botoes, Preto, MCR-DXR-RGB01",
     categoria: "Perifericos",
-    subcategoria: "Mouses",
+
     quantidade: 50,
     empresa: "Mancer",
   },
@@ -546,7 +543,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Placa Mae Asus Prime B760M-A D4, DDR4, Socket LGA1700, M-ATX, Chipset Intel B760, PRIME-B760M-A-D4",
     categoria: "Hardware",
-    subcategoria: "Placas-Mãe",
+
     quantidade: 12,
     empresa: "ASUS",
   },
@@ -571,7 +568,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Memoria Corsair Vengeance DDR5, 32GB (2x16GB), 5200MHz, C40, Branca, CMK32GX5M2B5200C40W",
     categoria: "Hardware",
-    subcategoria: "Memórias RAM",
+
     quantidade: 18,
     empresa: "Corsair",
   },
@@ -596,7 +593,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "SSD Kingston A400, 240GB, 2.5, Sata III 6GB/s, Leitura 500MB/s, Gravacao 350MB/s, SA400S37-240G",
     categoria: "Hardware",
-    subcategoria: "SSDs",
+
     quantidade: 22,
     empresa: "Kingston",
   },
@@ -622,7 +619,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Gabinete Gamer Mancer Hexer, Mid Tower, Vidro Temperado, ARGB, Preto, SGPU-001",
     categoria: "Hardware",
-    subcategoria: "Gabinetes",
+
     quantidade: 14,
     empresa: "Mancer",
   },
@@ -648,7 +645,6 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Headset Gamer Redragon Ares, 7.1, RGB, Microfone, Preto/Vermelho, H120",
     categoria: "Perifericos",
-    subcategoria: "Headsets",
     quantidade: 16,
     empresa: "Redragon",
   },
@@ -683,7 +679,6 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Monitor Gamer Mancer Horizon Z2B, 24 Pol, VA, FHD, 1ms, 100Hz, HDMI/VGA, MCR-HZ2BN24-BL2",
     categoria: "Perifericos",
-    subcategoria: "Monitores",
     quantidade: 10,
     empresa: "Mancer",
   },
@@ -711,7 +706,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Processador Intel Core i5-12400F, 6-Core, 12-Threads, 2.5GHz (4.4GHz Turbo), Cache 18MB, LGA1700, BX8071512400F",
     categoria: "Hardware",
-    subcategoria: "Processadores",
+
     quantidade: 25,
     empresa: "Intel",
   },
@@ -739,7 +734,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Processador AMD Ryzen 5 5500, 6-Core, 12-Threads, 3.6GHz (4.2GHz Turbo), Cache 19MB, AM4, 100-100000457BOX",
     categoria: "Hardware",
-    subcategoria: "Processadores",
+
     quantidade: 20,
     empresa: "AMD",
   },
@@ -762,7 +757,7 @@ export const ProdutoInfo: Produtos[] = [
     ],
     descricao: "PC Gamer Mancer Afrodite, Ryzen 5 5600GT, 16GB DDR4, SSD 480GB",
     categoria: "Desktops",
-    subcategoria: "Gaming",
+
     quantidade: 5,
     empresa: "Mancer",
   },
@@ -788,7 +783,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Teclado Mecanico Mancer Tharix, Rainbow, ABNT2, Switch Vermelho, Preto, MCR-THX-RBW01R",
     categoria: "Perifericos",
-    subcategoria: "Teclados",
+
     quantidade: 30,
     empresa: "Mancer",
   },
@@ -815,7 +810,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Mouse Gamer Mancer Draxor, RGB, 7200DPI, 6 Botoes, Preto, MCR-DXR-RGB01",
     categoria: "Periferico",
-    subcategoria: "Mouses",
+
     quantidade: 50,
     empresa: "Mancer",
   },
@@ -839,7 +834,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "FFonte Corsair CX650, 650W, 80 Plus Bronze, Preto, CP-9020278-BR",
     categoria: "Hardware",
-    subcategoria: "Fontes de Alimentação",
+
     quantidade: 40,
     empresa: "Corsair",
   },
@@ -864,7 +859,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Placa de Vídeo ASUS GeForce GTX 1650 Phoenix, 4GB GDDR6, DLSS, Ray Tracing, DUAL-GTX1650-O4G",
     categoria: "Hardware",
-    subcategoria: "Placas de Vídeo",
+
     quantidade: 8,
     empresa: "ASUS",
   },
@@ -890,7 +885,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Placa Mae Asus Prime B760M-A D4, DDR4, Socket LGA1700, M-ATX, Chipset Intel B760, PRIME-B760M-A-D4",
     categoria: "Hardware",
-    subcategoria: "Placas-Mãe",
+
     quantidade: 12,
     empresa: "ASUS",
   },
@@ -915,7 +910,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Memoria Corsair Vengeance DDR5, 32GB (2x16GB), 5200MHz, C40, Branca, CMK32GX5M2B5200C40W",
     categoria: "Hardware",
-    subcategoria: "Memórias RAM",
+
     quantidade: 18,
     empresa: "Corsair",
   },
@@ -940,7 +935,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "SSD Kingston A400, 240GB, 2.5, Sata III 6GB/s, Leitura 500MB/s, Gravacao 350MB/s, SA400S37-240G",
     categoria: "Hardware",
-    subcategoria: "SSDs",
+
     quantidade: 22,
     empresa: "Kingston",
   },
@@ -966,7 +961,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Gabinete Gamer Mancer Hexer, Mid Tower, Vidro Temperado, ARGB, Preto, SGPU-001",
     categoria: "Hardware",
-    subcategoria: "Gabinetes",
+
     quantidade: 14,
     empresa: "Mancer",
   },
@@ -992,7 +987,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Headset Gamer Redragon Ares, 7.1, RGB, Microfone, Preto/Vermelho, H120",
     categoria: "Periferico",
-    subcategoria: "Headsets",
+
     quantidade: 16,
     empresa: "Redragon",
   },
@@ -1012,7 +1007,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       'Samsung Celular Galaxy A16, 128GB + 4GB RAM, Câmera de até 50MP, Tela 6.7", NFC, IP54, Bateria 5000 mAh (Preto)',
     categoria: "Smartphone",
-    subcategoria: "Android",
+
     quantidade: 20,
     empresa: "Samsung",
     tags: [
@@ -1040,7 +1035,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao: "Apple iPhone 13 (128 GB) - Meia-noite",
 
     categoria: "Smartphone",
-    subcategoria: "iOS",
+
     quantidade: 15,
     empresa: "Apple",
     tags: [
@@ -1064,7 +1059,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "SAMSUNG Tablet Android Galaxy Tab A8 10,5 polegadas 32 GB, tela LCD, Wi-Fi, 3 GB RAM, Prata - SM-X205",
     categoria: "Tablet",
-    subcategoria: "Android",
+
     quantidade: 10,
     empresa: "Samsung",
     tags: [
@@ -1091,7 +1086,7 @@ export const ProdutoInfo: Produtos[] = [
     ],
     descricao: "Apple 2025 iPad (Wi-Fi, 128 GB) - Azul (A16), 10.2 polegadas",
     categoria: "Tablet",
-    subcategoria: "iOS",
+
     quantidade: 8,
     empresa: "Apple",
     tags: [
@@ -1117,7 +1112,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Notebook Dell Inspiron i15-i3100-A15P 15.6 Full HD Intel Core 3-100U 8GB 512GB SSD Win Home Preto Carbono",
     categoria: "Notebook",
-    subcategoria: "Ultrabooks",
+
     quantidade: 12,
     empresa: "Dell",
     tags: [
@@ -1143,7 +1138,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Notebook Lenovo IdeaPad 1 15IRU7 Intel Core i3-1315U 8GB 256GB SSD Linux 15.6 - 83QJS00000 Cloud Grey",
     categoria: "Notebook",
-    subcategoria: "Ultrabooks",
+
     quantidade: 10,
     empresa: "Lenovo",
     tags: [
@@ -1170,7 +1165,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Impressora Multifuncional HP Deskjet Ink Advantage 2874 Colorida, Wi-Fi, Scanner, USB (6W7G2A)",
     categoria: "Perifericos",
-    subcategoria: "Impressoras",
+
     quantidade: 10,
     empresa: "HP",
     tags: [
@@ -1196,7 +1191,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Impressora Multifuncional HP Smart Tank 724 Tanque de Tinta Colorida Wi-Fi Scanner Duplex (2G9Q2A)",
     categoria: "Perifericos",
-    subcategoria: "Impressoras",
+
     quantidade: 10,
     empresa: "HP",
     tags: [
@@ -1223,7 +1218,7 @@ export const ProdutoInfo: Produtos[] = [
     ],
     descricao: "Water Cooler Kalkan Delta 360mm - Wireless ARGB - KLK00051",
     categoria: "Hardware",
-    subcategoria: "Coolers e Sistemas de Refrigeração",
+
     quantidade: 10,
     empresa: "Kalkan",
     tags: [
@@ -1248,7 +1243,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Water Cooler Gamer Kalkan Alpha 360 ARGB com display Preto - KLK00048",
     categoria: "Hardware",
-    subcategoria: "Coolers e Sistemas de Refrigeração",
+
     quantidade: 10,
     empresa: "Kalkan",
     tags: [
@@ -1272,7 +1267,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Webcam Full HD Logitech Brio 100 com Microfone Integrado e Proteção de Privacidade - Grafite",
     categoria: "Perifericos",
-    subcategoria: "Webcams",
+
     quantidade: 10,
     empresa: "Logitech",
     tags: [
@@ -1298,7 +1293,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Webcam Full HD Logitech C920s com Microfone Embutido e Proteção de Privacidade - 1080p",
     categoria: "Perifericos",
-    subcategoria: "Webcams",
+
     quantidade: 10,
     empresa: "Logitech",
     tags: [
@@ -1321,7 +1316,7 @@ export const ProdutoInfo: Produtos[] = [
     ],
     descricao: "Scanner de Mesa Brother ADS1350W",
     categoria: "Perifericos",
-    subcategoria: "Scanners",
+
     quantidade: 10,
     empresa: "Brother",
     tags: [
@@ -1342,7 +1337,7 @@ export const ProdutoInfo: Produtos[] = [
     ],
     descricao: "Scanner Canon P-240 - Preto",
     categoria: "Perifericos",
-    subcategoria: "Scanners",
+
     quantidade: 10,
     empresa: "Canon",
     tags: [
@@ -1363,7 +1358,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Smartphone Samsung Galaxy Z Fold6 512GB 5G, 12GB RAM, Tela 7.60 - Azul",
     categoria: "Smartphones",
-    subcategoria: "Android",
+
     quantidade: 10,
     empresa: "Samsung",
     tags: [
@@ -1389,7 +1384,7 @@ export const ProdutoInfo: Produtos[] = [
     ],
     descricao: "Apple iPhone 17 Pro (256 GB) - Azul intenso",
     categoria: "Smartphones",
-    subcategoria: "iOS",
+
     quantidade: 10,
     empresa: "Apple",
     tags: [
@@ -1411,7 +1406,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       'Tablet Lenovo Tab M9 Octa-Core 4GB 64GB Wi-Fi, Câmera 8MP, 9" WVA (1340x800) - Prata',
     categoria: "Tablets",
-    subcategoria: "Android",
+
     quantidade: 10,
     empresa: "Lenovo",
     tags: [
@@ -1438,7 +1433,7 @@ export const ProdutoInfo: Produtos[] = [
     ],
     descricao: 'Apple iPad Pro Wi-Fi 11" (512 GB) - Cinzento sideral',
     categoria: "Tablets",
-    subcategoria: "iOS",
+
     quantidade: 10,
     empresa: "Apple",
     tags: [
@@ -1462,7 +1457,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       'Mini PC Slim Intel Core i7 3ª Geração | 16GB RAM | SSD 512GB NVMe | Windows 11 Pro | Monitor 19" + Teclado e Mouse sem Fio',
     categoria: "Desktops",
-    subcategoria: "Workstations",
+
     quantidade: 10,
     empresa: "Generic",
     tags: [
@@ -1485,7 +1480,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       'Computador Completo Intel Core i5 16GB SSD 512GB Monitor 19" Pc Hdmi Teclado e Mouse - Strong Tech',
     categoria: "Desktops",
-    subcategoria: "Workstations",
+
     quantidade: 10,
     empresa: "Strong Tech",
     tags: [
@@ -1508,7 +1503,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Carregador Turbo Compatível com Samsung Galaxy, Motorola, iPhone 15/16 - Fonte 25W Ultra, Tipo C + USB (acompanha cabo) - Black",
     categoria: "Acessórios",
-    subcategoria: "Carregadores",
+
     quantidade: 10,
     empresa: "Generic",
     tags: [
@@ -1531,7 +1526,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Carregador Super Turbo 50W Ultra Rápido Tipo C e USB + Cabo Tipo C",
     categoria: "Acessórios",
-    subcategoria: "Carregadores",
+
     quantidade: 10,
     empresa: "Generic",
     tags: [
@@ -1554,7 +1549,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "Fone de Ouvido Bluetooth com Microfone e Cancelamento de Ruído Ativo - 4Leader (à Prova D'água) - Preto",
     categoria: "Acessórios",
-    subcategoria: "Fones de Ouvido",
+
     quantidade: 10,
     empresa: "4Leader",
     tags: [
@@ -1578,7 +1573,7 @@ export const ProdutoInfo: Produtos[] = [
     descricao:
       "PHILIPS Fone de Ouvido com Microfone TAUE101BK/00 - Com fio, Intra-auricular, Preto",
     categoria: "Acessórios",
-    subcategoria: "Fones de Ouvido",
+
     quantidade: 10,
     empresa: "Philips",
     tags: [

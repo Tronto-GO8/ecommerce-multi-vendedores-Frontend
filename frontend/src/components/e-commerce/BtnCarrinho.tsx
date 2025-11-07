@@ -1,5 +1,7 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { useCarrinho } from "@/contexts/ProdutoCarrinhoContext";
 import { ShoppingCart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface BtnCarrinhoProps {
   adicionarAoCarrinho?: () => void;
@@ -7,6 +9,7 @@ interface BtnCarrinhoProps {
   children?: React.ReactNode;
   className?: string;
   mostrarTotal?: boolean;
+  redirecionarPara: string;
 }
 
 export default function BtnCarrinho({
@@ -14,12 +17,31 @@ export default function BtnCarrinho({
   children,
   className,
   mostrarTotal = false,
+  redirecionarPara,
 }: BtnCarrinhoProps) {
   const { totalAdicionado } = useCarrinho();
+  const navigate = useNavigate();
+  const { estaAutenticado } = useAuth();
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (adicionarAoCarrinho) {
+      adicionarAoCarrinho();
+    }
+
+    if (redirecionarPara) {
+      if (!estaAutenticado) {
+        navigate("/login");
+      } else {
+        navigate(redirecionarPara);
+      }
+      return;
+    }
+  };
+
   return (
     <button
       type="button"
-      onClick={adicionarAoCarrinho}
+      onClick={handleClick}
       className={`${className} rounded-full bg-black/80 hover:bg-black/90 transition-all duration-300`}
     >
       <ShoppingCart size={22} className="text-white" />
