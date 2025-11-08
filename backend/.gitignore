@@ -1,33 +1,84 @@
-HELP.md
+# =========================
+# 📦 BUILD / MAVEN
+# =========================
 target/
-.mvn/wrapper/maven-wrapper.jar
+build/
+out/
+!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Maven Wrapper executáveis
+mvnw
+mvnw.cmd
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# =========================
+# 🧠 IDEs
+# =========================
+# IntelliJ IDEA
+.idea/
 *.iml
 *.ipr
+*.iws
 
-### NetBeans ###
+# Eclipse / STS
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.apt_generated
+.factorypath
+
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# VS Code
 .vscode/
+
+# =========================
+# ⚙️ SISTEMAS OPERACIONAIS
+# =========================
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Linux
+*~
+
+# =========================
+# 🔐 CREDENCIAIS / SEGURANÇA
+# =========================
+# Nunca suba arquivos com segredos, tokens ou chaves privadas!
+application.properties
+application.yml
+.env
+*.pem
+*.key
+*.keystore
+*.p12
+*.jks
+
+# =========================
+# 🧪 LOGS / TEMP
+# =========================
+logs/
+*.log
+*.tmp
+*.bak
+*.swp
+
+# =========================
+# 🧰 TOOLS
+# =========================
+# Docker / Compose
+*.pid
+docker-compose.override.yml
