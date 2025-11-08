@@ -9,6 +9,7 @@ import Layout from "./Layout";
 import { CarrinhoProvider } from "./contexts/ProdutoCarrinhoContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import Conta from "./pages/conta";
+import Inicial from "./pages/inicial";
 
 import { ThemeProvider } from "./contexts/ThemeContext";
 
@@ -21,8 +22,8 @@ function App() {
           <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
           <Route path="/login" element={<Login />} />
           <Route path="/conta" element={<Conta />} />
-          <Route path="/" element={<Login />} />
-          <Route path="*" element={<Login />} />
+          <Route path="/" element={<Inicial />} />
+          <Route path="*" element={<Inicial />} />
           <Route path="/cadastro" element={<Cadastrar />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           {/* <Route path="*" element={<RedefinirSenha />} /> */}
