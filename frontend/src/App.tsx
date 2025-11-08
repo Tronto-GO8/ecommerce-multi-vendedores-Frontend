@@ -8,14 +8,19 @@ import AuthCallback from "./pages/AuthCallback";
 import Layout from "./Layout";
 import { CarrinhoProvider } from "./contexts/ProdutoCarrinhoContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import Conta from "./pages/conta";
+
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
   return (
     <AuthProvider>
+      <ThemeProvider>
       <Router>
         <Routes>
           <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/conta" element={<Conta />} />
           <Route path="/" element={<Login />} />
           <Route path="*" element={<Login />} />
           <Route path="/cadastro" element={<Cadastrar />} />
@@ -31,6 +36,7 @@ function App() {
           />
         </Routes>
       </Router>
+      </ThemeProvider>
     </AuthProvider>
   );
 }
