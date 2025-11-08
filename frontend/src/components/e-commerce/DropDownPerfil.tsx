@@ -9,7 +9,7 @@ import {
 } from "../ui/dropdown-menu";
 import { iconeComParagrafo } from "@/styles/variaveisTailwind/Reutilizaveis";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function () {
   const { logout } = useAuth();
@@ -29,10 +29,12 @@ export default function () {
       <DropdownMenuContent>
         <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className={iconeComParagrafo}>
-          <UserIcon />
-          Informações
-        </DropdownMenuItem>
+        <Link to="/app/conta">
+          <DropdownMenuItem className={iconeComParagrafo}>
+            <UserIcon />
+            Informações
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuItem className={iconeComParagrafo}>
           <ShoppingBag />
           Pedidos
