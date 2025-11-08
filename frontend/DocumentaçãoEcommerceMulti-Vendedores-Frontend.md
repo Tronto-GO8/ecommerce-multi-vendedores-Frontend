@@ -63,16 +63,33 @@ Componentes Reutilizáveis
 Header Inicial
 
 1. HeaderInicial
-   Cabeçalho simples da aplicação (logo + botões de usuário e suporte).
-   Usa ícone Headset.
+   Exibe LOGO (link para /app/inicial).
+   Mostra botões: Perfil (Dropdown), Assistência (Headset) e Área administrativa.
+   A ação da Área administrativa chama entrarNaAreaAdmOuAbrirModal:
+   Se usuarioAtual?.isVendedor é false abre modal para cadastro de vendedor.
+   Integra ModalSeTornarVendedor.
+   Se true redireciona para /app/areaAdmnistrativa.
    Local: src/components/e-commerce/HeaderInicial.tsx.
 
 2. Menu de Perfil (Dropdown)
-   Dropdown com opções da conta (Informações, Pedidos, Chamados, Configurações) usando primitives do DropdownMenu.
+   Dropdown com opções da conta (Informações, Pedidos, Chamados, Configurações, Sair) usando primitives do DropdownMenu.
    Usa a variável `iconeComParagrafo` para alinhar ícones e texto.
    Botão "Sair" estilizado em vermelho e redireciona para /login
    Local: src/components/ui/ProfileDropdown.tsx (ou similar).
 
+3. Modal: ModalSeTornarVendedor
+   Arquivo: src/components/e-commerce/ModalSeTornarVendedor.tsx (ou similar).
+
+Props:
+mostrarModalVendedor: boolean
+fecharModal: () => void
+confirmar: (dados: { nomeDaLoja: string; cnpj: string }) => void
+
+Comportamento
+Formulário com nomeDaLoja (obrigatório) e cnpj (opcional).
+Validação com Zod (modalSeTornarVendedorSchema) e zodResolver.
+Ao submeter chama confirmar com { nomeDaLoja: string, cnpj: string } — por padrão enviamos cnpj: data.cnpj ?? "" para garantir string ao backend/context.
+Ao fechar (Cancel) reseta o formulário.
 E-commerce: produtos, cards e imagem
 
 1. ProdutosInfo (tipo + lista)
@@ -243,15 +260,7 @@ Utilitários
    Função utilitária para formatar valores em BRL.
    Local: src/utils/formatarPreco.ts.
 
-2. compararArraysIguais
-   Compara se dois arrays contêm os mesmos elementos (ignorando ordem).
-   Local: src/utils/compararArraysIguais.ts.
-
-3. alternarItemNoArray
-   Toggle de item em array (adiciona se não existe, remove se existe).
-   Local: src/utils/alternarItemNoArray.ts.
-
-4. Variáveis de classe reutilizáveis
+2. Variáveis de classe reutilizáveis
    iconeComInput:
    tagsStyle:
    Local: src/styles/variaveisTailwind/Reutilizaveis.ts
@@ -267,8 +276,12 @@ Context
 1. AuthContext (src/contexts/AuthContext.tsx)
 
    - Gerencia autenticação simulada via localStorage.
-   - Expondo: usuarioAtual, estaAutenticado, loading, login(email, senha), logout(), register(payload).
-   - Keys utilizadas: USERS_KEY (`app_users_v1`), TOKEN_KEY (`authToken`), AUTH_USER_KEY (`authUser`).
+   - Expondo: usuarioAtual, estaAutenticado, loading, login(email, senha), logout(), register(payload),setUserComoVendedor().
+   - Keys utilizadas: USERS_KEY (`app_users_v1`), TOKEN_KEY (`authToken`), AUTH_USER_KEY (`authUser`), VENDOR_DATA_KEY (`vendor_data`).
+     setUserComoVendedor(dadosVendedor):
+     Atualiza vendorData[email] = dadosVendedor no localStorage.
+     Atualiza AUTH_USER_KEY com isVendedor: true e dadosVendedor.
+     Atualiza estado usuarioAtual.
    - Observações: login/register simulam delay; logout remove token e usuario do localStorage e atualiza estado.
 
 2. Carrinho (src/contexts/ProdutoCarrinhoContext.tsx) — atualização importante
@@ -640,6 +653,9 @@ Layout e App
    - Rotas principais:
      - `/app/inicial`
      - `/app/carrinho`
+     - `/app/assistenciaAoProduto`
+     - `/app/areaAdmnistrativa`
+     - `/app/conta`
    - HeaderInicial fixo
 
 2. App.css
@@ -657,6 +673,9 @@ Schemas / Validação
   - `rua`, `numero`, `bairro`, `cidade`: obrigatórios.
   - `estado`: 2 letras, transformado para maiúsculas.
   - Tipagem exportada: `EnderecoFormSchema` (usada em AddressForm e checkout).
+  - `modalSeTornarVendedorSchema`
+    nomeDaLoja: z.string().min(1).max(100)
+    cnpj: preprocess que remove não-dígitos; se resultado vazio retorna undefined; valida string().regex(/^\d{14}$/).optional().
 
 Estilização
 
