@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import ModalSeTornarVendedor from "./ModalSeTornarVendedor";
+import logoTechventory from "@/assets/logo.png";
 
 export default function HeaderInicial() {
   const navigate = useNavigate();
@@ -35,8 +36,15 @@ export default function HeaderInicial() {
           variant={"ghost"}
           className="text-xl font-semibold font-sans text-white"
         >
-          LOGO
-        </Button>
+           <img
+            src={logoTechventory}
+            alt="Techventory logo"
+            className="h-8 w-auto"
+          /> 
+          <span>
+            TECHVENTORY
+            </span>       
+      </Button>
       </Link>
 
       <div className="flex flex-row items-center gap-1 md:gap-2">
