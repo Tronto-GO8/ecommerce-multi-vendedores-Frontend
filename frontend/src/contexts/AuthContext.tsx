@@ -69,6 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       users.push(novoUsuario);
       setUsers(users);
       console.log("✅ Usuário de teste criado:", novoUsuario);
+
     }
   }, []);
 
