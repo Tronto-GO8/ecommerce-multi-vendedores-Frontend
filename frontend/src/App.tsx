@@ -13,7 +13,6 @@ import AuthCallback from "./pages/AuthCallback";
 import Layout from "./Layout";
 import { CarrinhoProvider } from "./contexts/ProdutoCarrinhoContext";
 import { AuthProvider } from "./contexts/AuthContext";
-
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
