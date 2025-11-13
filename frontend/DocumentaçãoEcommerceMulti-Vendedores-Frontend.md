@@ -650,6 +650,7 @@ Layout e App
 1. Layout (src/Layout.tsx)
 
    - Container principal da aplicação
+   - Adicionada rota index (Route index element={<Inicial />}) para que acessar /app carregue automaticamente Inicial.
    - Rotas principais:
      - `/app/inicial`
      - `/app/carrinho`
@@ -659,8 +660,27 @@ Layout e App
    - HeaderInicial fixo
 
 2. App.css
+
    - Reset básico de CSS
    - Box-sizing consistente
+
+3. App.tsx
+   Rotas definidas
+   /esqueceuSenha → EsqueceuSenha
+   Página para solicitar link de recuperação de senha.
+   /login → Login
+   Página de autenticação (login por email/senha + social login).
+   / → Navigate to="/app"
+   Redirecionamento: raiz do app direciona para área principal (/app).
+
+- → Navigate to="/app"
+  Rotas desconhecidas redirecionam para /app. (Pode ser alterado para /login conforme política de acesso.)
+  /cadastro → Cadastrar
+  Página de registro de novo usuário.
+  /auth/callback → AuthCallback
+  Callback para fluxos OAuth / Social login.
+  /app/\* → Layout (envolvido por CarrinhoProvider)
+  Área autenticada / principal da aplicação (listagem de produtos, carrinho, conta, área administrativa, etc.). Todas as rotas filhas dentro do Layout terão acesso ao CarrinhoProvider.
 
 Schemas / Validação
 

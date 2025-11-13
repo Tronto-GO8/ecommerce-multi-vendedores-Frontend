@@ -13,6 +13,7 @@ function Layout() {
       <HeaderInicial />
       <main className="flex-1">
         <Routes>
+          <Route index element={<Inicial />} />
           <Route path="inicial" element={<Inicial />} />
           <Route path="carrinho" element={<Carrinho />} />
           <Route path="assistenciaAoProduto" element={<Assistencia />} />
