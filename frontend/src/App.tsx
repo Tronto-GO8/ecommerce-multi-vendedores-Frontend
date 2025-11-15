@@ -9,6 +9,7 @@ import Cadastrar from "./pages/Cadastro";
 import EsqueceuSenha from "./pages/EsqueceuSenha";
 import Login from "./pages/Login";
 import RedefinirSenha from "./pages/RedefinirSenha";
+import AuthCallback from "./pages/AuthCallback";
 import Layout from "./Layout";
 import { CarrinhoProvider } from "./contexts/ProdutoCarrinhoContext";
 import { AuthProvider } from "./contexts/AuthContext";

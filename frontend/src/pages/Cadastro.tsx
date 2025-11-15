@@ -24,7 +24,7 @@ export default function Cadastrar() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }, setValue
   } = useForm<CadastroForm>({
     resolver: zodResolver(cadastroSchema),
   });
@@ -44,24 +44,30 @@ export default function Cadastrar() {
   } = useSubmitStatus({
     onSuccess: () => navigate("/login"),
   });
+
   const enviarFormCadastro = async (data: CadastroForm) => {
     startLoading();
 
     try {
-      const res = await registerUser({
-        nome: data.nome,
-        email: data.email,
-        senha: data.senha,
+      const response = await fetch("http://localhost:8080/Techventory/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: data.nome,
+          email: data.email,
+          senha: data.senha,
+        }),
       });
 
-      if (!res.ok) {
-        handleError(res.message ?? "Erro ao criar conta");
+      const result = await response.json();
+
+      if (!response.ok) {
+        handleError(result.message ?? "Erro ao criar conta");
         return;
       }
-
-      handleSuccess();
+      handleSuccess(); // isso redireciona para /login
     } catch (error) {
-      handleError("Erro ao criar conta");
+      handleError("Erro de conexão com o servidor");
     }
   };
 
@@ -87,7 +93,7 @@ export default function Cadastrar() {
                   isError={!!errors.senha}
                   onChange={(e) => {
                     setSenhaDigitada(e.target.value);
-                    register("senha").onChange(e as any);
+                    setValue("senha", e.target.value, { shouldValidate: true });
                   }}
                 />
                 <ChecklistSenha senha={senhaDigitada} />

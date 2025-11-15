@@ -5,7 +5,7 @@ import com.techventory.backend.servicos.ProdutoService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/produtos")
@@ -29,7 +29,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/vendedor/{idVendedor}")
-    public List<Produto> listarPorVendedor(@PathVariable UUID idVendedor) {
+    public List<Produto> listarPorVendedor(@PathVariable Long idVendedor) {
         return produtoService.listarPorVendedor(idVendedor);
     }
 

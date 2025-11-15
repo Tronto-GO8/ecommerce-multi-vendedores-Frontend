@@ -20,7 +20,7 @@ public class PedidoController {
     // 🆕 Criar novo pedido
     @PostMapping("/novo")
     public Map<String, Object> criarPedido(@RequestBody Map<String, Object> body) {
-        UUID idCliente = UUID.fromString(body.get("idCliente").toString());
+        Long idCliente = Long.parseLong(body.get("idCliente").toString());
         String metodoPagamento = body.get("metodoPagamento").toString();
 
         List<Map<String, Object>> itensJson = (List<Map<String, Object>>) body.get("itens");
@@ -29,12 +29,13 @@ public class PedidoController {
         for (Map<String, Object> itemJson : itensJson) {
             ItemPedido item = new ItemPedido();
             Produto produto = new Produto();
-            produto.setIdProduto(UUID.fromString(itemJson.get("idProduto").toString()));
+            produto.setIdProduto(Long.parseLong(itemJson.get("idProduto").toString())); // <-- Long aqui
 
             item.setProduto(produto);
             item.setQuantidade((int) itemJson.get("quantidade"));
             itens.add(item);
         }
+
 
         Pedido novoPedido = pedidoService.criarPedido(idCliente, itens, metodoPagamento);
 
@@ -46,7 +47,7 @@ public class PedidoController {
 
     // 📜 Listar pedidos de um cliente
     @GetMapping("/cliente/{idCliente}")
-    public List<Pedido> listarPedidosDoCliente(@PathVariable UUID idCliente) {
+    public List<Pedido> listarPedidosDoCliente(@PathVariable Long idCliente) {
         return pedidoService.listarPedidosDoCliente(idCliente);
     }
 

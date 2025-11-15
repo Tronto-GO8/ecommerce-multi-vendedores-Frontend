@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 public class Categoria {
 
     @Id
     @GeneratedValue
-    private UUID idCategoria;
+    private Long idCategoria;
 
     private String nome;
 
@@ -20,8 +19,8 @@ public class Categoria {
     private Set<Produto> produtos = new HashSet<>();
 
     // Getters e Setters
-    public UUID getIdCategoria() { return idCategoria; }
-    public void setIdCategoria(UUID idCategoria) { this.idCategoria = idCategoria; }
+    public Long getIdCategoria() { return idCategoria; }
+    public void setIdCategoria(Long  idCategoria) { this.idCategoria = idCategoria; }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }

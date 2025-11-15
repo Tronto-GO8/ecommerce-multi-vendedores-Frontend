@@ -1,6 +1,8 @@
 package com.techventory.backend.modelos;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -21,7 +23,7 @@ public class ItemPedido {
     private Pedido pedido;
 
     @Column(name = "preco_unitario", nullable = false)
-    private Double precoUnitario;
+    private BigDecimal precoUnitario;
 
     @Column(nullable = false)
     private int quantidade;
@@ -51,11 +53,11 @@ public class ItemPedido {
         this.pedido = pedido;
     }
 
-    public Double getPrecoUnitario() {
+    public BigDecimal getPrecoUnitario() {
         return precoUnitario;
     }
 
-    public void setPrecoUnitario(Double precoUnitario) {
+    public void setPrecoUnitario(BigDecimal precoUnitario) {
         this.precoUnitario = precoUnitario;
     }
 
@@ -67,7 +69,10 @@ public class ItemPedido {
         this.quantidade = quantidade;
     }
 
-    public Double getSubtotal() {
-        return precoUnitario * quantidade;
+    public BigDecimal getSubtotal() {
+        if (precoUnitario == null) {
+            return BigDecimal.ZERO;
+        }
+        return precoUnitario.multiply(BigDecimal.valueOf(quantidade));
     }
 }

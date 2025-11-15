@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "chat")
@@ -12,8 +11,8 @@ public class ChatIA {
 
     @Id
     @GeneratedValue
-    @Column(name = "id_chat", columnDefinition = "UUID")
-    private UUID idChat;
+    @Column(name = "id_chat")
+    private Long idChat;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
@@ -26,19 +25,19 @@ public class ChatIA {
     private String status; // "ativo" ou "inativo"
 
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Mensagem> mensagens = new ArrayList<>();
+    private List<Mensagens> mensagens = new ArrayList<>();
 
     // 🔧 Construtores
-    public Chat() {}
+    public ChatIA() {}
 
-    public Chat(Usuario usuario, String status) {
+    public ChatIA(Usuario usuario, String status) {
         this.usuario = usuario;
         this.status = status;
         this.dataInicio = LocalDateTime.now();
     }
 
     // ⚙️ Getters e Setters
-    public UUID getIdChat() { return idChat; }
+    public Long getIdChat() { return idChat; }
 
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
@@ -49,6 +48,6 @@ public class ChatIA {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    public List<Mensagem> getMensagens() { return mensagens; }
-    public void setMensagens(List<Mensagem> mensagens) { this.mensagens = mensagens; }
+    public List<Mensagens> getMensagens() { return mensagens; }
+    public void setMensagens(List<Mensagens> mensagens) { this.mensagens = mensagens; }
 }

@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { api } from "@/services/api";
 
-type User = {
+export type User = {
+  id?: number;
   nome?: string;
   email: string;
   isVendedor?: boolean;
@@ -20,144 +22,96 @@ type AuthContextType = {
   usuarioAtual: User | null;
   estaAutenticado: boolean;
   loading: boolean;
-  login: (
-    email: string,
-    senha: string
-  ) => Promise<{ ok: boolean; message?: string }>;
-  logout: () => void;
+
   register: (payload: RawUser) => Promise<{ ok: boolean; message?: string }>;
-  setUserComoVendedor: (dadosVendedor: {
-    nomeDaLoja: string;
-    cnpj: string;
-  }) => void;
+  login: (email: string, senha: string) => Promise<{ ok: boolean; message?: string }>;
+  loginGoogle: (googleToken: string) => Promise<void>;
+  logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const USERS_KEY = "app_users_v1";
-const TOKEN_KEY = "authToken";
 const AUTH_USER_KEY = "authUser";
-const VENDOR_DATA_KEY = "vendor_data";
+const TOKEN_KEY = "authToken";
 
-function getUsers(): RawUser[] {
-  const raw = localStorage.getItem(USERS_KEY);
-  return raw ? JSON.parse(raw) : [];
-}
-function setUsers(users: RawUser[]) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [usuarioAtual, setUsuarioAtual] = useState<User | null>(() => {
-    const raw = localStorage.getItem(AUTH_USER_KEY);
-    return raw ? JSON.parse(raw) : null;
-  });
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [usuarioAtual, setUsuarioAtual] = useState<User | null>(null);
+  const [estaAutenticado, setEstaAutenticado] = useState(
+    Boolean(localStorage.getItem(TOKEN_KEY))
+  );
   const [loading, setLoading] = useState(false);
 
-  const estaAutenticado = Boolean(localStorage.getItem(TOKEN_KEY));
-
-   useEffect(() => {
-    const users = getUsers();
-    const existeTeste = users.some((u) => u.email === "teste@teste.com");
-
-    if (!existeTeste) {
-      const novoUsuario = {
-        nome: "Usuário Teste",
-        email: "teste@teste.com",
-        senha: "123456",
-      };
-      users.push(novoUsuario);
-      setUsers(users);
-      console.log("✅ Usuário de teste criado:", novoUsuario);
-
-    }
+  // carregar usuário salvo
+  useEffect(() => {
+    const savedUser = localStorage.getItem(AUTH_USER_KEY);
+    if (savedUser) setUsuarioAtual(JSON.parse(savedUser));
   }, []);
 
-  const login = async (email: string, senha: string) => {
+  // REGISTRO
+  const register = async (payload: RawUser) => {
     setLoading(true);
     try {
-      // Simula chamada assincrona (faça fetch para sua API aqui)
-      await new Promise((r) => setTimeout(r, 500));
-      const users = getUsers();
-      const found = users.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase()
-      );
-      if (!found) return { ok: false, message: "Usuário não encontrado." };
-      if (found.senha !== senha)
-        return { ok: false, message: "Senha incorreta." };
-
-      const token = btoa(`${email}:${Date.now()}`);
-      localStorage.setItem(TOKEN_KEY, token);
-
-      const dadosDoUsuarioSalvo = localStorage.getItem(VENDOR_DATA_KEY);
-      const usuarioSalvo = dadosDoUsuarioSalvo
-        ? JSON.parse(dadosDoUsuarioSalvo)
-        : {};
-
-      const userVendorData = usuarioSalvo[email];
-
-      const authUser = {
-        nome: found.nome,
-        email: found.email,
-        isVendedor: userVendorData ? true : false,
-        dadosVendedor: userVendorData || undefined,
-      };
-
-      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(authUser));
-      setUsuarioAtual(authUser);
+      const res = await api.post("/auth/register", payload);
       return { ok: true };
+    } catch (err: any) {
+      return { ok: false, message: err?.response?.data?.message ?? "Erro ao registrar" };
     } finally {
       setLoading(false);
     }
   };
 
+  // LOGIN LOCAL
+  const login = async (email: string, senha: string) => {
+    setLoading(true);
+    try {
+      const res = await api.post("/auth/login", { email, senha });
+
+      const { token, user } = res.data;
+
+      if (!token || !user)
+        return { ok: false, message: "Resposta inválida do servidor." };
+
+      // salvar nos storages
+      localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+
+      setUsuarioAtual(user);
+      setEstaAutenticado(true);
+
+      return { ok: true };
+    } catch (err: any) {
+      return { ok: false, message: err?.response?.data?.message ?? "Erro ao logar" };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // LOGIN GOOGLE
+  const loginGoogle = async (googleToken: string) => {
+    setLoading(true);
+    try {
+      const res = await api.post("/auth/google", { token: googleToken });
+
+      const { token, user } = res.data;
+
+      localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+
+      setUsuarioAtual(user);
+      setEstaAutenticado(true);
+    } catch (e) {
+      console.error("Erro no login Google:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // LOGOUT
   const logout = () => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);
     setUsuarioAtual(null);
-  };
-
-  const register = async (payload: RawUser) => {
-    setLoading(true);
-    try {
-      await new Promise((r) => setTimeout(r, 400));
-      const users = getUsers();
-      const exists = users.some(
-        (u) => u.email.toLowerCase() === payload.email.toLowerCase()
-      );
-      if (exists)
-        return { ok: false, message: "Já existe uma conta com esse e-mail." };
-
-      users.push(payload);
-      setUsers(users);
-      return { ok: true };
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const setUserComoVendedor = (dadosVendedor: {
-    nomeDaLoja: string;
-    cnpj: string;
-  }) => {
-    if (!usuarioAtual) return;
-    //Recupera dados existentes ou cria objeto vazio
-    const vendorData = JSON.parse(
-      localStorage.getItem(VENDOR_DATA_KEY) || "{}"
-    );
-
-    // Salva os dados do vendedor indexados pelo email
-    vendorData[usuarioAtual.email] = dadosVendedor;
-    localStorage.setItem(VENDOR_DATA_KEY, JSON.stringify(vendorData));
-
-    const updatedUser = {
-      ...usuarioAtual,
-      isVendedor: true,
-      dadosVendedor,
-    };
-
-    localStorage.setItem(AUTH_USER_KEY, JSON.stringify(updatedUser));
-    setUsuarioAtual(updatedUser);
+    setEstaAutenticado(false);
   };
 
   return (
@@ -166,19 +120,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         usuarioAtual,
         estaAutenticado,
         loading,
-        login,
-        logout,
         register,
-        setUserComoVendedor,
+        login,
+        loginGoogle,
+        logout,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
+export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  if (!ctx) throw new Error("useAuth deve ser usado dentro de <AuthProvider>");
   return ctx;
-}
+};

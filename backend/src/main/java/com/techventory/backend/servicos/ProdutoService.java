@@ -23,7 +23,7 @@ public class ProdutoService {
     public Produto criarProduto(Produto produto) {
 
         // Valida limite de imagens
-        if (produto.getImagens() != null && produto.getImagens().size() > 6) {
+        if (produto.getImagemProduto() != null && produto.getImagemProduto().size() > 6) {
             throw new IllegalArgumentException("Um produto pode ter no máximo 6 imagens.");
         }
 
@@ -37,8 +37,8 @@ public class ProdutoService {
         }
 
         // Vincula o produto às imagens
-        if (produto.getImagens() != null) {
-            produto.getImagens().forEach(img -> img.setProduto(produto));
+        if (produto.getImagemProduto() != null) {
+            produto.getImagemProduto().forEach(img -> img.setProduto(produto));
         }
 
         return produtoRepository.save(produto);
@@ -48,7 +48,7 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
 
-    public List<Produto> listarPorVendedor(UUID idVendedor) {
+    public List<Produto> listarPorVendedor(Long idVendedor) {
         return produtoRepository.findByVendedor_IdUsuario(idVendedor);
     }
 

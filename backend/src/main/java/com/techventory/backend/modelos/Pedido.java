@@ -1,6 +1,8 @@
 package com.techventory.backend.modelos;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.*;
 
 @Entity
@@ -24,7 +26,7 @@ public class Pedido {
     private String status; // ex: "PENDENTE", "PAGO", "CANCELADO"
 
     @Column(name = "valor_total", nullable = false)
-    private Double valorTotal;
+    private BigDecimal valorTotal;
 
     @Column(name = "metodo_pagamento", nullable = false)
     private String metodoPagamento; // ex: "CARTAO", "PIX", "BOLETO"
@@ -79,13 +81,14 @@ public class Pedido {
         this.status = status;
     }
 
-    public Double getValorTotal() {
+    public BigDecimal getValorTotal() {
         return valorTotal;
     }
 
-    public void setValorTotal(Double valorTotal) {
+    public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
     }
+
 
     public String getMetodoPagamento() {
         return metodoPagamento;

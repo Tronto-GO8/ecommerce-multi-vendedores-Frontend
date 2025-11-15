@@ -1,62 +1,109 @@
 package com.techventory.backend.modelos;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
+@Table(name = "produto")
 public class Produto {
 
     @Id
     @GeneratedValue
-    private UUID idProduto;
+    @Column(name = "id_produto")
+    private Long idProduto;
 
     @ManyToOne
-    @JoinColumn(name = "id_vendedor")
+    @JoinColumn(name = "id_vendedor", nullable = false)
     private Usuario vendedor;
 
+    @Column(nullable = false)
     private String nome;
+
+    @Column(length = 500)
     private String descricao;
+
+    @Column(nullable = false)
     private int quantidade;
+
+    @Column(nullable = false)
     private BigDecimal precoUnitario;
 
-    // 📦 Relação com Categoria (N:N)
+    // Produto pode ter até 6 imagens
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImagemProduto> imagemProduto = new ArrayList<>();
+
+    // Produto pode pertencer a várias categorias (n:n)
     @ManyToMany
     @JoinTable(
             name = "produto_categoria",
             joinColumns = @JoinColumn(name = "id_produto"),
             inverseJoinColumns = @JoinColumn(name = "id_categoria")
     )
-    @JsonManagedReference // 👈 evita loop ao serializar
     private Set<Categoria> categorias = new HashSet<>();
 
-    private String imagemProduto;
-
     // Getters e Setters
-    public UUID getIdProduto() { return idProduto; }
-    public void setIdProduto(UUID idProduto) { this.idProduto = idProduto; }
+    public Long getIdProduto() {
+        return idProduto;
+    }
 
-    public Usuario getVendedor() { return vendedor; }
-    public void setVendedor(Usuario vendedor) { this.vendedor = vendedor; }
+    public void setIdProduto(Long idProduto) {
+        this.idProduto = idProduto;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public Usuario getVendedor() {
+        return vendedor;
+    }
 
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public void setVendedor(Usuario vendedor) {
+        this.vendedor = vendedor;
+    }
 
-    public int getQuantidade() { return quantidade; }
-    public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
+    public String getNome() {
+        return nome;
+    }
 
-    public BigDecimal getPrecoUnitario() { return precoUnitario; }
-    public void setPrecoUnitario(BigDecimal precoUnitario) { this.precoUnitario = precoUnitario; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public Set<Categoria> getCategorias() { return categorias; }
-    public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
+    public String getDescricao() {
+        return descricao;
+    }
 
-    public String getImagemProduto() { return imagemProduto; }
-    public void setImagemProduto(String imagemProduto) { this.imagemProduto = imagemProduto; }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public BigDecimal getPrecoUnitario() {
+        return precoUnitario;
+    }
+
+    public void setPrecoUnitario(BigDecimal precoUnitario) {
+        this.precoUnitario = precoUnitario;
+    }
+
+    public List<ImagemProduto> getImagemProduto() {
+        return imagemProduto;
+    }
+
+    public void setImagemProduto(List<ImagemProduto> imagemProduto) {
+        this.imagemProduto = imagemProduto;
+    }
+
+    public Set<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(Set<Categoria> categorias) {
+        this.categorias = categorias;
+    }
 }

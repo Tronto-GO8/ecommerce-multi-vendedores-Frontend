@@ -33,6 +33,7 @@ public class EnderecoController {
                 .orElse(ResponseEntity.badRequest().body("Usuário não encontrado!"));
     }
 
+
     // Buscar endereço de um usuário
     @GetMapping("/{idUsuario}")
     public ResponseEntity<?> buscarEndereco(@PathVariable Long idUsuario) {

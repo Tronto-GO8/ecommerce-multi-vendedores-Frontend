@@ -2,15 +2,15 @@ package com.techventory.backend.modelos;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "usuarios")
 @Inheritance(strategy = InheritanceType.JOINED) // permite herança entre vendedor/funcionário
 public class Usuario {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuario;
+    private Long  idUsuario;
 
     private String nome;
 
@@ -35,11 +35,11 @@ public class Usuario {
     }
 
     // Getters e Setters
-    public Long getIdUsuario() {
+    public Long  getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(Long idUsuario) {
+    public void setIdUsuario(Long  idUsuario) {
         this.idUsuario = idUsuario;
     }
 

@@ -1,15 +1,18 @@
 package com.techventory.backend.controller;
 
+import com.techventory.backend.DTOs.DTOLogin;
 import com.techventory.backend.modelos.Usuario;
+import com.techventory.backend.servicos.GoogleAuthService;
 import com.techventory.backend.servicos.JwtService;
 import com.techventory.backend.servicos.UsuarioService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.techventory.backend.servicos.GoogleAuthService;
+
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
 
@@ -23,6 +26,9 @@ public class AuthController {
         this.googleAuthService = googleAuthService;
     }
 
+    // ==============================
+    //      REGISTRO NORMAL
+    // ==============================
     @PostMapping("/register")
     public Map<String, Object> register(@RequestBody Usuario usuario) {
         Usuario novoUsuario = usuarioService.registrar(usuario);
@@ -39,14 +45,26 @@ public class AuthController {
         );
     }
 
-    @PostMapping("/google")
-    public Map<String, Object> loginGoogle(@RequestBody Map<String, String> body) {
-        String tokenGoogle = body.get("token");
-        String tokenJwt = googleAuthService.autenticarComGoogle(tokenGoogle);
+    // ==============================
+    //       LOGIN NORMAL
+    // ==============================
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody DTOLogin request) {
 
-        return Map.of(
-                "message", "Login com Google realizado com sucesso!",
-                "token", tokenJwt
-        );
+        return usuarioService.autenticar(request.getEmail(), request.getSenha())
+                .map(usuario -> {
+                    String token = jwtService.gerarToken(usuario.getEmail());
+
+                    return Map.of(
+                            "message", "Login realizado com sucesso!",
+                            "token", token,
+                            "user", Map.of(
+                                    "id", usuario.getIdUsuario(),
+                                    "nome", usuario.getNome(),
+                                    "email", usuario.getEmail()
+                            )
+                    );
+                })
+                .orElseThrow(() -> new RuntimeException("E-mail ou senha incorretos"));
     }
 }

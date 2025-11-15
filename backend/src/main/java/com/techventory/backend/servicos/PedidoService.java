@@ -5,6 +5,7 @@ import com.techventory.backend.repositorio.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -26,7 +27,7 @@ public class PedidoService {
     }
 
     @Transactional
-    public Pedido criarPedido(UUID idCliente, List<ItemPedido> itens, String metodoPagamento) {
+    public Pedido criarPedido(Long idCliente, List<ItemPedido> itens, String metodoPagamento) {
         Usuario cliente = usuarioRepository.findById(idCliente)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado!"));
 
@@ -36,7 +37,7 @@ public class PedidoService {
         pedido.setMetodoPagamento(metodoPagamento);
         pedido.setDataPedido(new Date());
 
-        double total = 0.0;
+        BigDecimal total = BigDecimal.ZERO; // ← usa BigDecimal agora
 
         for (ItemPedido item : itens) {
             Produto produto = produtoRepository.findById(item.getProduto().getIdProduto())
@@ -45,7 +46,7 @@ public class PedidoService {
             item.setProduto(produto);
             item.setPrecoUnitario(produto.getPrecoUnitario());
             item.setPedido(pedido);
-            total += item.getSubtotal();
+            total = total.add(item.getSubtotal()); // ← usa add() em vez de +
         }
 
         pedido.setValorTotal(total);
@@ -55,7 +56,7 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public List<Pedido> listarPedidosDoCliente(UUID idCliente) {
+    public List<Pedido> listarPedidosDoCliente(Long idCliente) {
         return pedidoRepository.findByCliente_IdUsuario(idCliente);
     }
 

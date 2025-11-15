@@ -2,7 +2,6 @@ package com.techventory.backend.modelos;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "Mensagens")
@@ -10,8 +9,8 @@ public class Mensagens {
 
     @Id
     @GeneratedValue
-    @Column(name = "id_mensagem", columnDefinition = "UUID")
-    private UUID idMensagem;
+    @Column(name = "id_mensagem")
+    private Long  idMensagem;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_chat", nullable = false)
@@ -37,7 +36,7 @@ public class Mensagens {
     }
 
     // ⚙️ Getters e Setters
-    public UUID getIdMensagem() { return idMensagem; }
+    public Long  getIdMensagem() { return idMensagem; }
 
     public ChatIA getChat() { return chat; }
     public void setChat(ChatIA chat) { this.chat = chat; }
